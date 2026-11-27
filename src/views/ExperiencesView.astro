@@ -11,8 +11,8 @@ const { vm } = Astro.props;
 ---
 
 <BaseLayout shell={vm.shell}>
-  <section class="mx-auto max-w-4xl slide-enter-content">
-    <header class="mx-auto max-w-[65ch] text-center mb-12 sm:mb-14">
+  <section class="mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10 sm:mb-12">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
         {vm.heading}
       </h1>
@@ -21,18 +21,18 @@ const { vm } = Astro.props;
 
     {
       vm.groups.length === 0 ? (
-        <p class="text-center text-sm text-muted">Nothing listed yet.</p>
+        <p class="text-sm text-muted">Nothing listed yet.</p>
       ) : (
-        <div class="space-y-12 sm:space-y-14">
+        <div class="space-y-12">
           {vm.groups.map((group) => (
             <section>
-              <div class="relative mb-5 sm:mb-6 text-center">
-                <h2 class="inline-block font-mono text-xs uppercase tracking-[0.2em] text-subtle border-b border-base pb-1.5">
+              <div class="mb-4">
+                <h2 class="inline-block font-mono text-xs uppercase tracking-[0.18em] text-subtle border-b border-base pb-1.5">
                   {group.category}
                 </h2>
               </div>
 
-              <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-10 md:gap-y-4">
+              <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-3">
                 {group.experiences.map((experience) => (
                   <ExperienceCard experience={experience} />
                 ))}

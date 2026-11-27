@@ -10,18 +10,20 @@ export interface RgbColor {
 
 export interface PortraitDitherConfig {
   readonly algorithm: DitherAlgorithm;
+  readonly levels: number;
   readonly targetWidth: number;
   readonly contrast: number;
   readonly gamma: number;
   readonly brightness: number;
   readonly threshold: number;
+  readonly inkOpacity: number;
   readonly revealOnHover: boolean;
   readonly lightInk: RgbColor;
   readonly darkInk: RgbColor;
 }
 
 export interface SocialLinkEntity {
-  readonly id: 'github' | 'linkedin' | 'x' | 'rss';
+  readonly id: 'github' | 'linkedin' | 'x' | 'email' | 'rss';
   readonly label: string;
   readonly href: string;
   readonly icon: string;

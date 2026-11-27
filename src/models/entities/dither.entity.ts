@@ -8,6 +8,7 @@ export interface GrayscaleBitmap {
 
 export interface DitherOptions {
   readonly algorithm: DitherAlgorithm;
+  readonly levels: number;
   readonly contrast: number;
   readonly gamma: number;
   readonly brightness: number;
@@ -18,7 +19,8 @@ export interface DitheredLuminanceMask {
   readonly width: number;
   readonly height: number;
   readonly algorithm: DitherAlgorithm;
-  readonly brightMask: Uint8Array;
+  readonly levels: number;
+  readonly luminance: Uint8Array;
 }
 
 export type PolarityMode = 'light-bg' | 'dark-bg';
@@ -26,4 +28,5 @@ export type PolarityMode = 'light-bg' | 'dark-bg';
 export interface RgbaRasterOptions {
   readonly ink: RgbColor;
   readonly mode: PolarityMode;
+  readonly opacity: number;
 }

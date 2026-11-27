@@ -17,8 +17,8 @@ export const SITE_CONFIG: SiteConfigEntity = {
     location: 'United States',
   },
   navigation: [
-    { id: 'blog', label: 'Blog', path: '/blog' },
     { id: 'experiences', label: 'Experiences', path: '/experiences' },
+    { id: 'blog', label: 'Blog', path: '/blog' },
     { id: 'notes', label: 'Notes', path: '/notes' },
   ],
   socials: [
@@ -44,6 +44,13 @@ export const SITE_CONFIG: SiteConfigEntity = {
       external: true,
     },
     {
+      id: 'email',
+      label: 'Email',
+      href: 'mailto:johntian2014@gmail.com',
+      icon: 'i-ri-mail-line',
+      external: false,
+    },
+    {
       id: 'rss',
       label: 'RSS Feed',
       href: '/rss.xml',
@@ -54,11 +61,13 @@ export const SITE_CONFIG: SiteConfigEntity = {
   background: 'plum',
   portraitDither: {
     algorithm: 'atkinson',
-    targetWidth: 420,
-    contrast: 1.06,
+    levels: 5,
+    targetWidth: 480,
+    contrast: 1.0,
     gamma: 1.0,
-    brightness: 2,
+    brightness: 0,
     threshold: 128,
+    inkOpacity: 0.88,
     revealOnHover: true,
     lightInk: { r: 28, g: 28, b: 30 },
     darkInk: { r: 228, g: 228, b: 230 },
