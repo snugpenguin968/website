@@ -64,7 +64,7 @@ function checkFile(filePath: string): BoundaryViolation[] {
           file: `src/${rel}`,
           line,
           importTarget: target,
-          rule: 'View layer (views/components/layouts) must not import Models or astro:content directly; go through an Adapter ViewModel.',
+          rule: 'View layer (views/components/layouts) must not import models or astro:content directly; route through an adapter view model.',
         });
       }
     }
@@ -79,7 +79,7 @@ function checkFile(filePath: string): BoundaryViolation[] {
           file: `src/${rel}`,
           line,
           importTarget: target,
-          rule: 'Route pages must delegate data loading through @adapters/* rather than importing Models or astro:content.',
+          rule: 'Route pages must delegate data loading through @adapters/* rather than importing models or astro:content.',
         });
       }
     }
@@ -97,7 +97,7 @@ function checkFile(filePath: string): BoundaryViolation[] {
           file: `src/${rel}`,
           line,
           importTarget: target,
-          rule: 'Model layer must remain independent of Adapters and Views.',
+          rule: 'Model layer must remain independent of adapters and views.',
         });
       }
     }
@@ -110,11 +110,11 @@ const files = walkFiles(SRC_ROOT);
 const allViolations = files.flatMap(checkFile);
 
 if (allViolations.length > 0) {
-  console.error(`\nMVA Boundary Check FAILED (${allViolations.length} violation(s)):\n`);
+  console.error(`\nArchitecture Boundary Check FAILED (${allViolations.length} violation(s)):\n`);
   for (const v of allViolations) {
     console.error(`  ${v.file}:${v.line} -> "${v.importTarget}"\n    ${v.rule}\n`);
   }
   process.exit(1);
 }
 
-console.log(`MVA Boundary Check PASSED (${files.length} source files verified).`);
+console.log(`Architecture Boundary Check PASSED (${files.length} source files verified).`);

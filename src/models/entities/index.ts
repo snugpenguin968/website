@@ -14,9 +14,9 @@ export type {
   ReadingTimeEntity,
 } from './blog.entity';
 export type {
-  ProjectCategoryGroupEntity,
-  ProjectEntity,
-} from './project.entity';
+  ExperienceCategoryGroupEntity,
+  ExperienceEntity,
+} from './experience.entity';
 export type { NoteEntity } from './note.entity';
 export type {
   DitheredLuminanceMask,

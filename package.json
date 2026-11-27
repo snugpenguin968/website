@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check && tsc --noEmit",
-    "check:mva": "tsx scripts/check-mva-boundaries.ts",
+    "check:arch": "tsx scripts/check-boundaries.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "npm run build && wrangler deploy"

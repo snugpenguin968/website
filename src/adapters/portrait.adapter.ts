@@ -43,11 +43,6 @@ async function encodeRgbaToPngDataUri(
 }
 
 export class PortraitAdapter {
-  /**
-   * Server-side MVA adapter that decodes `me.png` via Sharp, runs the pure domain
-   * `ditherGrayscaleBitmap` engine (defaulting to Atkinson, configurable via `SITE_CONFIG`),
-   * and returns crisp, true-positive light-mode and dark-mode PNG data URIs.
-   */
   static async resolve(
     overrides?: Partial<PortraitDitherConfig>,
   ): Promise<DitherPortraitViewModel> {

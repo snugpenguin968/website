@@ -1,0 +1,70 @@
+---
+import type { ExperienceCardViewModel } from '@adapters/view-models';
+
+interface Props {
+  experience: ExperienceCardViewModel;
+}
+
+const { experience } = Astro.props;
+---
+
+{
+  experience.link ? (
+    <a
+      href={experience.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="card-minimal group flex items-start gap-3.5 sm:gap-4 no-underline"
+    >
+      <div class="pt-0.5 text-2xl opacity-55 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+        <span class={experience.icon} aria-hidden="true" />
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+          <h3 class="text-base font-medium text-base-ink">{experience.name}</h3>
+          {(experience.period || experience.hostLabel) && (
+            <span class="font-mono text-[11px] text-subtle opacity-65 group-hover:opacity-100 transition-opacity shrink-0">
+              {experience.period ?? experience.hostLabel}
+            </span>
+          )}
+        </div>
+        {experience.role && (
+          <div class="mt-0.5 font-mono text-xs text-subtle">
+            {experience.role}
+            {experience.location ? ` · ${experience.location}` : ''}
+          </div>
+        )}
+        <p class="mt-1 text-sm text-muted leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
+          {experience.description}
+        </p>
+      </div>
+    </a>
+  ) : (
+    <div class="card-minimal group flex items-start gap-3.5 sm:gap-4">
+      <div class="pt-0.5 text-2xl opacity-55 group-hover:opacity-100 transition-opacity duration-200 shrink-0">
+        <span class={experience.icon} aria-hidden="true" />
+      </div>
+
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+          <h3 class="text-base font-medium text-base-ink">{experience.name}</h3>
+          {experience.period && (
+            <span class="font-mono text-[11px] text-subtle opacity-65 shrink-0">
+              {experience.period}
+            </span>
+          )}
+        </div>
+        {experience.role && (
+          <div class="mt-0.5 font-mono text-xs text-subtle">
+            {experience.role}
+            {experience.location ? ` · ${experience.location}` : ''}
+          </div>
+        )}
+        <p class="mt-1 text-sm text-muted leading-relaxed opacity-80">
+          {experience.description}
+        </p>
+      </div>
+    </div>
+  )
+}

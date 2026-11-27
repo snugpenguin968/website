@@ -13,10 +13,10 @@ const { vm } = Astro.props;
 <BaseLayout shell={vm.shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10">
-      <h1 class="text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
         {vm.heading}
       </h1>
-      <p class="mt-2 text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
 
       {
         vm.allTags.length > 0 && (
@@ -25,7 +25,7 @@ const { vm } = Astro.props;
               type="button"
               data-tag-btn="all"
               data-active="true"
-              class="rounded border border-base px-2.5 py-0.5 font-mono text-xs transition-colors bg-[#888888]/15 text-base-ink"
+              class="rounded border border-base px-2.5 py-1 font-mono text-xs transition-colors bg-[#888888]/15 text-base-ink"
             >
               all ({vm.totalCount})
             </button>
@@ -34,7 +34,7 @@ const { vm } = Astro.props;
                 type="button"
                 data-tag-btn={tag}
                 data-active="false"
-                class="rounded border border-base px-2.5 py-0.5 font-mono text-xs text-subtle hover:text-base-ink transition-colors"
+                class="rounded border border-base px-2.5 py-1 font-mono text-xs text-subtle hover:text-base-ink transition-colors"
               >
                 #{tag}
               </button>
@@ -46,14 +46,14 @@ const { vm } = Astro.props;
 
     {
       vm.yearGroups.length === 0 ? (
-        <p class="text-muted">No posts published yet.</p>
+        <p class="text-sm text-muted">No posts published yet.</p>
       ) : (
         <div class="space-y-12">
           {vm.yearGroups.map((group) => (
-            <div data-year-group class="relative pt-10">
+            <div data-year-group class="relative pt-8 sm:pt-10">
               <div
                 aria-hidden="true"
-                class="pointer-events-none select-none absolute -top-2 -left-4 sm:-left-8 font-condensed text-[6.5rem] sm:text-[7.5rem] leading-none font-bold text-transparent"
+                class="pointer-events-none select-none absolute -top-1 left-0 sm:-top-2 sm:-left-8 font-condensed text-[4.75rem] sm:text-[7.5rem] leading-none font-bold text-transparent"
                 style="-webkit-text-stroke: 1.5px rgba(136, 136, 136, 0.22);"
               >
                 {group.year}

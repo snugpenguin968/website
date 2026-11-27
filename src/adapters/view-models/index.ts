@@ -8,9 +8,9 @@ export type {
 } from './layout.vm';
 export type { DitherPortraitViewModel } from './portrait.vm';
 export type {
+  HomeExperiencePreviewViewModel,
   HomePageViewModel,
   HomePostPreviewViewModel,
-  HomeProjectPreviewViewModel,
 } from './home.vm';
 export type {
   BlogDetailViewModel,
@@ -21,8 +21,8 @@ export type {
   TocItemViewModel,
 } from './blog.vm';
 export type {
-  ProjectCardViewModel,
-  ProjectGroupViewModel,
-  ProjectsPageViewModel,
-} from './project.vm';
+  ExperienceCardViewModel,
+  ExperienceGroupViewModel,
+  ExperiencesPageViewModel,
+} from './experience.vm';
 export type { NotesPageViewModel, RenderedNoteViewModel } from './note.vm';

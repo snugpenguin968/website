@@ -7,26 +7,26 @@ describe('NavigationAdapter', () => {
     expect(isNavRouteActive('/blog', '/')).toBe(false);
     expect(isNavRouteActive('/blog', '/blog')).toBe(true);
     expect(isNavRouteActive('/blog/hello-world', '/blog')).toBe(true);
+    expect(isNavRouteActive('/experiences', '/experiences')).toBe(true);
     expect(isNavRouteActive('/blogger', '/blog')).toBe(false);
   });
 
   it('builds shell view model with active nav state, canonical URL, and logo polarity', () => {
     const shell = NavigationAdapter.buildShell({
-      currentPath: '/blog/mva-architecture',
-      pageTitle: 'MVA Architecture',
+      currentPath: '/blog/type-systems',
+      pageTitle: 'Type Systems',
       currentYear: 2026,
     });
 
-    expect(shell.head.pageTitle).toBe('MVA Architecture — John Tian');
-    expect(shell.head.canonicalUrl).toBe('https://snugpenguin.dev/blog/mva-architecture');
+    expect(shell.head.pageTitle).toBe('Type Systems — John Tian');
+    expect(shell.head.canonicalUrl).toBe('https://snugpenguin.dev/blog/type-systems');
     expect(shell.copyrightText).toBe('2026 © John Tian');
 
     const blogNav = shell.navItems.find((n) => n.id === 'blog');
-    const projectsNav = shell.navItems.find((n) => n.id === 'projects');
+    const expNav = shell.navItems.find((n) => n.id === 'experiences');
     expect(blogNav?.active).toBe(true);
-    expect(projectsNav?.active).toBe(false);
+    expect(expNav?.active).toBe(false);
 
-    // Light mode uses darklogo.png; dark mode uses logo.png
     expect(String(shell.logo.lightModeSrc)).toContain('darklogo');
     expect(String(shell.logo.darkModeSrc)).toContain('logo');
   });

@@ -1,9 +1,0 @@
-{
-  "name": "Dither Studio Engine",
-  "description": "Pure TypeScript server-side Atkinson, Floyd–Steinberg, and Bayer 4×4 error-diffusion rasterizer with true-positive light/dark polarity.",
-  "link": "https://github.com/snugpenguin968/website",
-  "icon": "i-ri-contrast-drop-2-line",
-  "category": "Web & Architecture",
-  "order": 2,
-  "featured": true
-}

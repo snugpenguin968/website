@@ -16,6 +16,6 @@ export {
   groupBlogPostsByYear,
   toBlogListItem,
 } from './blog.adapter';
-export { ProjectsPageAdapter } from './project.adapter';
+export { ExperiencesPageAdapter } from './experience.adapter';
 export { NotesPageAdapter } from './note.adapter';
 export { RssAdapter } from './rss.adapter';

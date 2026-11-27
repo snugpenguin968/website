@@ -1,0 +1,300 @@
+---
+import type { BackgroundStyle } from '@adapters/view-models';
+
+interface Props {
+  mode: BackgroundStyle;
+}
+
+const { mode } = Astro.props;
+---
+
+{
+  (mode === 'plum' || mode === 'rose') && (
+    <div
+      class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
+      style="mask-image: radial-gradient(circle, transparent 10%, black 90%); -webkit-mask-image: radial-gradient(circle, transparent 10%, black 90%);"
+      aria-hidden="true"
+    >
+      <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
+    </div>
+  )
+}
+
+{
+  mode === 'dot' && (
+    <div
+      class="pointer-events-none fixed inset-0 z-0 opacity-30 dark:opacity-20 print:hidden"
+      style="background-image: radial-gradient(rgba(136, 136, 136, 0.45) 1px, transparent 1px); background-size: 24px 24px;"
+      aria-hidden="true"
+    />
+  )
+}
+
+<script>
+  const R180 = Math.PI;
+  const R90 = Math.PI / 2;
+  const R15 = Math.PI / 12;
+  const STROKE_COLOR = '#88888838';
+  const MIN_BRANCH = 30;
+  const STEP_LEN = 6;
+  const FRAME_INTERVAL_MS = 1000 / 40;
+
+  let activeRafId: number | null = null;
+
+  function stopAnimation(): void {
+    if (activeRafId !== null) {
+      cancelAnimationFrame(activeRafId);
+      activeRafId = null;
+    }
+  }
+
+  function setupCanvas(canvas: HTMLCanvasElement): {
+    ctx: CanvasRenderingContext2D;
+    width: number;
+    height: number;
+  } | null {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+
+    return { ctx, width, height };
+  }
+
+  function runPlum(canvas: HTMLCanvasElement): void {
+    const setup = setupCanvas(canvas);
+    if (!setup) return;
+    const { ctx, width, height } = setup;
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = STROKE_COLOR;
+
+    let steps: (() => void)[] = [];
+    let prevSteps: (() => void)[] = [];
+
+    const polar2cart = (x: number, y: number, r: number, theta: number): [number, number] => [
+      x + r * Math.cos(theta),
+      y + r * Math.sin(theta),
+    ];
+
+    const step = (
+      x: number,
+      y: number,
+      rad: number,
+      counter: { value: number } = { value: 0 },
+    ): void => {
+      const length = Math.random() * STEP_LEN;
+      counter.value += 1;
+
+      const [nx, ny] = polar2cart(x, y, length, rad);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+
+      const rad1 = rad + Math.random() * R15;
+      const rad2 = rad - Math.random() * R15;
+
+      if (nx < -100 || nx > width + 100 || ny < -100 || ny > height + 100) return;
+
+      const rate = counter.value <= MIN_BRANCH ? 0.8 : 0.5;
+      if (Math.random() < rate) steps.push(() => step(nx, ny, rad1, counter));
+      if (Math.random() < rate) steps.push(() => step(nx, ny, rad2, counter));
+    };
+
+    const randomMiddle = (): number => Math.random() * 0.6 + 0.2;
+
+    steps = [
+      () => step(randomMiddle() * width, -5, R90),
+      () => step(randomMiddle() * width, height + 5, -R90),
+      () => step(-5, randomMiddle() * height, 0),
+      () => step(width + 5, randomMiddle() * height, R180),
+    ];
+
+    if (width < 500) {
+      steps = steps.slice(0, 2);
+    }
+
+    let lastTime = performance.now();
+
+    const frame = (now: number): void => {
+      if (now - lastTime >= FRAME_INTERVAL_MS) {
+        lastTime = now;
+        prevSteps = steps;
+        steps = [];
+
+        if (prevSteps.length === 0) {
+          stopAnimation();
+          return;
+        }
+
+        for (const fn of prevSteps) {
+          if (Math.random() < 0.5) {
+            steps.push(fn);
+          } else {
+            fn();
+          }
+        }
+      }
+      activeRafId = requestAnimationFrame(frame);
+    };
+
+    activeRafId = requestAnimationFrame(frame);
+  }
+
+  function runRose(canvas: HTMLCanvasElement): void {
+    const setup = setupCanvas(canvas);
+    if (!setup) return;
+    const { ctx, width, height } = setup;
+
+    ctx.lineWidth = 0.9;
+    ctx.strokeStyle = STROKE_COLOR;
+
+    interface RoseBlossom {
+      readonly cx: number;
+      readonly cy: number;
+      readonly radius: number;
+      readonly k: number;
+      readonly phase: number;
+      theta: number;
+      readonly maxTheta: number;
+    }
+
+    const scale = Math.min(width, height);
+    const baseRadius = Math.max(85, Math.min(200, scale * 0.24));
+    const blossoms: RoseBlossom[] =
+      width < 640
+        ? [
+            {
+              cx: width * 0.12,
+              cy: height * 0.16,
+              radius: baseRadius * 0.85,
+              k: 5 / 3,
+              phase: 0.2,
+              theta: 0,
+              maxTheta: Math.PI * 6,
+            },
+            {
+              cx: width * 0.88,
+              cy: height * 0.84,
+              radius: baseRadius * 0.9,
+              k: 7 / 4,
+              phase: 1.1,
+              theta: 0,
+              maxTheta: Math.PI * 8,
+            },
+          ]
+        : [
+            {
+              cx: width * 0.1,
+              cy: height * 0.2,
+              radius: baseRadius,
+              k: 5 / 3,
+              phase: 0.15,
+              theta: 0,
+              maxTheta: Math.PI * 6,
+            },
+            {
+              cx: width * 0.9,
+              cy: height * 0.26,
+              radius: baseRadius * 0.9,
+              k: 7 / 4,
+              phase: 0.9,
+              theta: 0,
+              maxTheta: Math.PI * 8,
+            },
+            {
+              cx: width * 0.14,
+              cy: height * 0.84,
+              radius: baseRadius * 0.85,
+              k: 4 / 3,
+              phase: 1.7,
+              theta: 0,
+              maxTheta: Math.PI * 6,
+            },
+            {
+              cx: width * 0.88,
+              cy: height * 0.82,
+              radius: baseRadius * 1.05,
+              k: 5 / 2,
+              phase: 0.5,
+              theta: 0,
+              maxTheta: Math.PI * 4,
+            },
+          ];
+
+    const stepSize = 0.045;
+    let lastTime = performance.now();
+
+    const frame = (now: number): void => {
+      if (now - lastTime >= FRAME_INTERVAL_MS) {
+        lastTime = now;
+        let remaining = false;
+
+        for (const rose of blossoms) {
+          if (rose.theta >= rose.maxTheta) continue;
+          remaining = true;
+
+          const startTheta = rose.theta;
+          const endTheta = Math.min(rose.maxTheta, rose.theta + stepSize * 3);
+
+          ctx.beginPath();
+          let first = true;
+          for (let t = startTheta; t <= endTheta; t += stepSize / 2) {
+            const r = rose.radius * Math.cos(rose.k * t);
+            const x = rose.cx + r * Math.cos(t + rose.phase);
+            const y = rose.cy + r * Math.sin(t + rose.phase);
+            if (first) {
+              ctx.moveTo(x, y);
+              first = false;
+            } else {
+              ctx.lineTo(x, y);
+            }
+          }
+          ctx.stroke();
+          rose.theta = endTheta;
+        }
+
+        if (!remaining) {
+          stopAnimation();
+          return;
+        }
+      }
+
+      activeRafId = requestAnimationFrame(frame);
+    };
+
+    activeRafId = requestAnimationFrame(frame);
+  }
+
+  function startBackground(): void {
+    stopAnimation();
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-bg-canvas]');
+    if (!canvas) return;
+
+    const mode = canvas.dataset['bgMode'];
+    if (mode === 'plum') {
+      runPlum(canvas);
+    } else if (mode === 'rose') {
+      runRose(canvas);
+    }
+  }
+
+  startBackground();
+  document.addEventListener('astro:page-load', startBackground);
+  document.addEventListener('astro:before-swap', stopAnimation);
+</script>

@@ -74,7 +74,7 @@ export default defineConfig({
     'prose-link':
       'border-b border-[#888888]/30 hover:border-current transition-colors duration-200',
     'card-minimal':
-      'block rounded-md px-4 py-3 -mx-4 transition-colors duration-200 hover:bg-[#888888]/8 dark:hover:bg-[#888888]/10',
+      'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#888888]/8 dark:hover:bg-[#888888]/10',
   },
   content: {
     filesystem: ['src/content/**/*.{json,md,mdx}'],

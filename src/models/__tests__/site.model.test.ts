@@ -2,9 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { SITE_CONFIG } from '../site.model';
 
 describe('site.model', () => {
-  it('defaults portrait dithering to atkinson with valid dimensions', () => {
+  it('defaults portrait dithering to atkinson with tuned resolution', () => {
     expect(SITE_CONFIG.portraitDither.algorithm).toBe('atkinson');
-    expect(SITE_CONFIG.portraitDither.targetWidth).toBeGreaterThan(0);
+    expect(SITE_CONFIG.portraitDither.targetWidth).toBeGreaterThanOrEqual(360);
+  });
+
+  it('exposes blog, experiences, and notes navigation routes', () => {
+    expect(SITE_CONFIG.navigation.map((n) => n.path)).toEqual([
+      '/blog',
+      '/experiences',
+      '/notes',
+    ]);
   });
 
   it('includes configured GitHub, LinkedIn, X, and RSS links', () => {
