@@ -37,6 +37,7 @@ export interface ShellViewModel {
   readonly logo: ThemeLogoViewModel;
   readonly navItems: readonly NavItemViewModel[];
   readonly socials: readonly SocialLinkViewModel[];
+  readonly rssHref: string | undefined;
   readonly background: BackgroundStyle;
   readonly copyrightText: string;
   readonly authorName: string;

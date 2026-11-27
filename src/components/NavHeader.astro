@@ -1,5 +1,6 @@
 ---
 import type { ShellViewModel } from '@adapters/view-models';
+import SearchButton from './SearchButton.astro';
 import ThemeLogo from './ThemeLogo.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
@@ -17,40 +18,59 @@ const { shell } = Astro.props;
   >
     <ThemeLogo logo={shell.logo} />
 
-    <div class="flex items-center gap-3.5 sm:gap-5 text-sm sm:text-[0.95rem]">
-      {
-        shell.navItems.map((item) => (
-          <a
-            href={item.href}
-            aria-current={item.active ? 'page' : undefined}
-            class:list={[
-              'nav-link py-1',
-              item.active ? 'opacity-100 text-base-ink font-medium' : '',
-            ]}
-          >
-            {item.label}
-          </a>
-        ))
-      }
-
-      <div class="hidden sm:flex items-center gap-3.5 pl-2 border-l border-base">
+    <div class="flex items-center gap-3 sm:gap-5 text-sm sm:text-[0.95rem]">
+      <div class="flex items-center gap-3.5 sm:gap-5">
         {
-          shell.socials.map((social) => (
+          shell.navItems.map((item) => (
             <a
-              href={social.href}
-              aria-label={social.label}
-              title={social.label}
-              target={social.external ? '_blank' : undefined}
-              rel={social.external ? 'noopener noreferrer' : undefined}
-              class="icon-btn text-lg"
+              href={item.href}
+              aria-current={item.active ? 'page' : undefined}
+              class:list={[
+                'nav-link py-1',
+                item.active ? 'opacity-100 text-base-ink font-medium' : '',
+              ]}
             >
-              <span class={social.icon} aria-hidden="true" />
+              {item.label}
             </a>
           ))
         }
       </div>
 
-      <ThemeToggle />
+      {
+        shell.socials.length > 0 && (
+          <div class="hidden sm:flex items-center gap-3.5 pl-4 border-l border-base">
+            {shell.socials.map((social) => (
+              <a
+                href={social.href}
+                aria-label={social.label}
+                title={social.label}
+                target={social.external ? '_blank' : undefined}
+                rel={social.external ? 'noopener noreferrer' : undefined}
+                class="icon-btn text-lg"
+              >
+                <span class={social.icon} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+        )
+      }
+
+      <div class="flex items-center gap-2 sm:gap-3.5 pl-3 sm:pl-4 border-l border-base">
+        <SearchButton />
+        {
+          shell.rssHref && (
+            <a
+              href={shell.rssHref}
+              aria-label="RSS Feed"
+              title="RSS Feed"
+              class="icon-btn p-1.5 sm:p-1 text-lg"
+            >
+              <span class="i-ri-rss-line" aria-hidden="true" />
+            </a>
+          )
+        }
+        <ThemeToggle />
+      </div>
     </div>
   </nav>
 </header>

@@ -22,6 +22,8 @@ describe('NavigationAdapter', () => {
     expect(shell.head.canonicalUrl).toBe('https://snugpenguin.dev/blog/type-systems');
     expect(shell.copyrightText).toBe('2026 © John Tian');
     expect(shell.navItems.map((n) => n.id)).toEqual(['experiences', 'blog']);
+    expect(shell.socials.map((s) => s.id)).toEqual(['github', 'linkedin', 'x', 'email']);
+    expect(shell.rssHref).toBe('/rss.xml');
 
     const blogNav = shell.navItems.find((n) => n.id === 'blog');
     const expNav = shell.navItems.find((n) => n.id === 'experiences');

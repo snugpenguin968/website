@@ -29,3 +29,4 @@ export type { HighlightItemViewModel, HighlightsPageViewModel } from './highligh
 export type { PhotoItemViewModel, PhotosPageViewModel } from './photo.vm';
 export type { RenderedShortViewModel, ShortsPageViewModel } from './short.vm';
 export type { NotesPageViewModel, RenderedNoteViewModel } from './note.vm';
+export type { SearchIndexItemViewModel } from './search.vm';
