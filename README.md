@@ -23,7 +23,34 @@ npm run dev
 Edit `src/models/site.model.ts`:
 
 - **Background effect**: Set `background` to `'plum'`, `'rose'`, `'dot'`, or `'none'`.
-- **Portrait dithering**: Adjust `portraitDither.algorithm` (`'atkinson'`, `'floyd-steinberg'`, or `'bayer4x4'`), `targetWidth`, `contrast`, and `revealOnHover`.
+- **Portrait dithering**: Adjust `portraitDither.algorithm` (`'atkinson'`, `'floyd-steinberg'`, or `'bayer4x4'`), `levels` (`2` for classic 1-bit, `4`–`8` for softer multi-level dithering), `inkOpacity` (`0`–`1`), `targetWidth`, `contrast`, and `revealOnHover`.
+
+### Dithering Any Arbitrary Image
+
+Call `ditherImageFile` from `@adapters/dither-image.adapter` on the server and pass the returned view model into `<DitherPortrait />`:
+
+```astro
+---
+import { ditherImageFile } from '@adapters/dither-image.adapter';
+import DitherPortrait from '@components/DitherPortrait.astro';
+import myPhoto from '@assets/images/my-photo.png';
+
+const dithered = await ditherImageFile({
+  filePath: 'src/assets/images/my-photo.png',
+  alt: 'My photo',
+  originalImage: myPhoto,
+  config: {
+    algorithm: 'atkinson',
+    levels: 5,
+    targetWidth: 480,
+    inkOpacity: 0.88,
+    revealOnHover: true,
+  },
+});
+---
+
+<DitherPortrait portrait={dithered} />
+```
 
 ## Adding Content
 

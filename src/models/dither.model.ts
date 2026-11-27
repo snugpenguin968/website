@@ -18,6 +18,25 @@ function clampByte(value: number): number {
   return value;
 }
 
+function clampUnit(value: number): number {
+  if (value <= 0) return 0;
+  if (value >= 1) return 1;
+  return value;
+}
+
+function normalizeLevels(levels: number): number {
+  return Math.max(2, Math.round(levels));
+}
+
+function quantizeValue(value: number, levels: number, threshold: number): number {
+  if (levels <= 2) {
+    return value >= threshold ? 255 : 0;
+  }
+  const shifted = clampByte(value + (128 - threshold));
+  const step = 255 / (levels - 1);
+  return clampByte(Math.round(Math.round(shifted / step) * step));
+}
+
 export function applyToneCurve(
   bitmap: GrayscaleBitmap,
   options: Pick<DitherOptions, 'brightness' | 'contrast' | 'gamma'>,
@@ -68,17 +87,17 @@ function runAtkinson(
   buffer: Float32Array,
   width: number,
   height: number,
+  levels: number,
   threshold: number,
 ): Uint8Array {
-  const brightMask = new Uint8Array(width * height);
+  const luminance = new Uint8Array(width * height);
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const idx = y * width + x;
       const oldVal = buffer[idx] ?? 0;
-      const isBright = oldVal >= threshold;
-      const newVal = isBright ? 255 : 0;
-      brightMask[idx] = isBright ? 1 : 0;
+      const newVal = quantizeValue(oldVal, levels, threshold);
+      luminance[idx] = newVal;
 
       const err = (oldVal - newVal) / 8;
       diffuseError(buffer, width, height, x + 1, y, err);
@@ -90,24 +109,24 @@ function runAtkinson(
     }
   }
 
-  return brightMask;
+  return luminance;
 }
 
 function runFloydSteinberg(
   buffer: Float32Array,
   width: number,
   height: number,
+  levels: number,
   threshold: number,
 ): Uint8Array {
-  const brightMask = new Uint8Array(width * height);
+  const luminance = new Uint8Array(width * height);
 
   for (let y = 0; y < height; y += 1) {
     for (let x = 0; x < width; x += 1) {
       const idx = y * width + x;
       const oldVal = buffer[idx] ?? 0;
-      const isBright = oldVal >= threshold;
-      const newVal = isBright ? 255 : 0;
-      brightMask[idx] = isBright ? 1 : 0;
+      const newVal = quantizeValue(oldVal, levels, threshold);
+      luminance[idx] = newVal;
 
       const err = oldVal - newVal;
       diffuseError(buffer, width, height, x + 1, y, (err * 7) / 16);
@@ -117,17 +136,18 @@ function runFloydSteinberg(
     }
   }
 
-  return brightMask;
+  return luminance;
 }
 
 function runBayer4x4(
   buffer: Float32Array,
   width: number,
   height: number,
+  levels: number,
   threshold: number,
 ): Uint8Array {
-  const brightMask = new Uint8Array(width * height);
-  const thresholdBias = threshold - 128;
+  const luminance = new Uint8Array(width * height);
+  const step = 255 / (levels - 1);
 
   for (let y = 0; y < height; y += 1) {
     const matrixRow = BAYER_4X4[y & 3];
@@ -135,12 +155,13 @@ function runBayer4x4(
       const idx = y * width + x;
       const val = buffer[idx] ?? 0;
       const cell = matrixRow?.[x & 3] ?? 0;
-      const cellThreshold = ((cell + 0.5) / 16) * 255 + thresholdBias;
-      brightMask[idx] = val >= cellThreshold ? 1 : 0;
+      const normalizedBias = (cell + 0.5) / 16 - 0.5;
+      const ditheredVal = val + normalizedBias * step;
+      luminance[idx] = quantizeValue(ditheredVal, levels, threshold);
     }
   }
 
-  return brightMask;
+  return luminance;
 }
 
 export function ditherGrayscaleBitmap(
@@ -151,18 +172,25 @@ export function ditherGrayscaleBitmap(
     throw new RangeError('GrayscaleBitmap dimensions must be positive integers.');
   }
 
+  const levels = normalizeLevels(options.levels);
   const adjusted = applyToneCurve(bitmap, options);
-  let brightMask: Uint8Array;
+  let luminance: Uint8Array;
 
   switch (options.algorithm) {
     case 'atkinson':
-      brightMask = runAtkinson(adjusted, bitmap.width, bitmap.height, options.threshold);
+      luminance = runAtkinson(adjusted, bitmap.width, bitmap.height, levels, options.threshold);
       break;
     case 'floyd-steinberg':
-      brightMask = runFloydSteinberg(adjusted, bitmap.width, bitmap.height, options.threshold);
+      luminance = runFloydSteinberg(
+        adjusted,
+        bitmap.width,
+        bitmap.height,
+        levels,
+        options.threshold,
+      );
       break;
     case 'bayer4x4':
-      brightMask = runBayer4x4(adjusted, bitmap.width, bitmap.height, options.threshold);
+      luminance = runBayer4x4(adjusted, bitmap.width, bitmap.height, levels, options.threshold);
       break;
     default: {
       const exhaustive: never = options.algorithm;
@@ -174,7 +202,8 @@ export function ditherGrayscaleBitmap(
     width: bitmap.width,
     height: bitmap.height,
     algorithm: options.algorithm,
-    brightMask,
+    levels,
+    luminance,
   };
 }
 
@@ -185,18 +214,20 @@ export function renderMaskToRgba(
   const pixelCount = mask.width * mask.height;
   const rgba = new Uint8Array(pixelCount * 4);
   const { r, g, b } = options.ink;
-  const drawWhenBright = options.mode === 'dark-bg';
+  const opacityScale = clampUnit(options.opacity);
+  const isDarkBg = options.mode === 'dark-bg';
 
   for (let i = 0; i < pixelCount; i += 1) {
-    const isBright = mask.brightMask[i] === 1;
-    const shouldDrawInk = drawWhenBright ? isBright : !isBright;
+    const lum = mask.luminance[i] ?? 0;
+    const rawIntensity = isDarkBg ? lum : 255 - lum;
+    const alpha = Math.round(rawIntensity * opacityScale);
 
-    if (shouldDrawInk) {
+    if (alpha > 0) {
       const offset = i * 4;
       rgba[offset] = r;
       rgba[offset + 1] = g;
       rgba[offset + 2] = b;
-      rgba[offset + 3] = 255;
+      rgba[offset + 3] = alpha;
     }
   }
 

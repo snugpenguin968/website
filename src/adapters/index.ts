@@ -8,6 +8,8 @@ export {
   normalizePathname,
 } from './format.adapter';
 export { NavigationAdapter, isNavRouteActive } from './navigation.adapter';
+export { DitherImageAdapter, ditherImageFile } from './dither-image.adapter';
+export type { DitherImageInput } from './dither-image.adapter';
 export { PortraitAdapter } from './portrait.adapter';
 export { HomePageAdapter } from './home.adapter';
 export {

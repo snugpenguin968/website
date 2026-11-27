@@ -22,7 +22,7 @@ const { portrait } = Astro.props;
       loading="eager"
       decoding="async"
       class:list={[
-        'dither-pixelated block dark:hidden h-full w-full object-cover transition-opacity duration-500',
+        'block dark:hidden h-full w-full object-cover transition-opacity duration-500',
         portrait.revealOnHover && portrait.originalImage ? 'group-hover:opacity-0' : '',
       ]}
     />
@@ -35,7 +35,7 @@ const { portrait } = Astro.props;
       loading="eager"
       decoding="async"
       class:list={[
-        'dither-pixelated hidden dark:block h-full w-full object-cover transition-opacity duration-500',
+        'hidden dark:block h-full w-full object-cover transition-opacity duration-500',
         portrait.revealOnHover && portrait.originalImage ? 'group-hover:opacity-0' : '',
       ]}
     />
