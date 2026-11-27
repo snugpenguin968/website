@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+.output/
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# OS & Editor
+.DS_Store
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.vscode/*
+!.vscode/extensions.json
