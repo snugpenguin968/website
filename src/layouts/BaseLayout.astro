@@ -142,6 +142,17 @@ const { shell } = Astro.props;
           }
         }
         document.addEventListener('astro:after-swap', syncPreferences);
+        window.addEventListener('pageshow', function (event) {
+          if (!event.persisted) return;
+          syncPreferences();
+          var hasThemeVars =
+            getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim() !== '';
+          var nav = document.querySelector('header nav');
+          var hasUtilityStyles = !nav || getComputedStyle(nav).display === 'flex';
+          if (!hasThemeVars || !hasUtilityStyles) {
+            window.location.reload();
+          }
+        });
       })();
     </script>
   </head>
