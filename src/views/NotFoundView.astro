@@ -1,0 +1,22 @@
+---
+import type { ShellViewModel } from '@adapters/view-models';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  shell: ShellViewModel;
+}
+
+const { shell } = Astro.props;
+---
+
+<BaseLayout shell={shell}>
+  <section class="mx-auto max-w-[65ch] py-16 slide-enter-content">
+    <h1 class="font-condensed text-6xl font-bold text-[#000000] dark:text-[#ffffff]">404</h1>
+    <p class="mt-3 text-muted">This page drifted out to sea.</p>
+    <div class="mt-8">
+      <a href="/" class="font-mono text-sm prose-link text-base-ink">
+        &gt; cd /
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,20 +1,8 @@
 ---
-// Phase 1 bootstrap entrypoint — full MVA Views & Adapters are wired in Phases 2–4.
-const title = 'John Tian';
+import { HomePageAdapter } from '@adapters/home.adapter';
+import HomeView from '@views/HomeView.astro';
+
+const vm = await HomePageAdapter.resolve(Astro.url.pathname);
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>{title}</title>
-  </head>
-  <body class="bg-base text-base-ink font-sans antialiased">
-    <main class="mx-auto max-w-2xl px-6 py-16">
-      <h1 class="text-2xl font-bold tracking-tight">{title}</h1>
-      <p class="mt-2 text-muted">Astro + UnoCSS + Strict TypeScript bootstrap ready.</p>
-    </main>
-  </body>
-</html>
+<HomeView vm={vm} />

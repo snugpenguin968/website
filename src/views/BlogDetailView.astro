@@ -1,0 +1,91 @@
+---
+import type { BlogDetailViewModel } from '@adapters/view-models';
+import TocSidebar from '@components/TocSidebar.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: BlogDetailViewModel;
+}
+
+const { vm } = Astro.props;
+const Content = vm.Content;
+---
+
+<BaseLayout shell={vm.shell}>
+  <article class="relative mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff] leading-tight">
+        {vm.title}
+      </h1>
+
+      <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-subtle">
+        <time datetime={vm.isoDate}>{vm.dateLabel}</time>
+        <span aria-hidden="true">·</span>
+        <span>{vm.readingTimeLabel}</span>
+        {
+          vm.updatedDateLabel && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>updated {vm.updatedDateLabel}</span>
+            </>
+          )
+        }
+      </div>
+
+      {
+        vm.tags.length > 0 && (
+          <div class="mt-4 flex flex-wrap gap-2">
+            {vm.tags.map((tag) => (
+              <span class="rounded border border-base px-2 py-0.5 font-mono text-[11px] text-subtle">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    <div class="antfu-prose">
+      <Content />
+    </div>
+
+    <hr class="w-12 mx-auto my-12 border-t border-base" />
+
+    <nav aria-label="Post navigation" class="flex flex-col gap-4">
+      {
+        (vm.previousPost || vm.nextPost) && (
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 text-sm">
+            <div>
+              {vm.previousPost && (
+                <a href={vm.previousPost.href} class="group block">
+                  <span class="block font-mono text-xs text-subtle">← Previous</span>
+                  <span class="mt-0.5 inline-block prose-link text-base-ink">
+                    {vm.previousPost.title}
+                  </span>
+                </a>
+              )}
+            </div>
+            <div class="sm:text-right">
+              {vm.nextPost && (
+                <a href={vm.nextPost.href} class="group block">
+                  <span class="block font-mono text-xs text-subtle">Next →</span>
+                  <span class="mt-0.5 inline-block prose-link text-base-ink">
+                    {vm.nextPost.title}
+                  </span>
+                </a>
+              )}
+            </div>
+          </div>
+        )
+      }
+
+      <div class="pt-4">
+        <a href="/blog" class="font-mono text-sm prose-link text-subtle hover:text-base-ink">
+          &gt; cd ..
+        </a>
+      </div>
+    </nav>
+
+    <TocSidebar headings={vm.headings} />
+  </article>
+</BaseLayout>

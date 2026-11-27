@@ -1,0 +1,46 @@
+---
+import type { ProjectsPageViewModel } from '@adapters/view-models';
+import ProjectCard from '@components/ProjectCard.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: ProjectsPageViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <section class="mx-auto max-w-4xl slide-enter-content">
+    <header class="mx-auto max-w-[65ch] text-center mb-14">
+      <h1 class="text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        {vm.heading}
+      </h1>
+      <p class="mt-2 text-muted italic">{vm.subtitle}</p>
+    </header>
+
+    {
+      vm.groups.length === 0 ? (
+        <p class="text-center text-muted">No projects listed yet.</p>
+      ) : (
+        <div class="space-y-14">
+          {vm.groups.map((group) => (
+            <section>
+              <div class="relative mb-6 text-center">
+                <h2 class="inline-block font-mono text-xs uppercase tracking-[0.2em] text-subtle border-b border-base pb-1.5">
+                  {group.category}
+                </h2>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-x-10 md:gap-y-4">
+                {group.projects.map((project) => (
+                  <ProjectCard project={project} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

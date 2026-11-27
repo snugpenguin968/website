@@ -1,0 +1,39 @@
+---
+---
+
+<button
+  type="button"
+  data-back-to-top
+  aria-label="Scroll to top"
+  title="Scroll to top"
+  class="fixed right-5 bottom-5 z-30 inline-flex h-10 w-10 items-center justify-center rounded-full border border-base bg-base/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 hover:bg-[#888888]/15"
+>
+  <span class="i-ri-arrow-up-line text-base" aria-hidden="true"></span>
+</button>
+
+<script>
+  function bindBackToTop(): void {
+    const button = document.querySelector<HTMLButtonElement>('[data-back-to-top]');
+    if (!button) return;
+
+    const updateVisibility = (): void => {
+      const visible = window.scrollY > 300;
+      button.classList.toggle('opacity-0', !visible);
+      button.classList.toggle('pointer-events-none', !visible);
+      button.classList.toggle('opacity-70', visible);
+    };
+
+    if (button.dataset['bound'] !== 'true') {
+      button.dataset['bound'] = 'true';
+      button.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      window.addEventListener('scroll', updateVisibility, { passive: true });
+    }
+
+    updateVisibility();
+  }
+
+  bindBackToTop();
+  document.addEventListener('astro:page-load', bindBackToTop);
+</script>

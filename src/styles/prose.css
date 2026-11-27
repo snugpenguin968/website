@@ -1,0 +1,126 @@
+/* AntfuStyle typographic prose refinements */
+.antfu-prose {
+  max-width: 65ch;
+  color: var(--c-fg);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.antfu-prose h1,
+.antfu-prose h2,
+.antfu-prose h3,
+.antfu-prose h4 {
+  color: var(--c-fg-deeper);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  scroll-margin-top: 5.5rem;
+}
+
+.antfu-prose h1 {
+  font-size: 2rem;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.antfu-prose h2 {
+  font-size: 1.4rem;
+  line-height: 1.35;
+  margin-top: 2.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.antfu-prose h3 {
+  font-size: 1.15rem;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.65rem;
+}
+
+.antfu-prose p {
+  margin-top: 1.15em;
+  margin-bottom: 1.15em;
+}
+
+.antfu-prose strong {
+  color: var(--c-fg-deep);
+  font-weight: 600;
+}
+
+.antfu-prose a {
+  color: var(--c-fg-deep);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(125, 125, 125, 0.35);
+  transition: border-color 0.25s ease, color 0.25s ease;
+}
+
+.antfu-prose a:hover {
+  border-bottom-color: var(--c-fg-deeper);
+  color: var(--c-fg-deeper);
+}
+
+.antfu-prose hr {
+  width: 50px;
+  margin: 2.5em auto;
+  border: 0;
+  border-top: 1px solid var(--c-border);
+}
+
+.antfu-prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.2em 0 0.2em 1.1em;
+  border-left: 2px solid var(--c-border);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.antfu-prose ul,
+.antfu-prose ol {
+  margin: 1.1em 0;
+  padding-left: 1.4em;
+}
+
+.antfu-prose ul {
+  list-style-type: disc;
+}
+
+.antfu-prose ol {
+  list-style-type: decimal;
+}
+
+.antfu-prose li {
+  margin: 0.35em 0;
+}
+
+.antfu-prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.15em 0.38em;
+  border-radius: 4px;
+  background-color: rgba(136, 136, 136, 0.12);
+  color: var(--c-fg-deep);
+}
+
+/* Shiki dual-theme code blocks */
+.antfu-prose pre.astro-code {
+  margin: 1.5em 0;
+  padding: 1rem 1.2rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--c-border);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  background-color: #fafafa !important;
+}
+
+.antfu-prose pre.astro-code span {
+  color: var(--shiki-light);
+}
+
+html.dark .antfu-prose pre.astro-code {
+  background-color: #0e0e0e !important;
+}
+
+html.dark .antfu-prose pre.astro-code span {
+  color: var(--shiki-dark);
+}

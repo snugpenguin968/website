@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 import mePortraitImage from '@assets/images/me.png';
@@ -6,9 +8,15 @@ import { SITE_CONFIG } from '@models/site.model';
 import type { PortraitDitherConfig } from '@models/entities';
 import type { DitherPortraitViewModel } from './view-models';
 
-const PORTRAIT_ASSET_PATH = fileURLToPath(
-  new URL('../assets/images/me.png', import.meta.url),
-);
+function resolvePortraitAssetPath(): string {
+  const fromProjectRoot = resolve(process.cwd(), 'src/assets/images/me.png');
+  if (existsSync(fromProjectRoot)) {
+    return fromProjectRoot;
+  }
+  return fileURLToPath(new URL('../assets/images/me.png', import.meta.url));
+}
+
+const PORTRAIT_ASSET_PATH = resolvePortraitAssetPath();
 
 const cache = new Map<string, DitherPortraitViewModel>();
 

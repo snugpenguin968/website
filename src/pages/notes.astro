@@ -1,0 +1,8 @@
+---
+import { NotesPageAdapter } from '@adapters/note.adapter';
+import NotesView from '@views/NotesView.astro';
+
+const vm = await NotesPageAdapter.resolve(Astro.url.pathname);
+---
+
+<NotesView vm={vm} />

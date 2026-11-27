@@ -1,0 +1,34 @@
+---
+import type { TocItemViewModel } from '@adapters/view-models';
+
+interface Props {
+  headings: readonly TocItemViewModel[];
+}
+
+const { headings } = Astro.props;
+---
+
+{
+  headings.length > 0 && (
+    <aside
+      aria-label="Table of contents"
+      class="hidden xl:block fixed top-28 right-8 w-56 max-h-[70vh] overflow-y-auto text-xs text-subtle"
+    >
+      <div class="mb-2.5 font-mono uppercase tracking-wider text-[11px] opacity-65">
+        On this page
+      </div>
+      <ul class="space-y-1.5 border-l border-base pl-3">
+        {headings.map((heading) => (
+          <li class:list={[heading.depth === 3 ? 'pl-3' : '']}>
+            <a
+              href={`#${heading.slug}`}
+              class="block leading-snug opacity-65 hover:opacity-100 hover:text-base-ink transition-opacity duration-150"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}

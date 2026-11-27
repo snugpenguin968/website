@@ -1,0 +1,56 @@
+---
+import type { ShellViewModel } from '@adapters/view-models';
+import ThemeLogo from './ThemeLogo.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  shell: ShellViewModel;
+}
+
+const { shell } = Astro.props;
+---
+
+<header class="w-full z-40">
+  <nav
+    aria-label="Primary navigation"
+    class="mx-auto flex max-w-5xl items-center justify-between px-6 py-6 sm:px-8"
+  >
+    <ThemeLogo logo={shell.logo} />
+
+    <div class="flex items-center gap-4 sm:gap-5 text-[0.95rem]">
+      {
+        shell.navItems.map((item) => (
+          <a
+            href={item.href}
+            aria-current={item.active ? 'page' : undefined}
+            class:list={[
+              'nav-link',
+              item.active ? 'opacity-100 text-base-ink font-medium' : '',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+
+      <div class="hidden sm:flex items-center gap-3.5 pl-1 border-l border-base">
+        {
+          shell.socials.map((social) => (
+            <a
+              href={social.href}
+              aria-label={social.label}
+              title={social.label}
+              target={social.external ? '_blank' : undefined}
+              rel={social.external ? 'noopener noreferrer' : undefined}
+              class="icon-btn text-lg"
+            >
+              <span class={social.icon} aria-hidden="true" />
+            </a>
+          ))
+        }
+      </div>
+
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>

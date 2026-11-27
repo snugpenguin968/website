@@ -1,0 +1,129 @@
+---
+import type { HomePageViewModel } from '@adapters/view-models';
+import DitherPortrait from '@components/DitherPortrait.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: HomePageViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <article class="mx-auto max-w-[65ch] slide-enter-content">
+    {/* Hero header + dithered portrait */}
+    <section class="flex flex-col-reverse gap-8 sm:flex-row sm:items-start sm:justify-between">
+      <div class="min-w-0 flex-1">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+          {vm.authorName}
+        </h1>
+        <p class="mt-2 font-mono text-xs sm:text-sm text-subtle">
+          {vm.tagline}
+        </p>
+
+        <div class="antfu-prose mt-6">
+          {vm.bioParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+
+      <div class="w-44 sm:w-48 md:w-52 shrink-0">
+        <DitherPortrait portrait={vm.portrait} />
+      </div>
+    </section>
+
+    <hr class="w-12 mx-auto my-10 border-t border-base" />
+
+    {/* Find me on */}
+    <section>
+      <p class="text-sm text-muted">Find me on</p>
+      <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2.5 text-sm">
+        {
+          vm.shell.socials.map((social) => (
+            <a
+              href={social.href}
+              target={social.external ? '_blank' : undefined}
+              rel={social.external ? 'noopener noreferrer' : undefined}
+              class="inline-flex items-center gap-1.5 prose-link text-base-ink opacity-80 hover:opacity-100"
+            >
+              <span class={`${social.icon} text-base`} aria-hidden="true" />
+              <span>{social.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    {/* Recent Writing */}
+    {
+      vm.recentPosts.length > 0 && (
+        <section class="mt-14">
+          <div class="flex items-baseline justify-between">
+            <h2 class="text-sm font-mono uppercase tracking-wider text-subtle">
+              Recent Writing
+            </h2>
+            <a href="/blog" class="text-xs font-mono prose-link text-subtle hover:text-base-ink">
+              all posts →
+            </a>
+          </div>
+
+          <ul class="mt-4 space-y-2">
+            {vm.recentPosts.map((post) => (
+              <li class="list-none">
+                <a
+                  href={post.href}
+                  class="group flex flex-col gap-0.5 py-1.5 sm:flex-row sm:items-baseline sm:justify-between opacity-80 hover:opacity-100 transition-opacity"
+                >
+                  <span class="text-base text-base-ink">{post.title}</span>
+                  <span class="font-mono text-xs text-subtle shrink-0">
+                    <time datetime={post.isoDate}>{post.dateLabel}</time>
+                    <span class="mx-1.5" aria-hidden="true">·</span>
+                    <span>{post.readingTimeLabel}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    {/* Selected Projects */}
+    {
+      vm.featuredProjects.length > 0 && (
+        <section class="mt-14">
+          <div class="flex items-baseline justify-between">
+            <h2 class="text-sm font-mono uppercase tracking-wider text-subtle">
+              Selected Projects
+            </h2>
+            <a href="/projects" class="text-xs font-mono prose-link text-subtle hover:text-base-ink">
+              all projects →
+            </a>
+          </div>
+
+          <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {vm.featuredProjects.map((project) => (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card-minimal group flex items-start gap-3 no-underline"
+              >
+                <span
+                  class={`${project.icon} mt-0.5 text-xl opacity-55 group-hover:opacity-100 transition-opacity shrink-0`}
+                  aria-hidden="true"
+                />
+                <div class="min-w-0">
+                  <div class="text-sm font-medium text-base-ink">{project.name}</div>
+                  <p class="mt-0.5 text-xs text-muted leading-relaxed opacity-80">
+                    {project.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

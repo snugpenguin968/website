@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { BlogPageAdapter } from '@adapters/blog.adapter';
+import BlogDetailView from '@views/BlogDetailView.astro';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = await BlogPageAdapter.resolveStaticPaths();
+  return [...paths];
+};
+
+const slug = Astro.params['slug'];
+if (typeof slug !== 'string') {
+  return Astro.redirect('/blog');
+}
+
+const vm = await BlogPageAdapter.resolveDetail(slug, Astro.url.pathname);
+if (vm === undefined) {
+  return Astro.redirect('/404');
+}
+---
+
+<BlogDetailView vm={vm} />

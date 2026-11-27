@@ -1,0 +1,9 @@
+{
+  "name": "MVA Boundary Guard",
+  "description": "Lightweight static import-graph validator enforcing strict unidirectional Model–View–Adapter architecture in TypeScript and Astro.",
+  "link": "https://github.com/snugpenguin968/website",
+  "icon": "i-ri-shield-check-line",
+  "category": "Tools & Systems",
+  "order": 3,
+  "featured": true
+}
