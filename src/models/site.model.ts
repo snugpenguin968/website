@@ -17,9 +17,12 @@ export const SITE_CONFIG: SiteConfigEntity = {
     location: 'United States',
   },
   navigation: [
-    { id: 'experiences', label: 'Experiences', path: '/experiences' },
-    { id: 'blog', label: 'Blog', path: '/blog' },
-    { id: 'notes', label: 'Notes', path: '/notes' },
+    { id: 'experiences', label: 'Experiences', path: '/experiences', alwaysVisible: true },
+    { id: 'blog', label: 'Blog', path: '/blog', alwaysVisible: true },
+    { id: 'highlights', label: 'Highlights', path: '/highlights', alwaysVisible: false },
+    { id: 'photos', label: 'Photos', path: '/photos', alwaysVisible: false },
+    { id: 'shorts', label: 'Shorts', path: '/shorts', alwaysVisible: false },
+    { id: 'notes', label: 'Notes', path: '/notes', alwaysVisible: false },
   ],
   socials: [
     {

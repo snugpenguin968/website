@@ -54,9 +54,14 @@ const dithered = await ditherImageFile({
 
 ## Adding Content
 
-- **Blog posts**: Add `.md` or `.mdx` files under `src/content/blog/`.
-- **Experiences**: Add `.json` files under `src/content/experiences/` with any `category` subsection (e.g., `"Work Experience"`, `"Projects"`, `"Research"`), plus optional `role`, `period`, `location`, and `link` fields.
-- **Notes**: Add `.md` or `.mdx` files under `src/content/notes/`.
+Every collection supports `draft: true` to keep unfinished entries hidden from the live site.
+
+- **Experiences** (always visible in nav): Add `.json` files under `src/content/experiences/` with any `category` subsection (e.g., `"Work Experience"`, `"Projects"`, `"Research"`), plus optional `role`, `period`, `location`, `link`, and `draft`.
+- **Blog** (always visible in nav): Add `.md` or `.mdx` files under `src/content/blog/`.
+- **Highlights** (shown in nav once at least 1 published entry exists): Add `.json` files under `src/content/highlights/`.
+- **Photos** (shown in nav once at least 1 published entry exists): Add `.json` files under `src/content/photos/`.
+- **Shorts** (shown in nav once at least 1 published entry exists): Add `.md` or `.mdx` files under `src/content/shorts/`.
+- **Notes** (shown in nav once at least 1 published entry exists): Add `.md` or `.mdx` files under `src/content/notes/`.
 
 ## Deploying with Cloudflare Pages
 

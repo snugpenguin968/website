@@ -1,0 +1,10 @@
+{
+  "title": "Sample Highlight",
+  "description": "An example highlight entry. Set draft to false to publish and reveal the Highlights tab.",
+  "date": "2026-11-27",
+  "category": "Talk",
+  "link": "https://example.com",
+  "icon": "i-ri-star-line",
+  "order": 1,
+  "draft": true
+}

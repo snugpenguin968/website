@@ -1,11 +1,18 @@
 import { ExperienceRepository } from '@models/repositories';
 import { extractHostLabel } from './format.adapter';
-import { NavigationAdapter } from './navigation.adapter';
+import { ShellAdapter } from './shell.adapter';
 import type { ExperienceGroupViewModel, ExperiencesPageViewModel } from './view-models';
 
 export class ExperiencesPageAdapter {
   static async resolve(currentPath: string = '/experiences'): Promise<ExperiencesPageViewModel> {
-    const groupedEntities = await ExperienceRepository.findGroupedByCategory();
+    const [groupedEntities, shell] = await Promise.all([
+      ExperienceRepository.findGroupedByCategory(),
+      ShellAdapter.resolve({
+        currentPath,
+        pageTitle: 'Experiences',
+        description: 'Work experiences, software projects, and other work.',
+      }),
+    ]);
 
     const groups: readonly ExperienceGroupViewModel[] = groupedEntities.map((group) => ({
       category: group.category,
@@ -22,12 +29,6 @@ export class ExperiencesPageAdapter {
         hostLabel: item.link !== undefined ? extractHostLabel(item.link) : undefined,
       })),
     }));
-
-    const shell = NavigationAdapter.buildShell({
-      currentPath,
-      pageTitle: 'Experiences',
-      description: 'Work experiences, software projects, and other work.',
-    });
 
     return {
       shell,

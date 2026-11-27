@@ -30,10 +30,13 @@ export interface SocialLinkEntity {
   readonly external: boolean;
 }
 
+export type NavRouteId = 'experiences' | 'blog' | 'highlights' | 'photos' | 'shorts' | 'notes';
+
 export interface NavRouteEntity {
-  readonly id: string;
+  readonly id: NavRouteId;
   readonly label: string;
   readonly path: string;
+  readonly alwaysVisible: boolean;
 }
 
 export interface AuthorProfileEntity {

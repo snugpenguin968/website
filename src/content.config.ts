@@ -29,6 +29,45 @@ const experiences = defineCollection({
     icon: z.string().min(1).default('i-ri-sparkling-line'),
     order: z.number().int().default(0),
     featured: z.boolean().default(false),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const highlights = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/highlights' }),
+  schema: z.object({
+    title: z.string().min(1),
+    description: z.string().min(1),
+    date: z.coerce.date().optional(),
+    category: z.string().min(1).optional(),
+    link: z.string().url().optional(),
+    icon: z.string().min(1).default('i-ri-star-line'),
+    order: z.number().int().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const photos = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/photos' }),
+  schema: z.object({
+    title: z.string().min(1),
+    src: z.string().min(1),
+    alt: z.string().min(1),
+    caption: z.string().min(1).optional(),
+    takenAt: z.coerce.date().optional(),
+    location: z.string().min(1).optional(),
+    order: z.number().int().default(0),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const shorts = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/shorts' }),
+  schema: z.object({
+    title: z.string().min(1).optional(),
+    publishedAt: z.coerce.date(),
+    tags: z.array(z.string().min(1)).default([]),
+    draft: z.boolean().default(false),
   }),
 });
 
@@ -45,5 +84,8 @@ const notes = defineCollection({
 export const collections = {
   blog,
   experiences,
+  highlights,
+  photos,
+  shorts,
   notes,
 };

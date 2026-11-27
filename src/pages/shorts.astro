@@ -1,0 +1,8 @@
+---
+import { ShortsPageAdapter } from '@adapters/short.adapter';
+import ShortsView from '@views/ShortsView.astro';
+
+const vm = await ShortsPageAdapter.resolve(Astro.url.pathname);
+---
+
+<ShortsView vm={vm} />

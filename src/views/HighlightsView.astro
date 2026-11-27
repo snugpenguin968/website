@@ -1,0 +1,82 @@
+---
+import type { HighlightsPageViewModel } from '@adapters/view-models';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: HighlightsPageViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <section class="mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10 sm:mb-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        {vm.heading}
+      </h1>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+    </header>
+
+    {
+      vm.items.length === 0 ? (
+        <p class="text-sm text-muted">No highlights yet.</p>
+      ) : (
+        <div class="space-y-2">
+          {vm.items.map((item) =>
+            item.link ? (
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="card-minimal group flex items-start gap-3.5 sm:gap-4 no-underline"
+              >
+                <div class="pt-0.5 text-xl opacity-55 group-hover:opacity-100 transition-opacity shrink-0">
+                  <span class={item.icon} aria-hidden="true" />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+                    <h2 class="text-base font-medium text-base-ink">{item.title}</h2>
+                    {(item.dateLabel || item.hostLabel) && (
+                      <span class="font-mono text-[11px] text-subtle opacity-65 group-hover:opacity-100 transition-opacity shrink-0">
+                        {item.dateLabel ?? item.hostLabel}
+                      </span>
+                    )}
+                  </div>
+                  {item.category && (
+                    <div class="mt-0.5 font-mono text-[11px] text-subtle">{item.category}</div>
+                  )}
+                  <p class="mt-1 text-sm text-muted leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
+                    {item.description}
+                  </p>
+                </div>
+              </a>
+            ) : (
+              <div class="card-minimal group flex items-start gap-3.5 sm:gap-4">
+                <div class="pt-0.5 text-xl opacity-55 shrink-0">
+                  <span class={item.icon} aria-hidden="true" />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
+                    <h2 class="text-base font-medium text-base-ink">{item.title}</h2>
+                    {item.dateLabel && (
+                      <span class="font-mono text-[11px] text-subtle opacity-65 shrink-0">
+                        {item.dateLabel}
+                      </span>
+                    )}
+                  </div>
+                  {item.category && (
+                    <div class="mt-0.5 font-mono text-[11px] text-subtle">{item.category}</div>
+                  )}
+                  <p class="mt-1 text-sm text-muted leading-relaxed opacity-80">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            ),
+          )}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

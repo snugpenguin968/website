@@ -8,12 +8,25 @@ describe('site.model', () => {
     expect(SITE_CONFIG.portraitDither.targetWidth).toBeGreaterThanOrEqual(420);
   });
 
-  it('exposes experiences, blog, and notes navigation routes', () => {
+  it('keeps experiences and blog always visible and hides optional sections until populated', () => {
     expect(SITE_CONFIG.navigation.map((n) => n.path)).toEqual([
       '/experiences',
       '/blog',
+      '/highlights',
+      '/photos',
+      '/shorts',
       '/notes',
     ]);
+
+    const alwaysVisible = SITE_CONFIG.navigation
+      .filter((n) => n.alwaysVisible)
+      .map((n) => n.id);
+    const conditional = SITE_CONFIG.navigation
+      .filter((n) => !n.alwaysVisible)
+      .map((n) => n.id);
+
+    expect(alwaysVisible).toEqual(['experiences', 'blog']);
+    expect(conditional).toEqual(['highlights', 'photos', 'shorts', 'notes']);
   });
 
   it('includes configured GitHub, LinkedIn, X, Email, and RSS links', () => {

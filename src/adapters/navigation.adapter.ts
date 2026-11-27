@@ -1,7 +1,7 @@
 import darkLogoImage from '@assets/images/darklogo.png';
 import lightLogoImage from '@assets/images/logo.png';
 import { SITE_CONFIG } from '@models/site.model';
-import type { SiteConfigEntity } from '@models/entities';
+import type { NavRouteId, SiteConfigEntity } from '@models/entities';
 import { formatCopyrightRange, normalizePathname } from './format.adapter';
 import type { NavItemViewModel, ShellViewModel } from './view-models';
 
@@ -11,6 +11,7 @@ export interface ResolveShellInput {
   readonly description?: string;
   readonly config?: SiteConfigEntity;
   readonly currentYear?: number;
+  readonly populatedRouteIds?: ReadonlySet<NavRouteId>;
 }
 
 export function isNavRouteActive(currentPath: string, navPath: string): boolean {
@@ -34,13 +35,16 @@ export class NavigationAdapter {
 
     const canonicalUrl = new URL(normalizedPath, config.siteUrl).toString();
     const year = input.currentYear ?? new Date().getUTCFullYear();
+    const populated = input.populatedRouteIds ?? new Set<NavRouteId>();
 
-    const navItems: readonly NavItemViewModel[] = config.navigation.map((route) => ({
-      id: route.id,
-      label: route.label,
-      href: route.path,
-      active: isNavRouteActive(normalizedPath, route.path),
-    }));
+    const navItems: readonly NavItemViewModel[] = config.navigation
+      .filter((route) => route.alwaysVisible || populated.has(route.id))
+      .map((route) => ({
+        id: route.id,
+        label: route.label,
+        href: route.path,
+        active: isNavRouteActive(normalizedPath, route.path),
+      }));
 
     return {
       head: {

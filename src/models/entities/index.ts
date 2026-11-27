@@ -3,6 +3,7 @@ export type {
   BackgroundStyle,
   DitherAlgorithm,
   NavRouteEntity,
+  NavRouteId,
   PortraitDitherConfig,
   RgbColor,
   SiteConfigEntity,
@@ -17,6 +18,9 @@ export type {
   ExperienceCategoryGroupEntity,
   ExperienceEntity,
 } from './experience.entity';
+export type { HighlightEntity } from './highlight.entity';
+export type { PhotoEntity } from './photo.entity';
+export type { ShortEntity } from './short.entity';
 export type { NoteEntity } from './note.entity';
 export type {
   DitheredLuminanceMask,

@@ -11,6 +11,7 @@ export interface ExperienceEntity {
   readonly icon: string;
   readonly order: number;
   readonly featured: boolean;
+  readonly draft: boolean;
 }
 
 export interface ExperienceCategoryGroupEntity {

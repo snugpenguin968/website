@@ -1,0 +1,57 @@
+---
+import type { PhotosPageViewModel } from '@adapters/view-models';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: PhotosPageViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <section class="mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10 sm:mb-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        {vm.heading}
+      </h1>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+    </header>
+
+    {
+      vm.photos.length === 0 ? (
+        <p class="text-sm text-muted">No photos yet.</p>
+      ) : (
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {vm.photos.map((photo) => (
+            <figure class="m-0 overflow-hidden rounded-sm border border-base bg-base">
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/3] w-full object-cover"
+              />
+              <figcaption class="px-3.5 py-2.5">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <span class="text-sm font-medium text-base-ink">{photo.title}</span>
+                  {photo.dateLabel && (
+                    <span class="font-mono text-[11px] text-subtle">{photo.dateLabel}</span>
+                  )}
+                </div>
+                {photo.caption && (
+                  <p class="mt-1 text-xs text-muted leading-relaxed">{photo.caption}</p>
+                )}
+                {photo.location && (
+                  <div class="mt-1 font-mono text-[11px] text-subtle opacity-75">
+                    {photo.location}
+                  </div>
+                )}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
