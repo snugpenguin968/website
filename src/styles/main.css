@@ -13,18 +13,18 @@
   --c-border: rgba(35, 32, 28, 0.12);
   --c-scrollbar: #e2dcd0;
   --c-scrollbar-hover: #cbc3b4;
-  --c-accent: #b84a39;
-  --c-accent-soft: rgba(184, 74, 57, 0.15);
+  --c-accent: #c93b2b;
+  --c-accent-soft: rgba(201, 59, 43, 0.2);
 }
 
 html[data-accent='moss'] {
-  --c-accent: #4a6b53;
-  --c-accent-soft: rgba(74, 107, 83, 0.15);
+  --c-accent: #2f6f46;
+  --c-accent-soft: rgba(47, 111, 70, 0.2);
 }
 
 html[data-accent='sumi'] {
-  --c-accent: #23201c;
-  --c-accent-soft: rgba(35, 32, 28, 0.12);
+  --c-accent: #171512;
+  --c-accent-soft: rgba(23, 21, 18, 0.16);
 }
 
 html.dark {
@@ -37,19 +37,19 @@ html.dark {
   --c-border: rgba(223, 217, 206, 0.12);
   --c-scrollbar: #272521;
   --c-scrollbar-hover: #3b3832;
-  --c-accent: #d46a59;
-  --c-accent-soft: rgba(212, 106, 89, 0.2);
+  --c-accent: #e86352;
+  --c-accent-soft: rgba(232, 99, 82, 0.26);
   color-scheme: dark;
 }
 
 html.dark[data-accent='moss'] {
-  --c-accent: #82a88c;
-  --c-accent-soft: rgba(130, 168, 140, 0.2);
+  --c-accent: #62b882;
+  --c-accent-soft: rgba(98, 184, 130, 0.26);
 }
 
 html.dark[data-accent='sumi'] {
-  --c-accent: #dfd9ce;
-  --c-accent-soft: rgba(223, 217, 206, 0.16);
+  --c-accent: #f0ebe1;
+  --c-accent-soft: rgba(240, 235, 225, 0.2);
 }
 
 html {
@@ -57,7 +57,7 @@ html {
   color: var(--c-fg);
   font-family: var(--font-sans);
   scroll-behavior: smooth;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: clip;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -202,6 +202,11 @@ html.dark::view-transition-new(root) {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--c-bg);
 }
 
 ::-webkit-scrollbar-thumb {

@@ -63,7 +63,7 @@ export const SITE_CONFIG: SiteConfigEntity = {
   ],
   background: 'plum',
   accent: 'vermilion',
-  texture: 'shoji',
+  texture: 'mist',
   portraitDither: {
     algorithm: 'atkinson',
     levels: 5,
