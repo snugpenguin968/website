@@ -9,10 +9,14 @@ const { mode } = Astro.props;
 ---
 
 {
-  (mode === 'plum' || mode === 'rose') && (
+  mode !== 'none' && (
     <div
       class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
-      style="mask-image: radial-gradient(circle, transparent 10%, black 90%); -webkit-mask-image: radial-gradient(circle, transparent 10%, black 90%);"
+      style={
+        mode === 'plum' || mode === 'rose'
+          ? 'mask-image: radial-gradient(circle, transparent, black); -webkit-mask-image: radial-gradient(circle, transparent, black);'
+          : undefined
+      }
       aria-hidden="true"
     >
       <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
@@ -20,31 +24,33 @@ const { mode } = Astro.props;
   )
 }
 
-{
-  mode === 'dot' && (
-    <div
-      class="pointer-events-none fixed inset-0 z-0 opacity-30 dark:opacity-20 print:hidden"
-      style="background-image: radial-gradient(rgba(136, 136, 136, 0.45) 1px, transparent 1px); background-size: 24px 24px;"
-      aria-hidden="true"
-    />
-  )
-}
-
 <script>
   const R180 = Math.PI;
   const R90 = Math.PI / 2;
   const R15 = Math.PI / 12;
-  const STROKE_COLOR = '#88888838';
-  const MIN_BRANCH = 30;
-  const STEP_LEN = 6;
-  const FRAME_INTERVAL_MS = 1000 / 40;
+  const STROKE_COLOR = '#88888835';
+  const MIN_BRANCH = 42;
+  const MAX_BRANCH_STEPS = 550;
+  const STEP_LEN = 7;
+  const PLUM_INTERVAL_MS = 1000 / 40;
+  const FLOW_INTERVAL_MS = 1000 / 30;
 
   let activeRafId: number | null = null;
+  let resizeTimer: number | null = null;
+  let cleanupListeners: (() => void) | null = null;
 
   function stopAnimation(): void {
     if (activeRafId !== null) {
       cancelAnimationFrame(activeRafId);
       activeRafId = null;
+    }
+    if (resizeTimer !== null) {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = null;
+    }
+    if (cleanupListeners !== null) {
+      cleanupListeners();
+      cleanupListeners = null;
     }
   }
 
@@ -58,10 +64,10 @@ const { mode } = Astro.props;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -70,7 +76,48 @@ const { mode } = Astro.props;
     return { ctx, width, height };
   }
 
-  function runPlum(canvas: HTMLCanvasElement): void {
+  function hash3(x: number, y: number, z: number): number {
+    const n = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453123;
+    return n - Math.floor(n);
+  }
+
+  function fade(t: number): number {
+    return t * t * (3 - 2 * t);
+  }
+
+  function lerp(a: number, b: number, t: number): number {
+    return a + (b - a) * t;
+  }
+
+  function valueNoise3D(x: number, y: number, z: number): number {
+    const xi = Math.floor(x);
+    const yi = Math.floor(y);
+    const zi = Math.floor(z);
+    const xf = fade(x - xi);
+    const yf = fade(y - yi);
+    const zf = fade(z - zi);
+
+    const c000 = hash3(xi, yi, zi);
+    const c100 = hash3(xi + 1, yi, zi);
+    const c010 = hash3(xi, yi + 1, zi);
+    const c110 = hash3(xi + 1, yi + 1, zi);
+    const c001 = hash3(xi, yi, zi + 1);
+    const c101 = hash3(xi + 1, yi, zi + 1);
+    const c011 = hash3(xi, yi + 1, zi + 1);
+    const c111 = hash3(xi + 1, yi + 1, zi + 1);
+
+    const x00 = lerp(c000, c100, xf);
+    const x10 = lerp(c010, c110, xf);
+    const x01 = lerp(c001, c101, xf);
+    const x11 = lerp(c011, c111, xf);
+
+    const y0 = lerp(x00, x10, yf);
+    const y1 = lerp(x01, x11, yf);
+
+    return lerp(y0, y1, zf);
+  }
+
+  function runPlum(canvas: HTMLCanvasElement, reducedMotion: boolean): void {
     const setup = setupCanvas(canvas);
     if (!setup) return;
     const { ctx, width, height } = setup;
@@ -92,7 +139,8 @@ const { mode } = Astro.props;
       rad: number,
       counter: { value: number } = { value: 0 },
     ): void => {
-      const length = Math.random() * STEP_LEN;
+      if (counter.value >= MAX_BRANCH_STEPS) return;
+      const length = Math.random() * STEP_LEN + 1.5;
       counter.value += 1;
 
       const [nx, ny] = polar2cart(x, y, length, rad);
@@ -106,7 +154,8 @@ const { mode } = Astro.props;
 
       if (nx < -100 || nx > width + 100 || ny < -100 || ny > height + 100) return;
 
-      const rate = counter.value <= MIN_BRANCH ? 0.8 : 0.5;
+      const rate =
+        counter.value <= MIN_BRANCH ? 0.8 : counter.value <= 260 ? 0.52 : 0.42;
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad1, counter));
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad2, counter));
     };
@@ -124,16 +173,27 @@ const { mode } = Astro.props;
       steps = steps.slice(0, 2);
     }
 
+    if (reducedMotion) {
+      for (let i = 0; i < 120 && steps.length > 0; i += 1) {
+        prevSteps = steps;
+        steps = [];
+        for (const fn of prevSteps) {
+          fn();
+        }
+      }
+      return;
+    }
+
     let lastTime = performance.now();
 
     const frame = (now: number): void => {
-      if (now - lastTime >= FRAME_INTERVAL_MS) {
+      if (now - lastTime >= PLUM_INTERVAL_MS) {
         lastTime = now;
         prevSteps = steps;
         steps = [];
 
         if (prevSteps.length === 0) {
-          stopAnimation();
+          activeRafId = null;
           return;
         }
 
@@ -151,125 +211,316 @@ const { mode } = Astro.props;
     activeRafId = requestAnimationFrame(frame);
   }
 
-  function runRose(canvas: HTMLCanvasElement): void {
+  function runDot(canvas: HTMLCanvasElement, reducedMotion: boolean): void {
     const setup = setupCanvas(canvas);
     if (!setup) return;
     const { ctx, width, height } = setup;
 
-    ctx.lineWidth = 0.9;
-    ctx.strokeStyle = STROKE_COLOR;
+    const spacing = width < 640 ? 28 : 24;
+    const noiseScale = 0.0045;
+    const amplitude = 12;
+    const points: { readonly x: number; readonly y: number }[] = [];
 
-    interface RoseBlossom {
+    for (let x = -spacing; x <= width + spacing; x += spacing) {
+      for (let y = -spacing; y <= height + spacing; y += spacing) {
+        points.push({ x, y });
+      }
+    }
+
+    let pointerX = -9999;
+    let pointerY = -9999;
+
+    const onPointerMove = (event: PointerEvent): void => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+    };
+    const onPointerLeave = (): void => {
+      pointerX = -9999;
+      pointerY = -9999;
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    cleanupListeners = () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerleave', onPointerLeave);
+    };
+
+    const drawFrame = (timeSec: number): void => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (const pt of points) {
+        const n = valueNoise3D(pt.x * noiseScale, pt.y * noiseScale, timeSec * 0.35);
+        const angle = n * Math.PI * 4;
+        const dx = Math.cos(angle) * amplitude;
+        const dy = Math.sin(angle) * amplitude;
+        const px = pt.x + dx;
+        const py = pt.y + dy;
+
+        const dist = Math.hypot(px - pointerX, py - pointerY);
+        const hoverBoost = dist < 140 ? (1 - dist / 140) * 0.28 : 0;
+        const alpha = Math.min(0.6, 0.14 + n * 0.24 + hoverBoost);
+        const radius = 1.15 + hoverBoost * 1.4;
+
+        ctx.fillStyle = `rgba(136, 136, 136, ${alpha.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    drawFrame(0);
+    if (reducedMotion) return;
+
+    let lastTime = performance.now();
+    const startTime = lastTime;
+
+    const frame = (now: number): void => {
+      if (now - lastTime >= FLOW_INTERVAL_MS) {
+        lastTime = now;
+        drawFrame((now - startTime) / 1000);
+      }
+      activeRafId = requestAnimationFrame(frame);
+    };
+
+    activeRafId = requestAnimationFrame(frame);
+  }
+
+  function drawPetal(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    cy: number,
+    angle: number,
+    length: number,
+    width: number,
+    fillColor: string,
+    strokeColor: string,
+  ): void {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(
+      -width * 0.95,
+      -length * 0.32,
+      -width * 0.85,
+      -length * 0.92,
+      -width * 0.22,
+      -length * 1.02,
+    );
+    ctx.quadraticCurveTo(0, -length * 0.94, width * 0.22, -length * 1.02);
+    ctx.bezierCurveTo(
+      width * 0.85,
+      -length * 0.92,
+      width * 0.95,
+      -length * 0.32,
+      0,
+      0,
+    );
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawLeaf(
+    ctx: CanvasRenderingContext2D,
+    cx: number,
+    cy: number,
+    angle: number,
+    length: number,
+    width: number,
+    strokeColor: string,
+  ): void {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(-width, -length * 0.35, -width * 0.65, -length * 0.8, 0, -length);
+    ctx.bezierCurveTo(width * 0.65, -length * 0.8, width, -length * 0.35, 0, 0);
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, -length * 0.08);
+    ctx.lineTo(0, -length * 0.82);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function runRose(canvas: HTMLCanvasElement, reducedMotion: boolean): void {
+    const setup = setupCanvas(canvas);
+    if (!setup) return;
+    const { ctx, width, height } = setup;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const fillColor = isDark ? 'rgba(5, 5, 5, 0.72)' : 'rgba(255, 255, 255, 0.72)';
+    const strokeColor = 'rgba(136, 136, 136, 0.26)';
+    const leafStrokeColor = 'rgba(136, 136, 136, 0.18)';
+    const goldenAngle = 2.399963229728653;
+
+    ctx.lineWidth = 0.85;
+
+    interface RoseSpec {
       readonly cx: number;
       readonly cy: number;
       readonly radius: number;
-      readonly k: number;
       readonly phase: number;
-      theta: number;
-      readonly maxTheta: number;
+      readonly petalCount: number;
     }
 
     const scale = Math.min(width, height);
-    const baseRadius = Math.max(85, Math.min(200, scale * 0.24));
-    const blossoms: RoseBlossom[] =
+    const baseRadius = Math.max(76, Math.min(165, scale * 0.21));
+    const roses: readonly RoseSpec[] =
       width < 640
         ? [
-            {
-              cx: width * 0.12,
-              cy: height * 0.16,
-              radius: baseRadius * 0.85,
-              k: 5 / 3,
-              phase: 0.2,
-              theta: 0,
-              maxTheta: Math.PI * 6,
-            },
-            {
-              cx: width * 0.88,
-              cy: height * 0.84,
-              radius: baseRadius * 0.9,
-              k: 7 / 4,
-              phase: 1.1,
-              theta: 0,
-              maxTheta: Math.PI * 8,
-            },
+            { cx: width * 0.08, cy: height * 0.14, radius: baseRadius * 0.88, phase: 0.3, petalCount: 28 },
+            { cx: width * 0.92, cy: height * 0.86, radius: baseRadius * 0.95, phase: 1.4, petalCount: 30 },
           ]
         : [
-            {
-              cx: width * 0.1,
-              cy: height * 0.2,
-              radius: baseRadius,
-              k: 5 / 3,
-              phase: 0.15,
-              theta: 0,
-              maxTheta: Math.PI * 6,
-            },
-            {
-              cx: width * 0.9,
-              cy: height * 0.26,
-              radius: baseRadius * 0.9,
-              k: 7 / 4,
-              phase: 0.9,
-              theta: 0,
-              maxTheta: Math.PI * 8,
-            },
-            {
-              cx: width * 0.14,
-              cy: height * 0.84,
-              radius: baseRadius * 0.85,
-              k: 4 / 3,
-              phase: 1.7,
-              theta: 0,
-              maxTheta: Math.PI * 6,
-            },
-            {
-              cx: width * 0.88,
-              cy: height * 0.82,
-              radius: baseRadius * 1.05,
-              k: 5 / 2,
-              phase: 0.5,
-              theta: 0,
-              maxTheta: Math.PI * 4,
-            },
+            { cx: width * 0.07, cy: height * 0.18, radius: baseRadius * 1.05, phase: 0.25, petalCount: 34 },
+            { cx: width * 0.93, cy: height * 0.22, radius: baseRadius * 0.9, phase: 1.15, petalCount: 30 },
+            { cx: width * 0.1, cy: height * 0.86, radius: baseRadius * 0.88, phase: 2.05, petalCount: 30 },
+            { cx: width * 0.91, cy: height * 0.84, radius: baseRadius * 1.1, phase: 0.8, petalCount: 36 },
           ];
 
-    const stepSize = 0.045;
+    interface DrawStep {
+      readonly run: () => void;
+    }
+
+    const queue: DrawStep[] = [];
+
+    for (const rose of roses) {
+      for (let l = 0; l < 3; l += 1) {
+        const leafAngle = rose.phase + l * ((Math.PI * 2) / 3) + 0.4;
+        const leafLen = rose.radius * 1.32;
+        const leafWidth = rose.radius * 0.32;
+        queue.push({
+          run: () => drawLeaf(ctx, rose.cx, rose.cy, leafAngle, leafLen, leafWidth, leafStrokeColor),
+        });
+      }
+
+      for (let i = rose.petalCount - 1; i >= 0; i -= 1) {
+        const t = i / (rose.petalCount - 1);
+        const angle = rose.phase + i * goldenAngle;
+        const length = rose.radius * (0.18 + 0.82 * Math.sqrt(t));
+        const petalWidth = length * (0.42 + 0.22 * t);
+        const offsetDist = rose.radius * 0.06 * t;
+        const px = rose.cx + Math.cos(angle - Math.PI / 2) * offsetDist;
+        const py = rose.cy + Math.sin(angle - Math.PI / 2) * offsetDist;
+        queue.push({
+          run: () =>
+            drawPetal(ctx, px, py, angle, length, petalWidth, fillColor, strokeColor),
+        });
+      }
+    }
+
+    const observer = new MutationObserver(() => {
+      startBackground();
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    cleanupListeners = () => {
+      observer.disconnect();
+    };
+
+    if (reducedMotion) {
+      for (const item of queue) {
+        item.run();
+      }
+      return;
+    }
+
+    let cursor = 0;
     let lastTime = performance.now();
 
     const frame = (now: number): void => {
-      if (now - lastTime >= FRAME_INTERVAL_MS) {
+      if (now - lastTime >= PLUM_INTERVAL_MS) {
         lastTime = now;
-        let remaining = false;
-
-        for (const rose of blossoms) {
-          if (rose.theta >= rose.maxTheta) continue;
-          remaining = true;
-
-          const startTheta = rose.theta;
-          const endTheta = Math.min(rose.maxTheta, rose.theta + stepSize * 3);
-
-          ctx.beginPath();
-          let first = true;
-          for (let t = startTheta; t <= endTheta; t += stepSize / 2) {
-            const r = rose.radius * Math.cos(rose.k * t);
-            const x = rose.cx + r * Math.cos(t + rose.phase);
-            const y = rose.cy + r * Math.sin(t + rose.phase);
-            if (first) {
-              ctx.moveTo(x, y);
-              first = false;
-            } else {
-              ctx.lineTo(x, y);
-            }
+        const batch = 2;
+        for (let b = 0; b < batch && cursor < queue.length; b += 1) {
+          const item = queue[cursor];
+          if (item !== undefined) {
+            item.run();
           }
-          ctx.stroke();
-          rose.theta = endTheta;
+          cursor += 1;
         }
-
-        if (!remaining) {
-          stopAnimation();
+        if (cursor >= queue.length) {
+          activeRafId = null;
           return;
         }
       }
+      activeRafId = requestAnimationFrame(frame);
+    };
 
+    activeRafId = requestAnimationFrame(frame);
+  }
+
+  function runParticle(canvas: HTMLCanvasElement, reducedMotion: boolean): void {
+    const setup = setupCanvas(canvas);
+    if (!setup) return;
+    const { ctx, width, height } = setup;
+
+    const count = width < 640 ? 28 : 52;
+    const linkDist = 120;
+    const particles = Array.from({ length: count }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      r: 1.1 + Math.random() * 1.1,
+    }));
+
+    const drawFrame = (): void => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i += 1) {
+        const a = particles[i];
+        if (!a) continue;
+
+        ctx.fillStyle = 'rgba(136, 136, 136, 0.32)';
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j += 1) {
+          const b = particles[j];
+          if (!b) continue;
+          const dist = Math.hypot(a.x - b.x, a.y - b.y);
+          if (dist < linkDist) {
+            const alpha = (1 - dist / linkDist) * 0.16;
+            ctx.strokeStyle = `rgba(136, 136, 136, ${alpha.toFixed(3)})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      }
+    };
+
+    drawFrame();
+    if (reducedMotion) return;
+
+    let lastTime = performance.now();
+
+    const frame = (now: number): void => {
+      if (now - lastTime >= FLOW_INTERVAL_MS) {
+        lastTime = now;
+        for (const p of particles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+        }
+        drawFrame();
+      }
       activeRafId = requestAnimationFrame(frame);
     };
 
@@ -279,22 +530,33 @@ const { mode } = Astro.props;
   function startBackground(): void {
     stopAnimation();
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-
     const canvas = document.querySelector<HTMLCanvasElement>('[data-bg-canvas]');
     if (!canvas) return;
 
     const mode = canvas.dataset['bgMode'];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     if (mode === 'plum') {
-      runPlum(canvas);
+      runPlum(canvas, reducedMotion);
+    } else if (mode === 'dot') {
+      runDot(canvas, reducedMotion);
     } else if (mode === 'rose') {
-      runRose(canvas);
+      runRose(canvas, reducedMotion);
+    } else if (mode === 'particle') {
+      runParticle(canvas, reducedMotion);
     }
   }
 
-  startBackground();
+  function handleResize(): void {
+    if (resizeTimer !== null) {
+      window.clearTimeout(resizeTimer);
+    }
+    resizeTimer = window.setTimeout(() => {
+      startBackground();
+    }, 220);
+  }
+
   document.addEventListener('astro:page-load', startBackground);
   document.addEventListener('astro:before-swap', stopAnimation);
+  window.addEventListener('resize', handleResize, { passive: true });
 </script>
