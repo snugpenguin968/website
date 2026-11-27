@@ -2,6 +2,8 @@ export type DitherAlgorithm = 'atkinson' | 'floyd-steinberg' | 'bayer4x4';
 
 export type BackgroundStyle = 'plum' | 'dot' | 'rose' | 'particle' | 'none';
 
+export type AccentStyle = 'vermilion' | 'moss' | 'sumi';
+
 export interface RgbColor {
   readonly r: number;
   readonly g: number;
@@ -56,6 +58,8 @@ export interface SiteConfigEntity {
   readonly navigation: readonly NavRouteEntity[];
   readonly socials: readonly SocialLinkEntity[];
   readonly background: BackgroundStyle;
+  readonly accent: AccentStyle;
+  readonly paperTexture: boolean;
   readonly portraitDither: PortraitDitherConfig;
   readonly copyrightStartYear: number;
 }

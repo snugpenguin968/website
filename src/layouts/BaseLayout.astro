@@ -13,6 +13,7 @@ import BackToTop from '@components/BackToTop.astro';
 import BackgroundCanvas from '@components/BackgroundCanvas.astro';
 import Footer from '@components/Footer.astro';
 import NavHeader from '@components/NavHeader.astro';
+import WashiTexture from '@components/WashiTexture.astro';
 
 interface Props {
   shell: ShellViewModel;
@@ -22,7 +23,7 @@ const { shell } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={shell.head.lang}>
+<html lang={shell.head.lang} data-accent={shell.accent}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -56,6 +57,7 @@ const { shell } = Astro.props;
     </script>
   </head>
   <body class="text-base-ink font-sans antialiased">
+    <WashiTexture enabled={shell.paperTexture} />
     <BackgroundCanvas mode={shell.background} />
     <div class="relative z-10 flex min-h-[100dvh] flex-col">
       <NavHeader shell={shell} />

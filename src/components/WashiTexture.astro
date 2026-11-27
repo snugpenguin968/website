@@ -1,0 +1,26 @@
+---
+interface Props {
+  enabled: boolean;
+}
+
+const { enabled } = Astro.props;
+---
+
+{
+  enabled && (
+    <>
+      <div
+        aria-hidden="true"
+        class="washi-pulp pointer-events-none fixed inset-0 z-0 opacity-[0.045] mix-blend-multiply dark:opacity-[0.05] dark:mix-blend-soft-light print:hidden"
+      />
+      <div
+        aria-hidden="true"
+        class="washi-fibers-light dark:hidden pointer-events-none fixed inset-0 z-0 print:hidden"
+      />
+      <div
+        aria-hidden="true"
+        class="washi-fibers-dark hidden dark:block pointer-events-none fixed inset-0 z-0 print:hidden"
+      />
+    </>
+  )
+}

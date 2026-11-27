@@ -1,4 +1,5 @@
 export type {
+  AccentStyle,
   BackgroundStyle,
   HeadMetaViewModel,
   NavItemViewModel,

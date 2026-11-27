@@ -23,6 +23,8 @@ npm run dev
 Edit `src/models/site.model.ts`:
 
 - **Background effect**: Set `background` to `'plum'`, `'dot'`, `'rose'`, `'particle'`, or `'none'`.
+- **Accent color**: Set `accent` to `'vermilion'`, `'moss'`, or `'sumi'`.
+- **Washi paper texture**: Set `paperTexture` to `true` or `false`.
 - **Portrait dithering**: Adjust `portraitDither.algorithm` (`'atkinson'`, `'floyd-steinberg'`, or `'bayer4x4'`), `levels` (`2` for classic 1-bit, `4`–`8` for softer multi-level dithering), `inkOpacity` (`0`–`1`), `targetWidth`, `contrast`, and `revealOnHover`.
 
 ### Dithering Any Arbitrary Image

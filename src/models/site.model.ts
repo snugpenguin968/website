@@ -62,6 +62,8 @@ export const SITE_CONFIG: SiteConfigEntity = {
     },
   ],
   background: 'plum',
+  accent: 'vermilion',
+  paperTexture: true,
   portraitDither: {
     algorithm: 'atkinson',
     levels: 5,
@@ -72,8 +74,8 @@ export const SITE_CONFIG: SiteConfigEntity = {
     threshold: 128,
     inkOpacity: 0.88,
     revealOnHover: true,
-    lightInk: { r: 28, g: 28, b: 30 },
-    darkInk: { r: 228, g: 228, b: 230 },
+    lightInk: { r: 35, g: 32, b: 28 },
+    darkInk: { r: 223, g: 217, b: 206 },
   },
   copyrightStartYear: 2026,
 } as const;

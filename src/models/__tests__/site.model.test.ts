@@ -6,6 +6,8 @@ describe('site.model', () => {
     expect(SITE_CONFIG.portraitDither.algorithm).toBe('atkinson');
     expect(SITE_CONFIG.portraitDither.levels).toBeGreaterThanOrEqual(4);
     expect(SITE_CONFIG.portraitDither.targetWidth).toBeGreaterThanOrEqual(420);
+    expect(['vermilion', 'moss', 'sumi']).toContain(SITE_CONFIG.accent);
+    expect(typeof SITE_CONFIG.paperTexture).toBe('boolean');
   });
 
   it('keeps experiences and blog always visible and hides optional sections until populated', () => {

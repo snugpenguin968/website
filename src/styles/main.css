@@ -4,24 +4,52 @@
   --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-condensed: 'Roboto Condensed', ui-sans-serif, system-ui, sans-serif;
 
-  --c-bg: #ffffff;
-  --c-fg: #555555;
-  --c-fg-deep: #222222;
-  --c-fg-deeper: #000000;
-  --c-border: rgba(125, 125, 125, 0.2);
-  --c-scrollbar: #eeeeee;
-  --c-scrollbar-hover: #cccccc;
+  --c-bg: #f6f3eb;
+  --c-bg-elevated: #ede8dc;
+  --c-fg: #544f47;
+  --c-fg-deep: #23201c;
+  --c-fg-deeper: #171512;
+  --c-muted: #686258;
+  --c-border: rgba(35, 32, 28, 0.12);
+  --c-scrollbar: #e2dcd0;
+  --c-scrollbar-hover: #cbc3b4;
+  --c-accent: #b84a39;
+  --c-accent-soft: rgba(184, 74, 57, 0.15);
+}
+
+html[data-accent='moss'] {
+  --c-accent: #4a6b53;
+  --c-accent-soft: rgba(74, 107, 83, 0.15);
+}
+
+html[data-accent='sumi'] {
+  --c-accent: #23201c;
+  --c-accent-soft: rgba(35, 32, 28, 0.12);
 }
 
 html.dark {
-  --c-bg: #050505;
-  --c-fg: #bbbbbb;
-  --c-fg-deep: #dddddd;
-  --c-fg-deeper: #ffffff;
-  --c-border: rgba(125, 125, 125, 0.25);
-  --c-scrollbar: #161616;
-  --c-scrollbar-hover: #2c2c2c;
+  --c-bg: #181715;
+  --c-bg-elevated: #211f1c;
+  --c-fg: #c2bbb0;
+  --c-fg-deep: #dfd9ce;
+  --c-fg-deeper: #ece7de;
+  --c-muted: #8e887d;
+  --c-border: rgba(223, 217, 206, 0.12);
+  --c-scrollbar: #272521;
+  --c-scrollbar-hover: #3b3832;
+  --c-accent: #d46a59;
+  --c-accent-soft: rgba(212, 106, 89, 0.2);
   color-scheme: dark;
+}
+
+html.dark[data-accent='moss'] {
+  --c-accent: #82a88c;
+  --c-accent-soft: rgba(130, 168, 140, 0.2);
+}
+
+html.dark[data-accent='sumi'] {
+  --c-accent: #dfd9ce;
+  --c-accent-soft: rgba(223, 217, 206, 0.16);
 }
 
 html {
@@ -44,7 +72,25 @@ body {
 }
 
 ::selection {
-  background: rgba(136, 136, 136, 0.28);
+  background: var(--c-accent-soft);
+}
+
+.washi-pulp {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 220px 220px;
+}
+
+.washi-fibers-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%235c5142' stroke-linecap='round' opacity='0.09'%3E%3Cpath d='M24 62 Q48 54 78 68' stroke-width='0.75'/%3E%3Cpath d='M165 34 Q182 58 174 88' stroke-width='0.65'/%3E%3Cpath d='M310 46 Q344 38 372 56' stroke-width='0.85'/%3E%3Cpath d='M422 118 Q438 148 428 176' stroke-width='0.7'/%3E%3Cpath d='M84 188 Q112 174 142 192' stroke-width='0.8'/%3E%3Cpath d='M238 156 Q252 184 274 196' stroke-width='0.65'/%3E%3Cpath d='M352 214 Q386 228 408 212' stroke-width='0.75'/%3E%3Cpath d='M46 298 Q62 328 54 358' stroke-width='0.7'/%3E%3Cpath d='M178 286 Q212 276 238 294' stroke-width='0.85'/%3E%3Cpath d='M296 322 Q314 352 302 384' stroke-width='0.65'/%3E%3Cpath d='M404 342 Q436 332 462 348' stroke-width='0.75'/%3E%3Cpath d='M118 418 Q152 406 184 424' stroke-width='0.8'/%3E%3Cpath d='M246 438 Q272 454 304 442' stroke-width='0.7'/%3E%3Cpath d='M368 412 Q382 440 374 466' stroke-width='0.65'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 480px 480px;
+}
+
+.washi-fibers-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%23dfd9ce' stroke-linecap='round' opacity='0.065'%3E%3Cpath d='M24 62 Q48 54 78 68' stroke-width='0.75'/%3E%3Cpath d='M165 34 Q182 58 174 88' stroke-width='0.65'/%3E%3Cpath d='M310 46 Q344 38 372 56' stroke-width='0.85'/%3E%3Cpath d='M422 118 Q438 148 428 176' stroke-width='0.7'/%3E%3Cpath d='M84 188 Q112 174 142 192' stroke-width='0.8'/%3E%3Cpath d='M238 156 Q252 184 274 196' stroke-width='0.65'/%3E%3Cpath d='M352 214 Q386 228 408 212' stroke-width='0.75'/%3E%3Cpath d='M46 298 Q62 328 54 358' stroke-width='0.7'/%3E%3Cpath d='M178 286 Q212 276 238 294' stroke-width='0.85'/%3E%3Cpath d='M296 322 Q314 352 302 384' stroke-width='0.65'/%3E%3Cpath d='M404 342 Q436 332 462 348' stroke-width='0.75'/%3E%3Cpath d='M118 418 Q152 406 184 424' stroke-width='0.8'/%3E%3Cpath d='M246 438 Q272 454 304 442' stroke-width='0.7'/%3E%3Cpath d='M368 412 Q382 440 374 466' stroke-width='0.65'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 480px 480px;
 }
 
 .dither-pixelated {

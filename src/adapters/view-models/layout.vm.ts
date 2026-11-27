@@ -1,7 +1,7 @@
 import type { ImageMetadata } from 'astro';
-import type { BackgroundStyle } from '@models/entities';
+import type { AccentStyle, BackgroundStyle } from '@models/entities';
 
-export type { BackgroundStyle };
+export type { AccentStyle, BackgroundStyle };
 
 export interface ThemeLogoViewModel {
   readonly lightModeSrc: ImageMetadata;
@@ -39,6 +39,8 @@ export interface ShellViewModel {
   readonly socials: readonly SocialLinkViewModel[];
   readonly rssHref: string | undefined;
   readonly background: BackgroundStyle;
+  readonly accent: AccentStyle;
+  readonly paperTexture: boolean;
   readonly copyrightText: string;
   readonly authorName: string;
 }
