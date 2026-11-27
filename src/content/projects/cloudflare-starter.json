@@ -1,0 +1,9 @@
+{
+  "name": "Cloudflare Edge Starter",
+  "description": "Zero-runtime static + Workers Static Assets deployment template with compile-time image optimization and RSS.",
+  "link": "https://github.com/snugpenguin968",
+  "icon": "i-ri-cloud-line",
+  "category": "Tools & Systems",
+  "order": 4,
+  "featured": true
+}

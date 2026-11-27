@@ -1,0 +1,12 @@
+---
+import { NavigationAdapter } from '@adapters/navigation.adapter';
+import NotFoundView from '@views/NotFoundView.astro';
+
+const shell = NavigationAdapter.buildShell({
+  currentPath: '/404',
+  pageTitle: '404',
+  description: 'Page not found.',
+});
+---
+
+<NotFoundView shell={shell} />

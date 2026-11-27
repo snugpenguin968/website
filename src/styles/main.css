@@ -1,0 +1,124 @@
+:root {
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-condensed: 'Roboto Condensed', ui-sans-serif, system-ui, sans-serif;
+
+  --c-bg: #ffffff;
+  --c-fg: #555555;
+  --c-fg-deep: #222222;
+  --c-fg-deeper: #000000;
+  --c-border: rgba(125, 125, 125, 0.2);
+  --c-scrollbar: #eeeeee;
+  --c-scrollbar-hover: #cccccc;
+}
+
+html.dark {
+  --c-bg: #050505;
+  --c-fg: #bbbbbb;
+  --c-fg-deep: #dddddd;
+  --c-fg-deeper: #ffffff;
+  --c-border: rgba(125, 125, 125, 0.25);
+  --c-scrollbar: #161616;
+  --c-scrollbar-hover: #2c2c2c;
+  color-scheme: dark;
+}
+
+html {
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background: rgba(136, 136, 136, 0.28);
+}
+
+/* Crisp pixel-art scaling for 1-bit dithered portrait */
+.dither-pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+}
+
+/* Circular theme view transition (antfu.me signature) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
+html.dark::view-transition-old(root) {
+  z-index: 9999;
+}
+
+html.dark::view-transition-new(root) {
+  z-index: 1;
+}
+
+/* Staggered slide-enter animation matching astro-antfustyle-theme */
+@keyframes slide-enter {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide-enter-content > * {
+    --stagger: 0;
+    --delay: 90ms;
+    --start: 0ms;
+    animation: slide-enter 0.75s both 1;
+    animation-delay: calc(var(--start) + var(--stagger) * var(--delay));
+  }
+
+  .slide-enter-content > *:nth-child(1) { --stagger: 1; }
+  .slide-enter-content > *:nth-child(2) { --stagger: 2; }
+  .slide-enter-content > *:nth-child(3) { --stagger: 3; }
+  .slide-enter-content > *:nth-child(4) { --stagger: 4; }
+  .slide-enter-content > *:nth-child(5) { --stagger: 5; }
+  .slide-enter-content > *:nth-child(6) { --stagger: 6; }
+  .slide-enter-content > *:nth-child(7) { --stagger: 7; }
+  .slide-enter-content > *:nth-child(8) { --stagger: 8; }
+  .slide-enter-content > *:nth-child(9) { --stagger: 9; }
+  .slide-enter-content > *:nth-child(10) { --stagger: 10; }
+}
+
+/* Subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--c-scrollbar);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-scrollbar-hover);
+}

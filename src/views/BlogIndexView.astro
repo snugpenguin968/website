@@ -1,0 +1,116 @@
+---
+import type { BlogIndexViewModel } from '@adapters/view-models';
+import PostListItem from '@components/PostListItem.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: BlogIndexViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <section class="mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10">
+      <h1 class="text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        {vm.heading}
+      </h1>
+      <p class="mt-2 text-muted italic">{vm.subtitle}</p>
+
+      {
+        vm.allTags.length > 0 && (
+          <div class="mt-5 flex flex-wrap gap-2" data-tag-filters>
+            <button
+              type="button"
+              data-tag-btn="all"
+              data-active="true"
+              class="rounded border border-base px-2.5 py-0.5 font-mono text-xs transition-colors bg-[#888888]/15 text-base-ink"
+            >
+              all ({vm.totalCount})
+            </button>
+            {vm.allTags.map((tag) => (
+              <button
+                type="button"
+                data-tag-btn={tag}
+                data-active="false"
+                class="rounded border border-base px-2.5 py-0.5 font-mono text-xs text-subtle hover:text-base-ink transition-colors"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {
+      vm.yearGroups.length === 0 ? (
+        <p class="text-muted">No posts published yet.</p>
+      ) : (
+        <div class="space-y-12">
+          {vm.yearGroups.map((group) => (
+            <div data-year-group class="relative pt-10">
+              <div
+                aria-hidden="true"
+                class="pointer-events-none select-none absolute -top-2 -left-4 sm:-left-8 font-condensed text-[6.5rem] sm:text-[7.5rem] leading-none font-bold text-transparent"
+                style="-webkit-text-stroke: 1.5px rgba(136, 136, 136, 0.22);"
+              >
+                {group.year}
+              </div>
+
+              <h2 class="sr-only">{group.year}</h2>
+              <ul class="relative space-y-1">
+                {group.posts.map((post) => (
+                  <PostListItem post={post} />
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<script>
+  function bindTagFilters(): void {
+    const container = document.querySelector<HTMLElement>('[data-tag-filters]');
+    if (!container || container.dataset['bound'] === 'true') return;
+    container.dataset['bound'] = 'true';
+
+    const buttons = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-tag-btn]'));
+    const postItems = Array.from(document.querySelectorAll<HTMLElement>('[data-post-item]'));
+    const yearGroups = Array.from(document.querySelectorAll<HTMLElement>('[data-year-group]'));
+
+    const applyFilter = (selected: string): void => {
+      for (const btn of buttons) {
+        const isSelected = btn.dataset['tagBtn'] === selected;
+        btn.dataset['active'] = String(isSelected);
+        btn.classList.toggle('bg-[#888888]/15', isSelected);
+        btn.classList.toggle('text-base-ink', isSelected);
+        btn.classList.toggle('text-subtle', !isSelected);
+      }
+
+      for (const item of postItems) {
+        const tags = (item.dataset['tags'] ?? '').split(',').filter(Boolean);
+        const visible = selected === 'all' || tags.includes(selected);
+        item.classList.toggle('hidden', !visible);
+      }
+
+      for (const group of yearGroups) {
+        const hasVisible = group.querySelector('[data-post-item]:not(.hidden)') !== null;
+        group.classList.toggle('hidden', !hasVisible);
+      }
+    };
+
+    for (const btn of buttons) {
+      btn.addEventListener('click', () => {
+        applyFilter(btn.dataset['tagBtn'] ?? 'all');
+      });
+    }
+  }
+
+  bindTagFilters();
+  document.addEventListener('astro:page-load', bindTagFilters);
+</script>

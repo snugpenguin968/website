@@ -77,8 +77,9 @@ export default defineConfig({
       'block rounded-md px-4 py-3 -mx-4 transition-colors duration-200 hover:bg-[#888888]/8 dark:hover:bg-[#888888]/10',
   },
   content: {
+    filesystem: ['src/content/**/*.{json,md,mdx}'],
     pipeline: {
-      include: [/\.(astro|mdx?|tsx?|html)($|\?)/],
+      include: [/\.(astro|mdx?|tsx?|json|html)($|\?)/],
     },
   },
 });

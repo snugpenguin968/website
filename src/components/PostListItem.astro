@@ -1,0 +1,29 @@
+---
+import type { BlogListItemViewModel } from '@adapters/view-models';
+
+interface Props {
+  post: BlogListItemViewModel;
+}
+
+const { post } = Astro.props;
+---
+
+<li
+  data-post-item
+  data-tags={post.tags.join(',')}
+  class="list-none"
+>
+  <a
+    href={post.href}
+    class="group flex flex-col gap-1 py-2 sm:flex-row sm:items-baseline sm:gap-3 transition-opacity duration-200 opacity-75 hover:opacity-100"
+  >
+    <span class="text-base text-base-ink leading-snug">
+      {post.title}
+    </span>
+    <span class="flex items-center gap-2 font-mono text-xs text-subtle shrink-0">
+      <time datetime={post.isoDate}>{post.dateLabel}</time>
+      <span aria-hidden="true">·</span>
+      <span>{post.readingTimeLabel}</span>
+    </span>
+  </a>
+</li>

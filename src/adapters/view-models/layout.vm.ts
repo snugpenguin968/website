@@ -1,6 +1,8 @@
 import type { ImageMetadata } from 'astro';
 import type { BackgroundStyle } from '@models/entities';
 
+export type { BackgroundStyle };
+
 export interface ThemeLogoViewModel {
   /** Dark-ink penguin mark rendered on light mode backgrounds (`darklogo.png`). */
   readonly lightModeSrc: ImageMetadata;

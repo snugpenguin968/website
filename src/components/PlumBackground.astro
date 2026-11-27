@@ -1,0 +1,152 @@
+---
+import type { BackgroundStyle } from '@adapters/view-models';
+
+interface Props {
+  mode: BackgroundStyle;
+}
+
+const { mode } = Astro.props;
+---
+
+{
+  mode === 'plum' && (
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 overflow-hidden print:hidden"
+      style="mask-image: radial-gradient(circle, transparent 15%, black 85%); -webkit-mask-image: radial-gradient(circle, transparent 15%, black 85%);"
+      aria-hidden="true"
+    >
+      <canvas data-plum-canvas class="h-full w-full" />
+    </div>
+  )
+}
+
+{
+  mode === 'dot' && (
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 opacity-30 dark:opacity-20 print:hidden"
+      style="background-image: radial-gradient(rgba(136, 136, 136, 0.45) 1px, transparent 1px); background-size: 24px 24px;"
+      aria-hidden="true"
+    />
+  )
+}
+
+<script>
+  const R180 = Math.PI;
+  const R90 = Math.PI / 2;
+  const R15 = Math.PI / 12;
+  const STROKE_COLOR = '#88888825';
+  const MIN_BRANCH = 30;
+  const STEP_LEN = 6;
+  const FRAME_INTERVAL_MS = 1000 / 40;
+
+  let activeRafId: number | null = null;
+
+  function stopPlum(): void {
+    if (activeRafId !== null) {
+      cancelAnimationFrame(activeRafId);
+      activeRafId = null;
+    }
+  }
+
+  function startPlum(): void {
+    stopPlum();
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const canvas = document.querySelector<HTMLCanvasElement>('[data-plum-canvas]');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = STROKE_COLOR;
+
+    let steps: (() => void)[] = [];
+    let prevSteps: (() => void)[] = [];
+
+    const polar2cart = (x: number, y: number, r: number, theta: number): [number, number] => [
+      x + r * Math.cos(theta),
+      y + r * Math.sin(theta),
+    ];
+
+    const step = (
+      x: number,
+      y: number,
+      rad: number,
+      counter: { value: number } = { value: 0 },
+    ): void => {
+      const length = Math.random() * STEP_LEN;
+      counter.value += 1;
+
+      const [nx, ny] = polar2cart(x, y, length, rad);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(nx, ny);
+      ctx.stroke();
+
+      const rad1 = rad + Math.random() * R15;
+      const rad2 = rad - Math.random() * R15;
+
+      if (nx < -100 || nx > width + 100 || ny < -100 || ny > height + 100) return;
+
+      const rate = counter.value <= MIN_BRANCH ? 0.8 : 0.5;
+      if (Math.random() < rate) steps.push(() => step(nx, ny, rad1, counter));
+      if (Math.random() < rate) steps.push(() => step(nx, ny, rad2, counter));
+    };
+
+    const randomMiddle = (): number => Math.random() * 0.6 + 0.2;
+
+    steps = [
+      () => step(randomMiddle() * width, -5, R90),
+      () => step(randomMiddle() * width, height + 5, -R90),
+      () => step(-5, randomMiddle() * height, 0),
+      () => step(width + 5, randomMiddle() * height, R180),
+    ];
+
+    if (width < 500) {
+      steps = steps.slice(0, 2);
+    }
+
+    let lastTime = performance.now();
+
+    const frame = (now: number): void => {
+      if (now - lastTime >= FRAME_INTERVAL_MS) {
+        lastTime = now;
+        prevSteps = steps;
+        steps = [];
+
+        if (prevSteps.length === 0) {
+          stopPlum();
+          return;
+        }
+
+        for (const fn of prevSteps) {
+          if (Math.random() < 0.5) {
+            steps.push(fn);
+          } else {
+            fn();
+          }
+        }
+      }
+      activeRafId = requestAnimationFrame(frame);
+    };
+
+    activeRafId = requestAnimationFrame(frame);
+  }
+
+  startPlum();
+  document.addEventListener('astro:page-load', startPlum);
+  document.addEventListener('astro:before-swap', stopPlum);
+</script>

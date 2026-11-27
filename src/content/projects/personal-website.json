@@ -1,0 +1,10 @@
+{
+  "name": "snugpenguin.dev",
+  "description": "This personal website — built with Astro Server Components, strict TypeScript MVA, UnoCSS, and 1-bit Atkinson dithering.",
+  "link": "https://github.com/snugpenguin968/website",
+  "repo": "https://github.com/snugpenguin968/website",
+  "icon": "i-ri-terminal-box-line",
+  "category": "Web & Architecture",
+  "order": 1,
+  "featured": true
+}

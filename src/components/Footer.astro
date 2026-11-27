@@ -1,0 +1,35 @@
+---
+import type { ShellViewModel } from '@adapters/view-models';
+
+interface Props {
+  shell: ShellViewModel;
+}
+
+const { shell } = Astro.props;
+---
+
+<footer class="mt-auto w-full px-6 pt-16 pb-10 sm:px-8">
+  <div
+    class="mx-auto flex max-w-[65ch] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm text-subtle"
+  >
+    <span class="font-mono text-xs">{shell.copyrightText}</span>
+
+    <div class="flex items-center gap-4">
+      {
+        shell.socials.map((social) => (
+          <a
+            href={social.href}
+            aria-label={social.label}
+            title={social.label}
+            target={social.external ? '_blank' : undefined}
+            rel={social.external ? 'noopener noreferrer' : undefined}
+            class="icon-btn text-base sm:hidden"
+          >
+            <span class={social.icon} aria-hidden="true" />
+          </a>
+        ))
+      }
+      <span class="font-mono text-xs opacity-75">Built with Astro · MVA</span>
+    </div>
+  </div>
+</footer>
