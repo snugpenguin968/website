@@ -1,9 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "snugpenguin-website",
+  "name": "johntian-dev",
   "main": "./dist/_worker.js/index.js",
   "compatibility_date": "2026-11-27",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "assets": {
     "binding": "ASSETS",
     "directory": "./dist"

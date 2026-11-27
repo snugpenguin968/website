@@ -3,6 +3,7 @@ import { SITE_CONFIG } from '../site.model';
 
 describe('site.model', () => {
   it('defaults portrait dithering to soft multi-level atkinson', () => {
+    expect(SITE_CONFIG.siteUrl).toBe('https://johntian.dev');
     expect(SITE_CONFIG.portraitDither.algorithm).toBe('atkinson');
     expect(SITE_CONFIG.portraitDither.levels).toBeGreaterThanOrEqual(4);
     expect(SITE_CONFIG.portraitDither.targetWidth).toBeGreaterThanOrEqual(420);

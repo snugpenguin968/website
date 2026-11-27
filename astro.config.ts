@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import UnoCSS from '@unocss/astro';
 
 export default defineConfig({
-  site: 'https://snugpenguin.dev',
+  site: 'https://johntian.dev',
   output: 'static',
   adapter: cloudflare({
     imageService: 'compile',
