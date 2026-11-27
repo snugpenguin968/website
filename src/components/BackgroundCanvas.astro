@@ -8,31 +8,19 @@ interface Props {
 const { mode } = Astro.props;
 ---
 
-{
-  mode !== 'none' && (
-    <div
-      class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
-      style={
-        mode === 'plum' || mode === 'rose'
-          ? 'mask-image: radial-gradient(circle, transparent, black); -webkit-mask-image: radial-gradient(circle, transparent, black);'
-          : undefined
-      }
-      aria-hidden="true"
-    >
-      <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
-    </div>
-  )
-}
+<div
+  data-bg-wrapper
+  class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
+  aria-hidden="true"
+>
+  <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
+</div>
 
 <script>
   const R180 = Math.PI;
   const R90 = Math.PI / 2;
   const R15 = Math.PI / 12;
-  const STROKE_COLOR = '#88888835';
-  const MIN_BRANCH = 42;
-  const MAX_BRANCH_STEPS = 550;
-  const STEP_LEN = 7;
-  const PLUM_INTERVAL_MS = 1000 / 40;
+  const PLUM_INTERVAL_MS = 1000 / 50;
   const FLOW_INTERVAL_MS = 1000 / 30;
 
   let activeRafId: number | null = null;
@@ -122,8 +110,26 @@ const { mode } = Astro.props;
     if (!setup) return;
     const { ctx, width, height } = setup;
 
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = STROKE_COLOR;
+    const isMobile = width < 640;
+    const isTablet = width >= 640 && width < 1100;
+    const isUltrawide = width >= 1600;
+
+    const minBranch = isMobile ? 24 : isTablet ? 48 : isUltrawide ? 86 : 74;
+    const maxSteps = isMobile ? 220 : isTablet ? 650 : isUltrawide ? 1700 : 1350;
+    const stepLen = isMobile ? 5.5 : isTablet ? 7.5 : isUltrawide ? 11 : 9.8;
+    const midThreshold = isMobile ? 110 : isTablet ? 260 : 420;
+    const midRate = isMobile ? 0.48 : isTablet ? 0.53 : 0.57;
+    const lateRate = isMobile ? 0.36 : isTablet ? 0.43 : 0.47;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    ctx.lineWidth = isMobile ? 0.9 : 1.05;
+    ctx.strokeStyle = isDark
+      ? isMobile
+        ? 'rgba(223, 217, 206, 0.15)'
+        : 'rgba(223, 217, 206, 0.22)'
+      : isMobile
+        ? 'rgba(35, 32, 28, 0.16)'
+        : 'rgba(35, 32, 28, 0.24)';
 
     let steps: (() => void)[] = [];
     let prevSteps: (() => void)[] = [];
@@ -139,8 +145,8 @@ const { mode } = Astro.props;
       rad: number,
       counter: { value: number } = { value: 0 },
     ): void => {
-      if (counter.value >= MAX_BRANCH_STEPS) return;
-      const length = Math.random() * STEP_LEN + 1.5;
+      if (counter.value >= maxSteps) return;
+      const length = Math.random() * stepLen + (isMobile ? 1.4 : 2.2);
       counter.value += 1;
 
       const [nx, ny] = polar2cart(x, y, length, rad);
@@ -152,29 +158,64 @@ const { mode } = Astro.props;
       const rad1 = rad + Math.random() * R15;
       const rad2 = rad - Math.random() * R15;
 
-      if (nx < -100 || nx > width + 100 || ny < -100 || ny > height + 100) return;
+      if (nx < -120 || nx > width + 120 || ny < -120 || ny > height + 120) return;
 
       const rate =
-        counter.value <= MIN_BRANCH ? 0.8 : counter.value <= 260 ? 0.52 : 0.42;
+        counter.value <= minBranch ? 0.84 : counter.value <= midThreshold ? midRate : lateRate;
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad1, counter));
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad2, counter));
     };
 
-    const randomMiddle = (): number => Math.random() * 0.6 + 0.2;
+    const randomRange = (min: number, max: number): number =>
+      min + Math.random() * (max - min);
 
-    steps = [
-      () => step(randomMiddle() * width, -5, R90),
-      () => step(randomMiddle() * width, height + 5, -R90),
-      () => step(-5, randomMiddle() * height, 0),
-      () => step(width + 5, randomMiddle() * height, R180),
-    ];
-
-    if (width < 500) {
-      steps = steps.slice(0, 2);
+    if (isMobile) {
+      steps = [
+        () => step(randomRange(0.2, 0.8) * width, -5, R90),
+        () => step(randomRange(0.2, 0.8) * width, height + 5, -R90),
+      ];
+    } else if (isTablet) {
+      steps = [
+        () => step(randomRange(0.2, 0.8) * width, -5, R90),
+        () => step(randomRange(0.2, 0.8) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.2, 0.8) * height, 0),
+        () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
+      ];
+    } else if (isUltrawide) {
+      steps = [
+        () => step(randomRange(0.08, 0.42) * width, -5, R90),
+        () => step(randomRange(0.58, 0.92) * width, -5, R90),
+        () => step(randomRange(0.08, 0.42) * width, height + 5, -R90),
+        () => step(randomRange(0.58, 0.92) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.15, 0.45) * height, 0),
+        () => step(-5, randomRange(0.55, 0.85) * height, 0),
+        () => step(width + 5, randomRange(0.15, 0.45) * height, R180),
+        () => step(width + 5, randomRange(0.55, 0.85) * height, R180),
+      ];
+    } else {
+      steps = [
+        () => step(randomRange(0.1, 0.45) * width, -5, R90),
+        () => step(randomRange(0.55, 0.9) * width, -5, R90),
+        () => step(randomRange(0.1, 0.45) * width, height + 5, -R90),
+        () => step(randomRange(0.55, 0.9) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.2, 0.8) * height, 0),
+        () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
+      ];
     }
 
+    const observer = new MutationObserver(() => {
+      startBackground();
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    cleanupListeners = () => {
+      observer.disconnect();
+    };
+
     if (reducedMotion) {
-      for (let i = 0; i < 120 && steps.length > 0; i += 1) {
+      for (let i = 0; i < 160 && steps.length > 0; i += 1) {
         prevSteps = steps;
         steps = [];
         for (const fn of prevSteps) {
@@ -357,9 +398,9 @@ const { mode } = Astro.props;
     const { ctx, width, height } = setup;
 
     const isDark = document.documentElement.classList.contains('dark');
-    const fillColor = isDark ? 'rgba(5, 5, 5, 0.72)' : 'rgba(255, 255, 255, 0.72)';
-    const strokeColor = 'rgba(136, 136, 136, 0.26)';
-    const leafStrokeColor = 'rgba(136, 136, 136, 0.18)';
+    const fillColor = isDark ? 'rgba(24, 23, 21, 0.78)' : 'rgba(246, 243, 235, 0.78)';
+    const strokeColor = isDark ? 'rgba(223, 217, 206, 0.24)' : 'rgba(35, 32, 28, 0.24)';
+    const leafStrokeColor = isDark ? 'rgba(223, 217, 206, 0.16)' : 'rgba(35, 32, 28, 0.16)';
     const goldenAngle = 2.399963229728653;
 
     ctx.lineWidth = 0.85;
@@ -530,10 +571,27 @@ const { mode } = Astro.props;
   function startBackground(): void {
     stopAnimation();
 
+    const wrapper = document.querySelector<HTMLElement>('[data-bg-wrapper]');
     const canvas = document.querySelector<HTMLCanvasElement>('[data-bg-canvas]');
-    if (!canvas) return;
+    if (!wrapper || !canvas) return;
 
-    const mode = canvas.dataset['bgMode'];
+    const mode = document.documentElement.dataset['background'] ?? canvas.dataset['bgMode'] ?? 'none';
+    const useRadialMask = mode === 'plum' || mode === 'rose';
+    wrapper.style.maskImage = useRadialMask
+      ? 'radial-gradient(circle, transparent 4%, black 78%)'
+      : 'none';
+    wrapper.style.webkitMaskImage = useRadialMask
+      ? 'radial-gradient(circle, transparent 4%, black 78%)'
+      : 'none';
+
+    if (mode === 'none') {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      return;
+    }
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (mode === 'plum') {
@@ -558,5 +616,6 @@ const { mode } = Astro.props;
 
   document.addEventListener('astro:page-load', startBackground);
   document.addEventListener('astro:before-swap', stopAnimation);
+  window.addEventListener('site:background-change', startBackground);
   window.addEventListener('resize', handleResize, { passive: true });
 </script>

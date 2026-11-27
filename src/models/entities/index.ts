@@ -1,4 +1,5 @@
 export type {
+  AccentStyle,
   AuthorProfileEntity,
   BackgroundStyle,
   DitherAlgorithm,
@@ -8,6 +9,7 @@ export type {
   RgbColor,
   SiteConfigEntity,
   SocialLinkEntity,
+  SurfaceTexture,
 } from './site.entity';
 export type {
   BlogPostEntity,

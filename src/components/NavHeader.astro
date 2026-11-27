@@ -1,5 +1,6 @@
 ---
 import type { ShellViewModel } from '@adapters/view-models';
+import AppearanceToggle from './AppearanceToggle.astro';
 import SearchButton from './SearchButton.astro';
 import ThemeLogo from './ThemeLogo.astro';
 import ThemeToggle from './ThemeToggle.astro';
@@ -27,7 +28,9 @@ const { shell } = Astro.props;
               aria-current={item.active ? 'page' : undefined}
               class:list={[
                 'nav-link py-1',
-                item.active ? 'opacity-100 text-base-ink font-medium' : '',
+                item.active
+                  ? 'opacity-100 text-[var(--c-accent)] font-medium border-b-2 border-[var(--c-accent)]'
+                  : '',
               ]}
             >
               {item.label}
@@ -69,6 +72,7 @@ const { shell } = Astro.props;
             </a>
           )
         }
+        <AppearanceToggle />
         <ThemeToggle />
       </div>
     </div>

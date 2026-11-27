@@ -4,24 +4,52 @@
   --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-condensed: 'Roboto Condensed', ui-sans-serif, system-ui, sans-serif;
 
-  --c-bg: #ffffff;
-  --c-fg: #555555;
-  --c-fg-deep: #222222;
-  --c-fg-deeper: #000000;
-  --c-border: rgba(125, 125, 125, 0.2);
-  --c-scrollbar: #eeeeee;
-  --c-scrollbar-hover: #cccccc;
+  --c-bg: #f6f3eb;
+  --c-bg-elevated: #ede8dc;
+  --c-fg: #544f47;
+  --c-fg-deep: #23201c;
+  --c-fg-deeper: #171512;
+  --c-muted: #686258;
+  --c-border: rgba(35, 32, 28, 0.12);
+  --c-scrollbar: #e2dcd0;
+  --c-scrollbar-hover: #cbc3b4;
+  --c-accent: #c93b2b;
+  --c-accent-soft: rgba(201, 59, 43, 0.2);
+}
+
+html[data-accent='moss'] {
+  --c-accent: #2f6f46;
+  --c-accent-soft: rgba(47, 111, 70, 0.2);
+}
+
+html[data-accent='sumi'] {
+  --c-accent: #171512;
+  --c-accent-soft: rgba(23, 21, 18, 0.16);
 }
 
 html.dark {
-  --c-bg: #050505;
-  --c-fg: #bbbbbb;
-  --c-fg-deep: #dddddd;
-  --c-fg-deeper: #ffffff;
-  --c-border: rgba(125, 125, 125, 0.25);
-  --c-scrollbar: #161616;
-  --c-scrollbar-hover: #2c2c2c;
+  --c-bg: #181715;
+  --c-bg-elevated: #211f1c;
+  --c-fg: #c2bbb0;
+  --c-fg-deep: #dfd9ce;
+  --c-fg-deeper: #ece7de;
+  --c-muted: #8e887d;
+  --c-border: rgba(223, 217, 206, 0.12);
+  --c-scrollbar: #272521;
+  --c-scrollbar-hover: #3b3832;
+  --c-accent: #e86352;
+  --c-accent-soft: rgba(232, 99, 82, 0.26);
   color-scheme: dark;
+}
+
+html.dark[data-accent='moss'] {
+  --c-accent: #62b882;
+  --c-accent-soft: rgba(98, 184, 130, 0.26);
+}
+
+html.dark[data-accent='sumi'] {
+  --c-accent: #f0ebe1;
+  --c-accent-soft: rgba(240, 235, 225, 0.2);
 }
 
 html {
@@ -29,7 +57,7 @@ html {
   color: var(--c-fg);
   font-family: var(--font-sans);
   scroll-behavior: smooth;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: clip;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -44,7 +72,78 @@ body {
 }
 
 ::selection {
-  background: rgba(136, 136, 136, 0.28);
+  background: var(--c-accent-soft);
+}
+
+html[data-texture='mist'] [data-texture-layer='mist'],
+html[data-texture='seigaiha'] [data-texture-layer='seigaiha'],
+html[data-texture='linen'] [data-texture-layer='linen'],
+html[data-texture='shoji'] [data-texture-layer='shoji'] {
+  display: block;
+}
+
+.texture-mist-light {
+  background-image:
+    radial-gradient(ellipse 58% 46% at 12% 88%, rgba(35, 32, 28, 0.42) 0%, rgba(35, 32, 28, 0.22) 38%, rgba(35, 32, 28, 0.06) 62%, transparent 78%),
+    radial-gradient(ellipse 52% 42% at 88% 14%, rgba(84, 76, 64, 0.36) 0%, rgba(84, 76, 64, 0.18) 38%, rgba(84, 76, 64, 0.05) 62%, transparent 76%),
+    radial-gradient(ellipse 50% 38% at 84% 88%, rgba(120, 106, 86, 0.34) 0%, rgba(120, 106, 86, 0.14) 44%, transparent 74%),
+    linear-gradient(180deg, rgba(196, 186, 168, 0.36) 0%, transparent 24%, transparent 68%, rgba(128, 116, 96, 0.38) 100%);
+}
+
+.texture-mist-dark {
+  background-image:
+    radial-gradient(ellipse 58% 46% at 12% 88%, rgba(223, 217, 206, 0.3) 0%, rgba(223, 217, 206, 0.15) 38%, rgba(223, 217, 206, 0.04) 62%, transparent 78%),
+    radial-gradient(ellipse 52% 42% at 88% 14%, rgba(196, 188, 174, 0.26) 0%, rgba(196, 188, 174, 0.12) 38%, rgba(196, 188, 174, 0.03) 62%, transparent 76%),
+    radial-gradient(ellipse 50% 38% at 84% 88%, rgba(223, 217, 206, 0.22) 0%, rgba(223, 217, 206, 0.09) 44%, transparent 74%),
+    linear-gradient(180deg, rgba(223, 217, 206, 0.1) 0%, transparent 24%, transparent 68%, rgba(223, 217, 206, 0.18) 100%);
+}
+
+.texture-seigaiha-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%2323201c' stroke-width='0.75' opacity='0.11'%3E%3Cpath d='M0 32 A32 32 0 0 1 64 32'/%3E%3Cpath d='M8 32 A24 24 0 0 1 56 32'/%3E%3Cpath d='M16 32 A16 16 0 0 1 48 32'/%3E%3Cpath d='M24 32 A8 8 0 0 1 40 32'/%3E%3Cpath d='M-32 16 A32 32 0 0 1 32 16'/%3E%3Cpath d='M-24 16 A24 24 0 0 1 24 16'/%3E%3Cpath d='M-16 16 A16 16 0 0 1 16 16'/%3E%3Cpath d='M-8 16 A8 8 0 0 1 8 16'/%3E%3Cpath d='M32 16 A32 32 0 0 1 96 16'/%3E%3Cpath d='M40 16 A24 24 0 0 1 88 16'/%3E%3Cpath d='M48 16 A16 16 0 0 1 80 16'/%3E%3Cpath d='M56 16 A8 8 0 0 1 72 16'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 64px 32px;
+}
+
+.texture-seigaiha-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%23dfd9ce' stroke-width='0.75' opacity='0.09'%3E%3Cpath d='M0 32 A32 32 0 0 1 64 32'/%3E%3Cpath d='M8 32 A24 24 0 0 1 56 32'/%3E%3Cpath d='M16 32 A16 16 0 0 1 48 32'/%3E%3Cpath d='M24 32 A8 8 0 0 1 40 32'/%3E%3Cpath d='M-32 16 A32 32 0 0 1 32 16'/%3E%3Cpath d='M-24 16 A24 24 0 0 1 24 16'/%3E%3Cpath d='M-16 16 A16 16 0 0 1 16 16'/%3E%3Cpath d='M-8 16 A8 8 0 0 1 8 16'/%3E%3Cpath d='M32 16 A32 32 0 0 1 96 16'/%3E%3Cpath d='M40 16 A24 24 0 0 1 88 16'/%3E%3Cpath d='M48 16 A16 16 0 0 1 80 16'/%3E%3Cpath d='M56 16 A8 8 0 0 1 72 16'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 64px 32px;
+}
+
+.texture-linen-light {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(35, 32, 28, 0.028) 0px,
+      rgba(35, 32, 28, 0.028) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(35, 32, 28, 0.024) 0px,
+      rgba(35, 32, 28, 0.024) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+}
+
+.texture-linen-dark {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(223, 217, 206, 0.025) 0px,
+      rgba(223, 217, 206, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(223, 217, 206, 0.02) 0px,
+      rgba(223, 217, 206, 0.02) 1px,
+      transparent 1px,
+      transparent 5px
+    );
 }
 
 .dither-pixelated {
@@ -110,6 +209,11 @@ html.dark::view-transition-new(root) {
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--c-bg);
 }
 
 ::-webkit-scrollbar-thumb {

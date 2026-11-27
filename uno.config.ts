@@ -30,11 +30,11 @@ export default defineConfig({
         a: {
           'font-weight': 'inherit',
           'text-decoration': 'none',
-          'border-bottom': '1px solid rgba(125, 125, 125, 0.3)',
-          transition: 'border-color 0.25s ease',
+          'border-bottom': '1px solid var(--c-border)',
+          transition: 'border-color 0.25s ease, color 0.25s ease',
         },
         'a:hover': {
-          'border-bottom-color': 'currentColor',
+          'border-bottom-color': 'var(--c-accent)',
         },
         code: {
           'font-family': 'var(--font-mono)',
@@ -52,29 +52,34 @@ export default defineConfig({
     },
     colors: {
       ink: {
-        light: '#222222',
-        dark: '#e5e5e5',
+        light: '#23201c',
+        dark: '#dfd9ce',
       },
       surface: {
-        light: '#ffffff',
-        dark: '#050505',
+        light: '#f6f3eb',
+        dark: '#181715',
+      },
+      elevated: {
+        light: '#ede8dc',
+        dark: '#211f1c',
       },
     },
   },
   shortcuts: {
     'bg-base': 'bg-surface-light dark:bg-surface-dark',
+    'bg-elevated': 'bg-elevated-light dark:bg-elevated-dark',
     'text-base-ink': 'text-ink-light dark:text-ink-dark',
-    'text-muted': 'text-[#555555] dark:text-[#bbbbbb]',
-    'text-subtle': 'text-[#777777] dark:text-[#888888]',
-    'border-base': 'border-[#888888]/20 dark:border-[#888888]/25',
+    'text-muted': 'text-[#544f47] dark:text-[#b5aea2]',
+    'text-subtle': 'text-[#686258] dark:text-[#8e887d]',
+    'border-base': 'border-[rgba(35,32,28,0.12)] dark:border-[rgba(223,217,206,0.12)]',
     'nav-link':
-      'opacity-65 hover:opacity-100 transition-opacity duration-200 cursor-pointer select-none',
+      'opacity-65 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
     'icon-btn':
-      'inline-flex items-center justify-center opacity-65 hover:opacity-100 transition-opacity duration-200 cursor-pointer select-none',
+      'inline-flex items-center justify-center opacity-65 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
     'prose-link':
-      'border-b border-[#888888]/30 hover:border-current transition-colors duration-200',
+      'border-b border-[color-mix(in_srgb,var(--c-accent)_65%,transparent)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)] transition-colors duration-200',
     'card-minimal':
-      'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#888888]/8 dark:hover:bg-[#888888]/10',
+      'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#ede8dc]/75 dark:hover:bg-[#211f1c]/85',
   },
   content: {
     filesystem: ['src/content/**/*.{json,md,mdx}'],

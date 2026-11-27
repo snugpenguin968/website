@@ -1,9 +1,11 @@
 export type {
+  AccentStyle,
   BackgroundStyle,
   HeadMetaViewModel,
   NavItemViewModel,
   ShellViewModel,
   SocialLinkViewModel,
+  SurfaceTexture,
   ThemeLogoViewModel,
 } from './layout.vm';
 export type { DitherPortraitViewModel } from './portrait.vm';

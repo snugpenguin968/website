@@ -11,7 +11,7 @@ const { portrait } = Astro.props;
 
 <figure class="group relative m-0 shrink-0 select-none">
   <div
-    class="relative overflow-hidden rounded-sm border border-base bg-base p-1.5 transition-colors duration-300"
+    class="relative overflow-hidden rounded-sm border border-[color-mix(in_srgb,var(--c-accent)_38%,var(--c-border))] bg-base p-1.5 transition-colors duration-300 group-hover:border-[var(--c-accent)]"
     style={`aspect-ratio: ${portrait.aspectRatio};`}
   >
     <img
