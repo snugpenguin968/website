@@ -18,14 +18,14 @@ export class BlogPageAdapter {
       ShellAdapter.resolve({
         currentPath,
         pageTitle: 'Blog',
-        description: 'Essays, engineering notes, and thoughts on software design.',
+        description: 'Occasional thoughts...',
       }),
     ]);
 
     return {
       shell,
       heading: 'Blog',
-      subtitle: 'Writing about engineering, type systems, developer tools, and design.',
+      subtitle: 'Occasional thoughts...',
       totalCount: posts.length,
       allTags: extractUniqueTags(posts),
       yearGroups: groupBlogPostsByYear(posts),

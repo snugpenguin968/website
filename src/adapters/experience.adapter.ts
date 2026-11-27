@@ -10,7 +10,7 @@ export class ExperiencesPageAdapter {
       ShellAdapter.resolve({
         currentPath,
         pageTitle: 'Experiences',
-        description: 'Work experiences, software projects, and other work.',
+        description: "Things I've done.",
       }),
     ]);
 
@@ -33,7 +33,7 @@ export class ExperiencesPageAdapter {
     return {
       shell,
       heading: 'Experiences',
-      subtitle: 'Work, projects, and things I have built along the way.',
+      subtitle: "Things I've done.",
       groups,
     };
   }

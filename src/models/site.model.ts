@@ -9,10 +9,10 @@ export const SITE_CONFIG: SiteConfigEntity = {
   author: {
     name: 'John Tian',
     handle: 'snugpenguin',
-    tagline: 'Builder, systems tinkerer, and software engineer.',
+    tagline: '1x engineer',
     bioParagraphs: [
-      'Hey, I am John Tian — a software engineer who enjoys crafting clean architectures, fast developer tooling, and quiet, expressive interfaces on the web.',
-      'I care deeply about type safety, deliberate design, and systems that age well. Outside of engineering, you can usually find me hunting for good katsu curry, reading, or tinkering with side projects.',
+      "Hi, I'm John, a software engineer interested in computer/distributed/ML systems. I studied computer science at Rice University.",
+      "I enjoy playing/watching soccer, playing various other sports, and eating food.",
     ],
     location: 'United States',
   },
