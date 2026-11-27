@@ -52,8 +52,8 @@ export default defineConfig({
     },
     colors: {
       ink: {
-        light: '#23201c',
-        dark: '#dfd9ce',
+        light: '#161411',
+        dark: '#f3efe6',
       },
       surface: {
         light: '#f6f3eb',
@@ -61,7 +61,7 @@ export default defineConfig({
       },
       elevated: {
         light: '#ede8dc',
-        dark: '#211f1c',
+        dark: '#22201d',
       },
     },
   },
@@ -69,17 +69,17 @@ export default defineConfig({
     'bg-base': 'bg-surface-light dark:bg-surface-dark',
     'bg-elevated': 'bg-elevated-light dark:bg-elevated-dark',
     'text-base-ink': 'text-ink-light dark:text-ink-dark',
-    'text-muted': 'text-[#544f47] dark:text-[#b5aea2]',
-    'text-subtle': 'text-[#686258] dark:text-[#8e887d]',
-    'border-base': 'border-[rgba(35,32,28,0.12)] dark:border-[rgba(223,217,206,0.12)]',
+    'text-muted': 'text-[#3b362f] dark:text-[#d4cec2]',
+    'text-subtle': 'text-[#575046] dark:text-[#a8a195]',
+    'border-base': 'border-[rgba(22,20,17,0.16)] dark:border-[rgba(243,239,230,0.16)]',
     'nav-link':
-      'opacity-65 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
+      'opacity-80 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
     'icon-btn':
-      'inline-flex items-center justify-center opacity-65 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
+      'inline-flex items-center justify-center opacity-80 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
     'prose-link':
       'border-b border-[color-mix(in_srgb,var(--c-accent)_65%,transparent)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)] transition-colors duration-200',
     'card-minimal':
-      'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#ede8dc]/75 dark:hover:bg-[#211f1c]/85',
+      'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#ede8dc]/80 dark:hover:bg-[#22201d]/90',
   },
   content: {
     filesystem: ['src/content/**/*.{json,md,mdx}'],

@@ -34,6 +34,7 @@ export class NavigationAdapter {
         : config.title;
 
     const canonicalUrl = new URL(normalizedPath, config.siteUrl).toString();
+    const ogImageUrl = new URL('/og-image.png', config.siteUrl).toString();
     const year = input.currentYear ?? new Date().getUTCFullYear();
     const populated = input.populatedRouteIds ?? new Set<NavRouteId>();
 
@@ -55,6 +56,7 @@ export class NavigationAdapter {
         siteTitle: config.title,
         description: input.description ?? config.description,
         canonicalUrl,
+        ogImageUrl,
         lang: config.lang,
       },
       logo: {

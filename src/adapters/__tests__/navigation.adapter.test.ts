@@ -20,6 +20,7 @@ describe('NavigationAdapter', () => {
 
     expect(shell.head.pageTitle).toBe('Type Systems — John Tian');
     expect(shell.head.canonicalUrl).toBe('https://johntian.dev/blog/type-systems');
+    expect(shell.head.ogImageUrl).toBe('https://johntian.dev/og-image.png');
     expect(shell.copyrightText).toBe('2026 © John Tian');
     expect(shell.navItems.map((n) => n.id)).toEqual(['experiences', 'blog']);
     expect(shell.socials.map((s) => s.id)).toEqual(['github', 'linkedin', 'x', 'email']);

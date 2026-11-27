@@ -614,6 +614,7 @@ const { mode } = Astro.props;
     }, 220);
   }
 
+  startBackground();
   document.addEventListener('astro:page-load', startBackground);
   document.addEventListener('astro:before-swap', stopAnimation);
   window.addEventListener('site:background-change', startBackground);

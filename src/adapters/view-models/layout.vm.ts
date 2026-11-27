@@ -29,6 +29,7 @@ export interface HeadMetaViewModel {
   readonly siteTitle: string;
   readonly description: string;
   readonly canonicalUrl: string;
+  readonly ogImageUrl: string;
   readonly lang: string;
 }
 

@@ -148,10 +148,8 @@
   ): void {
     for (const btn of buttons) {
       const active = btn.dataset[key] === currentValue;
-      btn.classList.toggle('border-[var(--c-accent)]', active);
-      btn.classList.toggle('bg-[var(--c-accent-soft)]', active);
-      btn.classList.toggle('text-base-ink', active);
-      btn.classList.toggle('text-muted', !active);
+      btn.dataset['active'] = String(active);
+      btn.setAttribute('aria-pressed', String(active));
     }
   }
 
@@ -264,5 +262,6 @@
     );
   }
 
+  bindAppearanceMenu();
   document.addEventListener('astro:page-load', bindAppearanceMenu);
 </script>

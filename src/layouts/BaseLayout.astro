@@ -41,7 +41,14 @@ const { shell } = Astro.props;
     <meta property="og:description" content={shell.head.description} />
     <meta property="og:url" content={shell.head.canonicalUrl} />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={shell.head.ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={shell.logo.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={shell.head.pageTitle} />
+    <meta name="twitter:description" content={shell.head.description} />
+    <meta name="twitter:image" content={shell.head.ogImageUrl} />
     <ClientRouter />
     <script is:inline>
       (function () {
