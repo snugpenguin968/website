@@ -1,0 +1,261 @@
+---
+---
+
+<button
+  type="button"
+  data-search-open
+  aria-label="Search site"
+  title="Search (⌘K)"
+  class="icon-btn p-1.5 sm:p-1 text-lg"
+>
+  <span class="i-ri-search-line" aria-hidden="true"></span>
+</button>
+
+<div
+  data-search-modal
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search site"
+  class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 px-4 pt-[12vh] backdrop-blur-sm"
+>
+  <div
+    data-search-panel
+    class="w-full max-w-lg overflow-hidden rounded-lg border border-base bg-base shadow-xl"
+  >
+    <div class="flex items-center gap-3 border-b border-base px-4 py-3">
+      <span class="i-ri-search-line text-lg text-subtle shrink-0" aria-hidden="true"></span>
+      <input
+        type="search"
+        data-search-input
+        placeholder="Search posts, experiences, pages..."
+        autocomplete="off"
+        spellcheck="false"
+        class="w-full bg-transparent text-sm text-base-ink placeholder:text-subtle focus:outline-none"
+      />
+      <kbd
+        class="hidden sm:inline-block rounded border border-base px-1.5 py-0.5 font-mono text-[10px] text-subtle"
+      >
+        ESC
+      </kbd>
+    </div>
+
+    <ul data-search-results class="max-h-[55vh] overflow-y-auto p-2 space-y-0.5"></ul>
+
+    <div
+      class="flex items-center justify-between border-t border-base px-4 py-2 font-mono text-[11px] text-subtle"
+    >
+      <span data-search-status>Type to search</span>
+      <span class="hidden sm:inline">↑↓ navigate · ↵ open</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface SearchItem {
+    readonly id: string;
+    readonly type: string;
+    readonly title: string;
+    readonly description: string;
+    readonly href: string;
+    readonly tags: readonly string[];
+    readonly external: boolean;
+  }
+
+  let cachedItems: readonly SearchItem[] | null = null;
+  let activeIndex = 0;
+  let currentMatches: SearchItem[] = [];
+
+  async function loadSearchIndex(): Promise<readonly SearchItem[]> {
+    if (cachedItems !== null) return cachedItems;
+    try {
+      const response = await fetch('/search.json');
+      if (!response.ok) return [];
+      const data = (await response.json()) as SearchItem[];
+      cachedItems = data;
+      return data;
+    } catch {
+      return [];
+    }
+  }
+
+  function renderResults(
+    listEl: HTMLUListElement,
+    statusEl: HTMLElement,
+    items: SearchItem[],
+    query: string,
+  ): void {
+    listEl.innerHTML = '';
+    currentMatches = items;
+    activeIndex = 0;
+
+    if (items.length === 0) {
+      statusEl.textContent = query.length > 0 ? `No results for "${query}"` : 'No indexed items';
+      const emptyLi = document.createElement('li');
+      emptyLi.className = 'px-3 py-6 text-center text-xs text-subtle';
+      emptyLi.textContent = query.length > 0 ? 'Nothing matched your query.' : 'No content yet.';
+      listEl.appendChild(emptyLi);
+      return;
+    }
+
+    statusEl.textContent = `${items.length} result${items.length === 1 ? '' : 's'}`;
+
+    items.forEach((item, idx) => {
+      const li = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = item.href;
+      if (item.external) {
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+      }
+      link.dataset['resultIndex'] = String(idx);
+      link.className =
+        'flex flex-col gap-0.5 rounded-md px-3 py-2 transition-colors hover:bg-[#888888]/12';
+      if (idx === 0) {
+        link.classList.add('bg-[#888888]/12');
+      }
+
+      const header = document.createElement('div');
+      header.className = 'flex items-baseline justify-between gap-2';
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'text-sm font-medium text-base-ink truncate';
+      titleSpan.textContent = item.title;
+
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'font-mono text-[10px] uppercase tracking-wider text-subtle shrink-0';
+      typeSpan.textContent = item.type;
+
+      header.appendChild(titleSpan);
+      header.appendChild(typeSpan);
+      link.appendChild(header);
+
+      if (item.description.length > 0) {
+        const desc = document.createElement('span');
+        desc.className = 'text-xs text-muted line-clamp-1';
+        desc.textContent = item.description;
+        link.appendChild(desc);
+      }
+
+      li.appendChild(link);
+      listEl.appendChild(li);
+    });
+  }
+
+  function updateActiveHighlight(listEl: HTMLUListElement): void {
+    const links = listEl.querySelectorAll<HTMLAnchorElement>('a[data-result-index]');
+    links.forEach((link, idx) => {
+      link.classList.toggle('bg-[#888888]/12', idx === activeIndex);
+      if (idx === activeIndex) {
+        link.scrollIntoView({ block: 'nearest' });
+      }
+    });
+  }
+
+  function filterItems(items: readonly SearchItem[], rawQuery: string): SearchItem[] {
+    const q = rawQuery.trim().toLowerCase();
+    if (q.length === 0) {
+      return items.slice(0, 8);
+    }
+    return items
+      .filter((item) => {
+        const haystack =
+          `${item.title} ${item.description} ${item.type} ${item.tags.join(' ')}`.toLowerCase();
+        return haystack.includes(q);
+      })
+      .slice(0, 12);
+  }
+
+  function bindSearch(): void {
+    const openBtn = document.querySelector<HTMLButtonElement>('[data-search-open]');
+    const modal = document.querySelector<HTMLElement>('[data-search-modal]');
+    const panel = document.querySelector<HTMLElement>('[data-search-panel]');
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]');
+    const listEl = document.querySelector<HTMLUListElement>('[data-search-results]');
+    const statusEl = document.querySelector<HTMLElement>('[data-search-status]');
+
+    if (!openBtn || !modal || !panel || !input || !listEl || !statusEl) return;
+    if (modal.dataset['bound'] === 'true') return;
+    modal.dataset['bound'] = 'true';
+
+    const openModal = async (): Promise<void> => {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      input.value = '';
+      input.focus();
+      const items = await loadSearchIndex();
+      renderResults(listEl, statusEl, filterItems(items, ''), '');
+    };
+
+    const closeModal = (): void => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    openBtn.addEventListener('click', () => {
+      void openModal();
+    });
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    input.addEventListener('input', async () => {
+      const items = await loadSearchIndex();
+      const q = input.value;
+      renderResults(listEl, statusEl, filterItems(items, q), q);
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' && currentMatches.length > 0) {
+        event.preventDefault();
+        activeIndex = (activeIndex + 1) % currentMatches.length;
+        updateActiveHighlight(listEl);
+      } else if (event.key === 'ArrowUp' && currentMatches.length > 0) {
+        event.preventDefault();
+        activeIndex = (activeIndex - 1 + currentMatches.length) % currentMatches.length;
+        updateActiveHighlight(listEl);
+      } else if (event.key === 'Enter' && currentMatches.length > 0) {
+        const selected = currentMatches[activeIndex];
+        if (selected !== undefined) {
+          event.preventDefault();
+          closeModal();
+          if (selected.external) {
+            window.open(selected.href, '_blank', 'noopener,noreferrer');
+          } else {
+            window.location.href = selected.href;
+          }
+        }
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        closeModal();
+      }
+    });
+
+    const onGlobalKeydown = (event: KeyboardEvent): void => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        if (modal.classList.contains('hidden')) {
+          void openModal();
+        } else {
+          closeModal();
+        }
+      } else if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    };
+
+    window.addEventListener('keydown', onGlobalKeydown);
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        window.removeEventListener('keydown', onGlobalKeydown);
+        closeModal();
+      },
+      { once: true },
+    );
+  }
+
+  document.addEventListener('astro:page-load', bindSearch);
+</script>

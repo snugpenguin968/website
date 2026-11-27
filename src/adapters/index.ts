@@ -25,3 +25,4 @@ export { PhotosPageAdapter } from './photo.adapter';
 export { ShortsPageAdapter } from './short.adapter';
 export { NotesPageAdapter } from './note.adapter';
 export { RssAdapter } from './rss.adapter';
+export { SearchAdapter } from './search.adapter';

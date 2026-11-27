@@ -46,6 +46,9 @@ export class NavigationAdapter {
         active: isNavRouteActive(normalizedPath, route.path),
       }));
 
+    const rssLink = config.socials.find((s) => s.id === 'rss');
+    const personalSocials = config.socials.filter((s) => s.id !== 'rss');
+
     return {
       head: {
         pageTitle: fullTitle,
@@ -60,7 +63,8 @@ export class NavigationAdapter {
         alt: `${config.author.name} logo`,
       },
       navItems,
-      socials: config.socials,
+      socials: personalSocials,
+      rssHref: rssLink?.href,
       background: config.background,
       copyrightText: `${formatCopyrightRange(config.copyrightStartYear, year)} © ${config.author.name}`,
       authorName: config.author.name,
