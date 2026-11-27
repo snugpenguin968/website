@@ -75,6 +75,13 @@ body {
   background: var(--c-accent-soft);
 }
 
+html[data-texture='mist'] [data-texture-layer='mist'],
+html[data-texture='seigaiha'] [data-texture-layer='seigaiha'],
+html[data-texture='linen'] [data-texture-layer='linen'],
+html[data-texture='shoji'] [data-texture-layer='shoji'] {
+  display: block;
+}
+
 .texture-mist-light {
   background-image:
     radial-gradient(ellipse 58% 46% at 12% 88%, rgba(35, 32, 28, 0.42) 0%, rgba(35, 32, 28, 0.22) 38%, rgba(35, 32, 28, 0.06) 62%, transparent 78%),

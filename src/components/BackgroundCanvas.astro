@@ -8,21 +8,13 @@ interface Props {
 const { mode } = Astro.props;
 ---
 
-{
-  mode !== 'none' && (
-    <div
-      class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
-      style={
-        mode === 'plum' || mode === 'rose'
-          ? 'mask-image: radial-gradient(circle, transparent 4%, black 78%); -webkit-mask-image: radial-gradient(circle, transparent 4%, black 78%);'
-          : undefined
-      }
-      aria-hidden="true"
-    >
-      <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
-    </div>
-  )
-}
+<div
+  data-bg-wrapper
+  class="pointer-events-none fixed inset-0 z-0 overflow-hidden print:hidden"
+  aria-hidden="true"
+>
+  <canvas data-bg-canvas data-bg-mode={mode} class="h-full w-full" />
+</div>
 
 <script>
   const R180 = Math.PI;
@@ -579,10 +571,27 @@ const { mode } = Astro.props;
   function startBackground(): void {
     stopAnimation();
 
+    const wrapper = document.querySelector<HTMLElement>('[data-bg-wrapper]');
     const canvas = document.querySelector<HTMLCanvasElement>('[data-bg-canvas]');
-    if (!canvas) return;
+    if (!wrapper || !canvas) return;
 
-    const mode = canvas.dataset['bgMode'];
+    const mode = document.documentElement.dataset['background'] ?? canvas.dataset['bgMode'] ?? 'none';
+    const useRadialMask = mode === 'plum' || mode === 'rose';
+    wrapper.style.maskImage = useRadialMask
+      ? 'radial-gradient(circle, transparent 4%, black 78%)'
+      : 'none';
+    wrapper.style.webkitMaskImage = useRadialMask
+      ? 'radial-gradient(circle, transparent 4%, black 78%)'
+      : 'none';
+
+    if (mode === 'none') {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      return;
+    }
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (mode === 'plum') {
@@ -607,5 +616,6 @@ const { mode } = Astro.props;
 
   document.addEventListener('astro:page-load', startBackground);
   document.addEventListener('astro:before-swap', stopAnimation);
+  window.addEventListener('site:background-change', startBackground);
   window.addEventListener('resize', handleResize, { passive: true });
 </script>

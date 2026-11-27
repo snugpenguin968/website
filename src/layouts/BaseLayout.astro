@@ -23,7 +23,12 @@ const { shell } = Astro.props;
 ---
 
 <!doctype html>
-<html lang={shell.head.lang} data-accent={shell.accent}>
+<html
+  lang={shell.head.lang}
+  data-accent={shell.accent}
+  data-texture={shell.texture}
+  data-background={shell.background}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,24 +45,57 @@ const { shell } = Astro.props;
     <ClientRouter />
     <script is:inline>
       (function () {
+        var validAccents = ['vermilion', 'moss', 'sumi'];
+        var validTextures = ['mist', 'seigaiha', 'linen', 'shoji', 'none'];
+        var validBackgrounds = ['plum', 'dot', 'rose', 'particle', 'none'];
         function resolveDark() {
           try {
             var stored = localStorage.getItem('theme');
             if (stored === 'dark') return true;
             if (stored === 'light') return false;
           } catch (_) {}
-          return window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (typeof window.matchMedia === 'function') {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+          return false;
         }
-        function syncTheme() {
-          document.documentElement.classList.toggle('dark', resolveDark());
+        function syncPreferences() {
+          var root = document.documentElement;
+          root.classList.toggle('dark', resolveDark());
+          try {
+            var storedAccent = localStorage.getItem('accent');
+            if (storedAccent && validAccents.indexOf(storedAccent) !== -1) {
+              root.dataset.accent = storedAccent;
+            }
+            var storedTexture = localStorage.getItem('texture');
+            if (storedTexture && validTextures.indexOf(storedTexture) !== -1) {
+              root.dataset.texture = storedTexture;
+            }
+            var storedBackground = localStorage.getItem('background');
+            if (storedBackground && validBackgrounds.indexOf(storedBackground) !== -1) {
+              root.dataset.background = storedBackground;
+            }
+          } catch (_) {}
         }
-        syncTheme();
-        document.addEventListener('astro:after-swap', syncTheme);
+        syncPreferences();
+        if (typeof window.matchMedia === 'function') {
+          var mq = window.matchMedia('(prefers-color-scheme: dark)');
+          if (typeof mq.addEventListener === 'function') {
+            mq.addEventListener('change', function () {
+              try {
+                if (!localStorage.getItem('theme')) {
+                  document.documentElement.classList.toggle('dark', mq.matches);
+                }
+              } catch (_) {}
+            });
+          }
+        }
+        document.addEventListener('astro:after-swap', syncPreferences);
       })();
     </script>
   </head>
   <body class="text-base-ink font-sans antialiased">
-    <SurfaceTexture texture={shell.texture} />
+    <SurfaceTexture />
     <BackgroundCanvas mode={shell.background} />
     <div class="relative z-10 flex min-h-[100dvh] flex-col">
       <NavHeader shell={shell} />

@@ -1,5 +1,6 @@
 ---
 import type { ShellViewModel } from '@adapters/view-models';
+import AppearanceToggle from './AppearanceToggle.astro';
 import SearchButton from './SearchButton.astro';
 import ThemeLogo from './ThemeLogo.astro';
 import ThemeToggle from './ThemeToggle.astro';
@@ -71,6 +72,7 @@ const { shell } = Astro.props;
             </a>
           )
         }
+        <AppearanceToggle />
         <ThemeToggle />
       </div>
     </div>

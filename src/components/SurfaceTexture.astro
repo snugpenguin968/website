@@ -1,72 +1,45 @@
 ---
-import type { SurfaceTexture } from '@adapters/view-models';
-
-interface Props {
-  texture: SurfaceTexture;
-}
-
-const { texture } = Astro.props;
 ---
 
-{
-  texture === 'mist' && (
-    <>
-      <div
-        aria-hidden="true"
-        class="texture-mist-light dark:hidden pointer-events-none fixed inset-0 z-0 print:hidden"
-      />
-      <div
-        aria-hidden="true"
-        class="texture-mist-dark hidden dark:block pointer-events-none fixed inset-0 z-0 print:hidden"
-      />
-    </>
-  )
-}
+<div
+  aria-hidden="true"
+  data-texture-layer="mist"
+  class="hidden pointer-events-none fixed inset-0 z-0 print:hidden"
+>
+  <div class="texture-mist-light dark:hidden absolute inset-0" />
+  <div class="texture-mist-dark hidden dark:block absolute inset-0" />
+</div>
 
-{
-  texture === 'seigaiha' && (
-    <>
-      <div
-        aria-hidden="true"
-        class="texture-seigaiha-light dark:hidden pointer-events-none fixed inset-0 z-0 print:hidden"
-        style="mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%); -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%);"
-      />
-      <div
-        aria-hidden="true"
-        class="texture-seigaiha-dark hidden dark:block pointer-events-none fixed inset-0 z-0 print:hidden"
-        style="mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%); -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%);"
-      />
-    </>
-  )
-}
+<div
+  aria-hidden="true"
+  data-texture-layer="seigaiha"
+  class="hidden pointer-events-none fixed inset-0 z-0 print:hidden"
+  style="mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%); -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 18%, black 88%);"
+>
+  <div class="texture-seigaiha-light dark:hidden absolute inset-0" />
+  <div class="texture-seigaiha-dark hidden dark:block absolute inset-0" />
+</div>
 
-{
-  texture === 'linen' && (
-    <>
-      <div
-        aria-hidden="true"
-        class="texture-linen-light dark:hidden pointer-events-none fixed inset-0 z-0 print:hidden"
-      />
-      <div
-        aria-hidden="true"
-        class="texture-linen-dark hidden dark:block pointer-events-none fixed inset-0 z-0 print:hidden"
-      />
-    </>
-  )
-}
+<div
+  aria-hidden="true"
+  data-texture-layer="linen"
+  class="hidden pointer-events-none fixed inset-0 z-0 print:hidden"
+>
+  <div class="texture-linen-light dark:hidden absolute inset-0" />
+  <div class="texture-linen-dark hidden dark:block absolute inset-0" />
+</div>
 
-{
-  texture === 'shoji' && (
-    <div
-      aria-hidden="true"
-      class="pointer-events-none fixed inset-0 z-0 hidden md:block print:hidden"
-    >
-      <div class="mx-auto flex h-full max-w-5xl justify-between px-6">
-        <div class="h-full w-px bg-[var(--c-border)] opacity-80" />
-        <div class="h-full w-px bg-[var(--c-border)] opacity-80" />
-      </div>
-      <div class="fixed inset-x-0 top-[76px] h-px bg-[var(--c-border)] opacity-75" />
-      <div class="fixed inset-x-0 bottom-[96px] h-px bg-[var(--c-border)] opacity-75" />
+<div
+  aria-hidden="true"
+  data-texture-layer="shoji"
+  class="hidden pointer-events-none fixed inset-0 z-0 print:hidden"
+>
+  <div class="hidden md:block h-full w-full">
+    <div class="mx-auto flex h-full max-w-5xl justify-between px-6">
+      <div class="h-full w-px bg-[var(--c-border)] opacity-80" />
+      <div class="h-full w-px bg-[var(--c-border)] opacity-80" />
     </div>
-  )
-}
+    <div class="fixed inset-x-0 top-[76px] h-px bg-[var(--c-border)] opacity-75" />
+    <div class="fixed inset-x-0 bottom-[96px] h-px bg-[var(--c-border)] opacity-75" />
+  </div>
+</div>
