@@ -72,3 +72,8 @@ Connect this GitHub repository in the Cloudflare Pages dashboard with:
 - **Framework preset**: Astro
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
+
+## Credits & License
+
+- Visual style and background concepts inspired by [Astro AntfuStyle Theme](https://github.com/lin-stephanie/astro-antfustyle-theme) by Stephanie Lin and [antfu.me](https://github.com/antfu/antfu.me) by Anthony Fu.
+- Source code is licensed under the [MIT License](./LICENSE). Personal written content, photos, and brand assets are Copyright © John Tian, all rights reserved.
