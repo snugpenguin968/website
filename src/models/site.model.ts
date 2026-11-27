@@ -3,12 +3,12 @@ import type { SiteConfigEntity } from './entities/site.entity';
 export const SITE_CONFIG: SiteConfigEntity = {
   title: 'John Tian',
   description:
-    'Software engineer building thoughtful systems, developer tools, and minimalist web experiences.',
-  siteUrl: 'https://snugpenguin.dev',
+    '1x engineer',
+  siteUrl: 'https://johntian.dev',
   lang: 'en',
   author: {
     name: 'John Tian',
-    handle: 'snugpenguin',
+    handle: 'johntian',
     tagline: '1x engineer',
     bioParagraphs: [
       "Hi, I'm John, a software engineer interested in computer/distributed/ML systems. I studied computer science at Rice University.",
