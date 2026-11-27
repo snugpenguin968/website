@@ -1,6 +1,6 @@
 export type DitherAlgorithm = 'atkinson' | 'floyd-steinberg' | 'bayer4x4';
 
-export type BackgroundStyle = 'plum' | 'rose' | 'dot' | 'none';
+export type BackgroundStyle = 'plum' | 'dot' | 'rose' | 'particle' | 'none';
 
 export interface RgbColor {
   readonly r: number;

@@ -61,7 +61,7 @@ export const SITE_CONFIG: SiteConfigEntity = {
       external: false,
     },
   ],
-  background: 'plum',
+  background: 'rose',
   portraitDither: {
     algorithm: 'atkinson',
     levels: 5,

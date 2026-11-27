@@ -22,7 +22,7 @@ npm run dev
 
 Edit `src/models/site.model.ts`:
 
-- **Background effect**: Set `background` to `'plum'`, `'rose'`, `'dot'`, or `'none'`.
+- **Background effect**: Set `background` to `'plum'`, `'dot'`, `'rose'`, `'particle'`, or `'none'`.
 - **Portrait dithering**: Adjust `portraitDither.algorithm` (`'atkinson'`, `'floyd-steinberg'`, or `'bayer4x4'`), `levels` (`2` for classic 1-bit, `4`–`8` for softer multi-level dithering), `inkOpacity` (`0`–`1`), `targetWidth`, `contrast`, and `revealOnHover`.
 
 ### Dithering Any Arbitrary Image
