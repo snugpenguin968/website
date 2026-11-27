@@ -27,7 +27,7 @@ const { vm } = Astro.props;
           {vm.groups.map((group) => (
             <section>
               <div class="mb-4">
-                <h2 class="inline-block font-mono text-xs uppercase tracking-[0.18em] text-subtle border-b border-base pb-1.5">
+                <h2 class="inline-block font-mono text-xs uppercase tracking-[0.18em] text-[var(--c-accent)] border-b border-[var(--c-accent)]/40 pb-1.5">
                   {group.category}
                 </h2>
               </div>

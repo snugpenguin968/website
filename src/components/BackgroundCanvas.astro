@@ -28,9 +28,6 @@ const { mode } = Astro.props;
   const R180 = Math.PI;
   const R90 = Math.PI / 2;
   const R15 = Math.PI / 12;
-  const MIN_BRANCH = 68;
-  const MAX_BRANCH_STEPS = 1200;
-  const STEP_LEN = 9.5;
   const PLUM_INTERVAL_MS = 1000 / 50;
   const FLOW_INTERVAL_MS = 1000 / 30;
 
@@ -121,9 +118,26 @@ const { mode } = Astro.props;
     if (!setup) return;
     const { ctx, width, height } = setup;
 
+    const isMobile = width < 640;
+    const isTablet = width >= 640 && width < 1100;
+    const isUltrawide = width >= 1600;
+
+    const minBranch = isMobile ? 24 : isTablet ? 48 : isUltrawide ? 86 : 74;
+    const maxSteps = isMobile ? 220 : isTablet ? 650 : isUltrawide ? 1700 : 1350;
+    const stepLen = isMobile ? 5.5 : isTablet ? 7.5 : isUltrawide ? 11 : 9.8;
+    const midThreshold = isMobile ? 110 : isTablet ? 260 : 420;
+    const midRate = isMobile ? 0.48 : isTablet ? 0.53 : 0.57;
+    const lateRate = isMobile ? 0.36 : isTablet ? 0.43 : 0.47;
+
     const isDark = document.documentElement.classList.contains('dark');
-    ctx.lineWidth = 1.05;
-    ctx.strokeStyle = isDark ? 'rgba(223, 217, 206, 0.22)' : 'rgba(35, 32, 28, 0.24)';
+    ctx.lineWidth = isMobile ? 0.9 : 1.05;
+    ctx.strokeStyle = isDark
+      ? isMobile
+        ? 'rgba(223, 217, 206, 0.15)'
+        : 'rgba(223, 217, 206, 0.22)'
+      : isMobile
+        ? 'rgba(35, 32, 28, 0.16)'
+        : 'rgba(35, 32, 28, 0.24)';
 
     let steps: (() => void)[] = [];
     let prevSteps: (() => void)[] = [];
@@ -139,8 +153,8 @@ const { mode } = Astro.props;
       rad: number,
       counter: { value: number } = { value: 0 },
     ): void => {
-      if (counter.value >= MAX_BRANCH_STEPS) return;
-      const length = Math.random() * STEP_LEN + 2.2;
+      if (counter.value >= maxSteps) return;
+      const length = Math.random() * stepLen + (isMobile ? 1.4 : 2.2);
       counter.value += 1;
 
       const [nx, ny] = polar2cart(x, y, length, rad);
@@ -155,7 +169,7 @@ const { mode } = Astro.props;
       if (nx < -120 || nx > width + 120 || ny < -120 || ny > height + 120) return;
 
       const rate =
-        counter.value <= MIN_BRANCH ? 0.85 : counter.value <= 380 ? 0.56 : 0.46;
+        counter.value <= minBranch ? 0.84 : counter.value <= midThreshold ? midRate : lateRate;
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad1, counter));
       if (Math.random() < rate) steps.push(() => step(nx, ny, rad2, counter));
     };
@@ -163,22 +177,39 @@ const { mode } = Astro.props;
     const randomRange = (min: number, max: number): number =>
       min + Math.random() * (max - min);
 
-    steps =
-      width < 500
-        ? [
-            () => step(randomRange(0.15, 0.85) * width, -5, R90),
-            () => step(randomRange(0.15, 0.85) * width, height + 5, -R90),
-            () => step(-5, randomRange(0.2, 0.8) * height, 0),
-            () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
-          ]
-        : [
-            () => step(randomRange(0.1, 0.45) * width, -5, R90),
-            () => step(randomRange(0.55, 0.9) * width, -5, R90),
-            () => step(randomRange(0.1, 0.45) * width, height + 5, -R90),
-            () => step(randomRange(0.55, 0.9) * width, height + 5, -R90),
-            () => step(-5, randomRange(0.2, 0.8) * height, 0),
-            () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
-          ];
+    if (isMobile) {
+      steps = [
+        () => step(randomRange(0.2, 0.8) * width, -5, R90),
+        () => step(randomRange(0.2, 0.8) * width, height + 5, -R90),
+      ];
+    } else if (isTablet) {
+      steps = [
+        () => step(randomRange(0.2, 0.8) * width, -5, R90),
+        () => step(randomRange(0.2, 0.8) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.2, 0.8) * height, 0),
+        () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
+      ];
+    } else if (isUltrawide) {
+      steps = [
+        () => step(randomRange(0.08, 0.42) * width, -5, R90),
+        () => step(randomRange(0.58, 0.92) * width, -5, R90),
+        () => step(randomRange(0.08, 0.42) * width, height + 5, -R90),
+        () => step(randomRange(0.58, 0.92) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.15, 0.45) * height, 0),
+        () => step(-5, randomRange(0.55, 0.85) * height, 0),
+        () => step(width + 5, randomRange(0.15, 0.45) * height, R180),
+        () => step(width + 5, randomRange(0.55, 0.85) * height, R180),
+      ];
+    } else {
+      steps = [
+        () => step(randomRange(0.1, 0.45) * width, -5, R90),
+        () => step(randomRange(0.55, 0.9) * width, -5, R90),
+        () => step(randomRange(0.1, 0.45) * width, height + 5, -R90),
+        () => step(randomRange(0.55, 0.9) * width, height + 5, -R90),
+        () => step(-5, randomRange(0.2, 0.8) * height, 0),
+        () => step(width + 5, randomRange(0.2, 0.8) * height, R180),
+      ];
+    }
 
     const observer = new MutationObserver(() => {
       startBackground();

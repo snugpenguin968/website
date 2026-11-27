@@ -77,7 +77,7 @@ export default defineConfig({
     'icon-btn':
       'inline-flex items-center justify-center opacity-65 hover:opacity-100 hover:text-[var(--c-accent)] transition-all duration-200 cursor-pointer select-none',
     'prose-link':
-      'border-b border-[rgba(35,32,28,0.22)] dark:border-[rgba(223,217,206,0.22)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)] transition-colors duration-200',
+      'border-b border-[color-mix(in_srgb,var(--c-accent)_42%,transparent)] hover:border-[var(--c-accent)] hover:text-[var(--c-accent)] transition-colors duration-200',
     'card-minimal':
       'block rounded-md px-3 py-3 -mx-3 sm:px-4 sm:-mx-4 transition-colors duration-200 hover:bg-[#ede8dc]/75 dark:hover:bg-[#211f1c]/85',
   },

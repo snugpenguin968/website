@@ -75,22 +75,68 @@ body {
   background: var(--c-accent-soft);
 }
 
-.washi-pulp {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 220px 220px;
+.texture-mist-light {
+  background-image:
+    radial-gradient(ellipse 58% 46% at 12% 88%, rgba(35, 32, 28, 0.42) 0%, rgba(35, 32, 28, 0.22) 38%, rgba(35, 32, 28, 0.06) 62%, transparent 78%),
+    radial-gradient(ellipse 52% 42% at 88% 14%, rgba(84, 76, 64, 0.36) 0%, rgba(84, 76, 64, 0.18) 38%, rgba(84, 76, 64, 0.05) 62%, transparent 76%),
+    radial-gradient(ellipse 50% 38% at 84% 88%, rgba(120, 106, 86, 0.34) 0%, rgba(120, 106, 86, 0.14) 44%, transparent 74%),
+    linear-gradient(180deg, rgba(196, 186, 168, 0.36) 0%, transparent 24%, transparent 68%, rgba(128, 116, 96, 0.38) 100%);
 }
 
-.washi-fibers-light {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%235c5142' stroke-linecap='round' opacity='0.09'%3E%3Cpath d='M24 62 Q48 54 78 68' stroke-width='0.75'/%3E%3Cpath d='M165 34 Q182 58 174 88' stroke-width='0.65'/%3E%3Cpath d='M310 46 Q344 38 372 56' stroke-width='0.85'/%3E%3Cpath d='M422 118 Q438 148 428 176' stroke-width='0.7'/%3E%3Cpath d='M84 188 Q112 174 142 192' stroke-width='0.8'/%3E%3Cpath d='M238 156 Q252 184 274 196' stroke-width='0.65'/%3E%3Cpath d='M352 214 Q386 228 408 212' stroke-width='0.75'/%3E%3Cpath d='M46 298 Q62 328 54 358' stroke-width='0.7'/%3E%3Cpath d='M178 286 Q212 276 238 294' stroke-width='0.85'/%3E%3Cpath d='M296 322 Q314 352 302 384' stroke-width='0.65'/%3E%3Cpath d='M404 342 Q436 332 462 348' stroke-width='0.75'/%3E%3Cpath d='M118 418 Q152 406 184 424' stroke-width='0.8'/%3E%3Cpath d='M246 438 Q272 454 304 442' stroke-width='0.7'/%3E%3Cpath d='M368 412 Q382 440 374 466' stroke-width='0.65'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 480px 480px;
+.texture-mist-dark {
+  background-image:
+    radial-gradient(ellipse 58% 46% at 12% 88%, rgba(223, 217, 206, 0.3) 0%, rgba(223, 217, 206, 0.15) 38%, rgba(223, 217, 206, 0.04) 62%, transparent 78%),
+    radial-gradient(ellipse 52% 42% at 88% 14%, rgba(196, 188, 174, 0.26) 0%, rgba(196, 188, 174, 0.12) 38%, rgba(196, 188, 174, 0.03) 62%, transparent 76%),
+    radial-gradient(ellipse 50% 38% at 84% 88%, rgba(223, 217, 206, 0.22) 0%, rgba(223, 217, 206, 0.09) 44%, transparent 74%),
+    linear-gradient(180deg, rgba(223, 217, 206, 0.1) 0%, transparent 24%, transparent 68%, rgba(223, 217, 206, 0.18) 100%);
 }
 
-.washi-fibers-dark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%23dfd9ce' stroke-linecap='round' opacity='0.065'%3E%3Cpath d='M24 62 Q48 54 78 68' stroke-width='0.75'/%3E%3Cpath d='M165 34 Q182 58 174 88' stroke-width='0.65'/%3E%3Cpath d='M310 46 Q344 38 372 56' stroke-width='0.85'/%3E%3Cpath d='M422 118 Q438 148 428 176' stroke-width='0.7'/%3E%3Cpath d='M84 188 Q112 174 142 192' stroke-width='0.8'/%3E%3Cpath d='M238 156 Q252 184 274 196' stroke-width='0.65'/%3E%3Cpath d='M352 214 Q386 228 408 212' stroke-width='0.75'/%3E%3Cpath d='M46 298 Q62 328 54 358' stroke-width='0.7'/%3E%3Cpath d='M178 286 Q212 276 238 294' stroke-width='0.85'/%3E%3Cpath d='M296 322 Q314 352 302 384' stroke-width='0.65'/%3E%3Cpath d='M404 342 Q436 332 462 348' stroke-width='0.75'/%3E%3Cpath d='M118 418 Q152 406 184 424' stroke-width='0.8'/%3E%3Cpath d='M246 438 Q272 454 304 442' stroke-width='0.7'/%3E%3Cpath d='M368 412 Q382 440 374 466' stroke-width='0.65'/%3E%3C/g%3E%3C/svg%3E");
+.texture-seigaiha-light {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%2323201c' stroke-width='0.75' opacity='0.11'%3E%3Cpath d='M0 32 A32 32 0 0 1 64 32'/%3E%3Cpath d='M8 32 A24 24 0 0 1 56 32'/%3E%3Cpath d='M16 32 A16 16 0 0 1 48 32'/%3E%3Cpath d='M24 32 A8 8 0 0 1 40 32'/%3E%3Cpath d='M-32 16 A32 32 0 0 1 32 16'/%3E%3Cpath d='M-24 16 A24 24 0 0 1 24 16'/%3E%3Cpath d='M-16 16 A16 16 0 0 1 16 16'/%3E%3Cpath d='M-8 16 A8 8 0 0 1 8 16'/%3E%3Cpath d='M32 16 A32 32 0 0 1 96 16'/%3E%3Cpath d='M40 16 A24 24 0 0 1 88 16'/%3E%3Cpath d='M48 16 A16 16 0 0 1 80 16'/%3E%3Cpath d='M56 16 A8 8 0 0 1 72 16'/%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 480px 480px;
+  background-size: 64px 32px;
+}
+
+.texture-seigaiha-dark {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='32' viewBox='0 0 64 32'%3E%3Cg fill='none' stroke='%23dfd9ce' stroke-width='0.75' opacity='0.09'%3E%3Cpath d='M0 32 A32 32 0 0 1 64 32'/%3E%3Cpath d='M8 32 A24 24 0 0 1 56 32'/%3E%3Cpath d='M16 32 A16 16 0 0 1 48 32'/%3E%3Cpath d='M24 32 A8 8 0 0 1 40 32'/%3E%3Cpath d='M-32 16 A32 32 0 0 1 32 16'/%3E%3Cpath d='M-24 16 A24 24 0 0 1 24 16'/%3E%3Cpath d='M-16 16 A16 16 0 0 1 16 16'/%3E%3Cpath d='M-8 16 A8 8 0 0 1 8 16'/%3E%3Cpath d='M32 16 A32 32 0 0 1 96 16'/%3E%3Cpath d='M40 16 A24 24 0 0 1 88 16'/%3E%3Cpath d='M48 16 A16 16 0 0 1 80 16'/%3E%3Cpath d='M56 16 A8 8 0 0 1 72 16'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 64px 32px;
+}
+
+.texture-linen-light {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(35, 32, 28, 0.028) 0px,
+      rgba(35, 32, 28, 0.028) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(35, 32, 28, 0.024) 0px,
+      rgba(35, 32, 28, 0.024) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+}
+
+.texture-linen-dark {
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(223, 217, 206, 0.025) 0px,
+      rgba(223, 217, 206, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(223, 217, 206, 0.02) 0px,
+      rgba(223, 217, 206, 0.02) 1px,
+      transparent 1px,
+      transparent 5px
+    );
 }
 
 .dither-pixelated {

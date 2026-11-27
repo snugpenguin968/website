@@ -27,7 +27,9 @@ const { shell } = Astro.props;
               aria-current={item.active ? 'page' : undefined}
               class:list={[
                 'nav-link py-1',
-                item.active ? 'opacity-100 text-base-ink font-medium' : '',
+                item.active
+                  ? 'opacity-100 text-[var(--c-accent)] font-medium border-b border-[var(--c-accent)]'
+                  : '',
               ]}
             >
               {item.label}

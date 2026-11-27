@@ -67,7 +67,7 @@ export class NavigationAdapter {
       rssHref: rssLink?.href,
       background: config.background,
       accent: config.accent,
-      paperTexture: config.paperTexture,
+      texture: config.texture,
       copyrightText: `${formatCopyrightRange(config.copyrightStartYear, year)} © ${config.author.name}`,
       authorName: config.author.name,
     };

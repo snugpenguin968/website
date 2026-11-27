@@ -4,6 +4,8 @@ export type BackgroundStyle = 'plum' | 'dot' | 'rose' | 'particle' | 'none';
 
 export type AccentStyle = 'vermilion' | 'moss' | 'sumi';
 
+export type SurfaceTexture = 'mist' | 'seigaiha' | 'linen' | 'shoji' | 'none';
+
 export interface RgbColor {
   readonly r: number;
   readonly g: number;
@@ -59,7 +61,7 @@ export interface SiteConfigEntity {
   readonly socials: readonly SocialLinkEntity[];
   readonly background: BackgroundStyle;
   readonly accent: AccentStyle;
-  readonly paperTexture: boolean;
+  readonly texture: SurfaceTexture;
   readonly portraitDither: PortraitDitherConfig;
   readonly copyrightStartYear: number;
 }

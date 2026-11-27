@@ -1,7 +1,7 @@
 import type { ImageMetadata } from 'astro';
-import type { AccentStyle, BackgroundStyle } from '@models/entities';
+import type { AccentStyle, BackgroundStyle, SurfaceTexture } from '@models/entities';
 
-export type { AccentStyle, BackgroundStyle };
+export type { AccentStyle, BackgroundStyle, SurfaceTexture };
 
 export interface ThemeLogoViewModel {
   readonly lightModeSrc: ImageMetadata;
@@ -40,7 +40,7 @@ export interface ShellViewModel {
   readonly rssHref: string | undefined;
   readonly background: BackgroundStyle;
   readonly accent: AccentStyle;
-  readonly paperTexture: boolean;
+  readonly texture: SurfaceTexture;
   readonly copyrightText: string;
   readonly authorName: string;
 }

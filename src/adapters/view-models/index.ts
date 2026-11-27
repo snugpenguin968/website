@@ -5,6 +5,7 @@ export type {
   NavItemViewModel,
   ShellViewModel,
   SocialLinkViewModel,
+  SurfaceTexture,
   ThemeLogoViewModel,
 } from './layout.vm';
 export type { DitherPortraitViewModel } from './portrait.vm';
