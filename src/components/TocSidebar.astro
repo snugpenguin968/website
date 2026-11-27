@@ -1,8 +1,12 @@
 ---
-import type { TocItemViewModel } from '@adapters/view-models';
+export interface TocItem {
+  readonly depth: number;
+  readonly slug: string;
+  readonly text: string;
+}
 
-interface Props {
-  headings: readonly TocItemViewModel[];
+export interface Props {
+  headings: readonly TocItem[];
 }
 
 const { headings } = Astro.props;

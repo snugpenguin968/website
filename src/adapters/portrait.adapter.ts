@@ -5,7 +5,7 @@ import mePortraitImage from '@assets/images/me.png';
 import { SITE_CONFIG } from '@models/site.model';
 import type { PortraitDitherConfig } from '@models/entities';
 import { DitherImageAdapter } from './dither-image.adapter';
-import type { DitherPortraitViewModel } from './view-models';
+import type { DitherPortraitData } from '@components/DitherPortrait.astro';
 
 function resolvePortraitAssetPath(): string {
   const fromProjectRoot = resolve(process.cwd(), 'src/assets/images/me.png');
@@ -20,7 +20,7 @@ const PORTRAIT_ASSET_PATH = resolvePortraitAssetPath();
 export class PortraitAdapter {
   static resolve(
     overrides?: Partial<PortraitDitherConfig>,
-  ): Promise<DitherPortraitViewModel> {
+  ): Promise<DitherPortraitData> {
     return DitherImageAdapter.ditherFile({
       filePath: PORTRAIT_ASSET_PATH,
       alt: `Dithered portrait of ${SITE_CONFIG.author.name}`,

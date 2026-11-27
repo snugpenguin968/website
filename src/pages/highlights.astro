@@ -2,7 +2,7 @@
 import { HighlightsPageAdapter } from '@adapters/highlight.adapter';
 import HighlightsView from '@views/HighlightsView.astro';
 
-const vm = await HighlightsPageAdapter.resolve(Astro.url.pathname);
+const props = await HighlightsPageAdapter.resolve(Astro.url.pathname);
 ---
 
-<HighlightsView vm={vm} />
+<HighlightsView {...props} />

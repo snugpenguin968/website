@@ -1,10 +1,13 @@
 import { HighlightRepository } from '@models/repositories';
 import { extractHostLabel, formatFullDate } from './format.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type { HighlightItemViewModel, HighlightsPageViewModel } from './view-models';
+import type {
+  HighlightItem,
+  Props as HighlightsViewProps,
+} from '@views/HighlightsView.astro';
 
 export class HighlightsPageAdapter {
-  static async resolve(currentPath: string = '/highlights'): Promise<HighlightsPageViewModel> {
+  static async resolve(currentPath: string = '/highlights'): Promise<HighlightsViewProps> {
     const [entities, shell] = await Promise.all([
       HighlightRepository.findAll(),
       ShellAdapter.resolve({
@@ -14,7 +17,7 @@ export class HighlightsPageAdapter {
       }),
     ]);
 
-    const items: readonly HighlightItemViewModel[] = entities.map((item) => ({
+    const items: readonly HighlightItem[] = entities.map((item) => ({
       id: item.id,
       title: item.title,
       description: item.description,

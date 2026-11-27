@@ -7,7 +7,7 @@ import {
 import type { NavRouteId } from '@models/entities';
 import { NavigationAdapter } from './navigation.adapter';
 import type { ResolveShellInput } from './navigation.adapter';
-import type { ShellViewModel } from './view-models';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
 export class ShellAdapter {
   static async resolvePopulatedOptionalRoutes(): Promise<ReadonlySet<NavRouteId>> {
@@ -28,7 +28,7 @@ export class ShellAdapter {
 
   static async resolve(
     input: Omit<ResolveShellInput, 'populatedRouteIds'>,
-  ): Promise<ShellViewModel> {
+  ): Promise<ShellData> {
     const populatedRouteIds = await ShellAdapter.resolvePopulatedOptionalRoutes();
     return NavigationAdapter.buildShell({
       ...input,

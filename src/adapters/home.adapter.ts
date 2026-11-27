@@ -3,13 +3,13 @@ import { SITE_CONFIG } from '@models/site.model';
 import { formatReadingTime, formatShortDate } from './format.adapter';
 import { PortraitAdapter } from './portrait.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type { HomePageViewModel } from './view-models';
+import type { Props as HomeViewProps } from '@views/HomeView.astro';
 
 const MAX_RECENT_POSTS = 5;
 const MAX_FEATURED_EXPERIENCES = 4;
 
 export class HomePageAdapter {
-  static async resolve(currentPath: string = '/'): Promise<HomePageViewModel> {
+  static async resolve(currentPath: string = '/'): Promise<HomeViewProps> {
     const [portrait, allPosts, allExperiences, shell] = await Promise.all([
       PortraitAdapter.resolve(),
       BlogRepository.findAll(),

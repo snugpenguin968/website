@@ -2,7 +2,7 @@
 import { HomePageAdapter } from '@adapters/home.adapter';
 import HomeView from '@views/HomeView.astro';
 
-const vm = await HomePageAdapter.resolve(Astro.url.pathname);
+const props = await HomePageAdapter.resolve(Astro.url.pathname);
 ---
 
-<HomeView vm={vm} />
+<HomeView {...props} />

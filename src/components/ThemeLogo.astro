@@ -1,9 +1,15 @@
 ---
+import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
-import type { ThemeLogoViewModel } from '@adapters/view-models';
 
-interface Props {
-  logo: ThemeLogoViewModel;
+export interface ThemeLogoData {
+  readonly lightModeSrc: ImageMetadata;
+  readonly darkModeSrc: ImageMetadata;
+  readonly alt: string;
+}
+
+export interface Props {
+  logo: ThemeLogoData;
 }
 
 const { logo } = Astro.props;

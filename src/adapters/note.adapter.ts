@@ -2,10 +2,10 @@ import { render } from 'astro:content';
 import { NoteRepository } from '@models/repositories';
 import { formatFullDate } from './format.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type { NotesPageViewModel, RenderedNoteViewModel } from './view-models';
+import type { Props as NotesViewProps, RenderedNote } from '@views/NotesView.astro';
 
 export class NotesPageAdapter {
-  static async resolve(currentPath: string = '/notes'): Promise<NotesPageViewModel> {
+  static async resolve(currentPath: string = '/notes'): Promise<NotesViewProps> {
     const [notes, shell] = await Promise.all([
       NoteRepository.findAll(),
       ShellAdapter.resolve({
@@ -15,7 +15,7 @@ export class NotesPageAdapter {
       }),
     ]);
 
-    const renderedNotes: readonly RenderedNoteViewModel[] = await Promise.all(
+    const renderedNotes: readonly RenderedNote[] = await Promise.all(
       notes.map(async (note) => {
         const { Content } = await render(note.entry);
         return {

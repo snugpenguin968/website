@@ -1,8 +1,9 @@
 import type { BlogPostEntity } from '@models/entities';
 import { formatReadingTime, formatShortDate } from './format.adapter';
-import type { BlogListItemViewModel, BlogYearGroupViewModel } from './view-models';
+import type { BlogListItem } from '@components/PostListItem.astro';
+import type { BlogYearGroup } from '@views/BlogIndexView.astro';
 
-export function toBlogListItem(post: BlogPostEntity): BlogListItemViewModel {
+export function toBlogListItem(post: BlogPostEntity): BlogListItem {
   return {
     slug: post.slug,
     href: `/blog/${post.slug}`,
@@ -18,8 +19,8 @@ export function toBlogListItem(post: BlogPostEntity): BlogListItemViewModel {
 
 export function groupBlogPostsByYear(
   posts: readonly BlogPostEntity[],
-): readonly BlogYearGroupViewModel[] {
-  const byYear = new Map<number, BlogListItemViewModel[]>();
+): readonly BlogYearGroup[] {
+  const byYear = new Map<number, BlogListItem[]>();
 
   for (const post of posts) {
     const year = post.publishedAt.getUTCFullYear();

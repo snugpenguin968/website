@@ -1,41 +1,72 @@
 ---
-import type { BlogDetailViewModel } from '@adapters/view-models';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import TocSidebar from '@components/TocSidebar.astro';
+import type { TocItem } from '@components/TocSidebar.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: BlogDetailViewModel;
+export interface BlogNeighbor {
+  readonly title: string;
+  readonly href: string;
 }
 
-const { vm } = Astro.props;
-const Content = vm.Content;
+export interface Props {
+  readonly shell: ShellData;
+  readonly slug: string;
+  readonly title: string;
+  readonly description: string;
+  readonly dateLabel: string;
+  readonly updatedDateLabel: string | undefined;
+  readonly isoDate: string;
+  readonly readingTimeLabel: string;
+  readonly wordCount: number;
+  readonly tags: readonly string[];
+  readonly headings: readonly TocItem[];
+  readonly Content: AstroComponentFactory;
+  readonly previousPost: BlogNeighbor | undefined;
+  readonly nextPost: BlogNeighbor | undefined;
+}
+
+const {
+  shell,
+  title,
+  dateLabel,
+  updatedDateLabel,
+  isoDate,
+  readingTimeLabel,
+  tags,
+  headings,
+  Content,
+  previousPost,
+  nextPost,
+} = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <article class="relative mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-8 sm:mb-10">
       <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-base-ink leading-tight">
-        {vm.title}
+        {title}
       </h1>
 
       <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-subtle">
-        <time datetime={vm.isoDate}>{vm.dateLabel}</time>
+        <time datetime={isoDate}>{dateLabel}</time>
         <span aria-hidden="true">·</span>
-        <span>{vm.readingTimeLabel}</span>
+        <span>{readingTimeLabel}</span>
         {
-          vm.updatedDateLabel && (
+          updatedDateLabel && (
             <>
               <span aria-hidden="true">·</span>
-              <span>updated {vm.updatedDateLabel}</span>
+              <span>updated {updatedDateLabel}</span>
             </>
           )
         }
       </div>
 
       {
-        vm.tags.length > 0 && (
+        tags.length > 0 && (
           <div class="mt-4 flex flex-wrap gap-2">
-            {vm.tags.map((tag) => (
+            {tags.map((tag) => (
               <span class="rounded border border-base px-2 py-0.5 font-mono text-[11px] text-subtle">
                 #{tag}
               </span>
@@ -53,24 +84,24 @@ const Content = vm.Content;
 
     <nav aria-label="Post navigation" class="flex flex-col gap-4">
       {
-        (vm.previousPost || vm.nextPost) && (
+        (previousPost || nextPost) && (
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 text-sm">
             <div>
-              {vm.previousPost && (
-                <a href={vm.previousPost.href} class="group block">
+              {previousPost && (
+                <a href={previousPost.href} class="group block">
                   <span class="block font-mono text-xs text-subtle">← Previous</span>
                   <span class="mt-0.5 inline-block prose-link text-base-ink">
-                    {vm.previousPost.title}
+                    {previousPost.title}
                   </span>
                 </a>
               )}
             </div>
             <div class="sm:text-right">
-              {vm.nextPost && (
-                <a href={vm.nextPost.href} class="group block">
+              {nextPost && (
+                <a href={nextPost.href} class="group block">
                   <span class="block font-mono text-xs text-subtle">Next →</span>
                   <span class="mt-0.5 inline-block prose-link text-base-ink">
-                    {vm.nextPost.title}
+                    {nextPost.title}
                   </span>
                 </a>
               )}
@@ -86,6 +117,6 @@ const Content = vm.Content;
       </div>
     </nav>
 
-    <TocSidebar headings={vm.headings} />
+    <TocSidebar headings={headings} />
   </article>
 </BaseLayout>

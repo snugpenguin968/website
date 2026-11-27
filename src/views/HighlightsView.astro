@@ -1,29 +1,43 @@
 ---
-import type { HighlightsPageViewModel } from '@adapters/view-models';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: HighlightsPageViewModel;
+export interface HighlightItem {
+  readonly id: string;
+  readonly title: string;
+  readonly description: string;
+  readonly dateLabel: string | undefined;
+  readonly category: string | undefined;
+  readonly link: string | undefined;
+  readonly hostLabel: string | undefined;
+  readonly icon: string;
 }
 
-const { vm } = Astro.props;
+export interface Props {
+  readonly shell: ShellData;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly items: readonly HighlightItem[];
+}
+
+const { shell, heading, subtitle, items } = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10 sm:mb-12">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-ink">
-        {vm.heading}
+        {heading}
       </h1>
-      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{subtitle}</p>
     </header>
 
     {
-      vm.items.length === 0 ? (
+      items.length === 0 ? (
         <p class="text-sm text-muted">No highlights yet.</p>
       ) : (
         <div class="space-y-2">
-          {vm.items.map((item) =>
+          {items.map((item) =>
             item.link ? (
               <a
                 href={item.link}

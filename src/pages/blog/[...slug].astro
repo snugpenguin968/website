@@ -13,10 +13,10 @@ if (typeof slug !== 'string') {
   return Astro.redirect('/blog');
 }
 
-const vm = await BlogPageAdapter.resolveDetail(slug, Astro.url.pathname);
-if (vm === undefined) {
+const props = await BlogPageAdapter.resolveDetail(slug, Astro.url.pathname);
+if (props === undefined) {
   return Astro.redirect('/404');
 }
 ---
 
-<BlogDetailView vm={vm} />
+<BlogDetailView {...props} />

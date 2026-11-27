@@ -1,9 +1,23 @@
 ---
+import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
-import type { DitherPortraitViewModel } from '@adapters/view-models';
 
-interface Props {
-  portrait: DitherPortraitViewModel;
+export type DitherAlgorithm = 'atkinson' | 'floyd-steinberg' | 'bayer4x4';
+
+export interface DitherPortraitData {
+  readonly lightBgDataUri: string;
+  readonly darkBgDataUri: string;
+  readonly originalImage: ImageMetadata | undefined;
+  readonly width: number;
+  readonly height: number;
+  readonly aspectRatio: string;
+  readonly alt: string;
+  readonly algorithm: DitherAlgorithm;
+  readonly revealOnHover: boolean;
+}
+
+export interface Props {
+  portrait: DitherPortraitData;
 }
 
 const { portrait } = Astro.props;

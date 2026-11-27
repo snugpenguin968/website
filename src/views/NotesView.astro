@@ -1,29 +1,42 @@
 ---
-import type { NotesPageViewModel } from '@adapters/view-models';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: NotesPageViewModel;
+export interface RenderedNote {
+  readonly slug: string;
+  readonly title: string;
+  readonly dateLabel: string;
+  readonly isoDate: string;
+  readonly tags: readonly string[];
+  readonly Content: AstroComponentFactory;
 }
 
-const { vm } = Astro.props;
+export interface Props {
+  readonly shell: ShellData;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly notes: readonly RenderedNote[];
+}
+
+const { shell, heading, subtitle, notes } = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10 sm:mb-12">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-ink">
-        {vm.heading}
+        {heading}
       </h1>
-      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{subtitle}</p>
     </header>
 
     {
-      vm.notes.length === 0 ? (
+      notes.length === 0 ? (
         <p class="text-sm text-muted">No notes yet.</p>
       ) : (
         <div class="space-y-9 sm:space-y-10">
-          {vm.notes.map((note) => {
+          {notes.map((note) => {
             const Content = note.Content;
             return (
               <article class="border-l border-base pl-4 sm:pl-5">

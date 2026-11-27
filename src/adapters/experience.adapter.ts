@@ -1,10 +1,13 @@
 import { ExperienceRepository } from '@models/repositories';
 import { extractHostLabel } from './format.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type { ExperienceGroupViewModel, ExperiencesPageViewModel } from './view-models';
+import type {
+  ExperienceGroup,
+  Props as ExperiencesViewProps,
+} from '@views/ExperiencesView.astro';
 
 export class ExperiencesPageAdapter {
-  static async resolve(currentPath: string = '/experiences'): Promise<ExperiencesPageViewModel> {
+  static async resolve(currentPath: string = '/experiences'): Promise<ExperiencesViewProps> {
     const [groupedEntities, shell] = await Promise.all([
       ExperienceRepository.findGroupedByCategory(),
       ShellAdapter.resolve({
@@ -14,7 +17,7 @@ export class ExperiencesPageAdapter {
       }),
     ]);
 
-    const groups: readonly ExperienceGroupViewModel[] = groupedEntities.map((group) => ({
+    const groups: readonly ExperienceGroup[] = groupedEntities.map((group) => ({
       category: group.category,
       experiences: group.experiences.map((item) => ({
         id: item.id,

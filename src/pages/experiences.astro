@@ -2,7 +2,7 @@
 import { ExperiencesPageAdapter } from '@adapters/experience.adapter';
 import ExperiencesView from '@views/ExperiencesView.astro';
 
-const vm = await ExperiencesPageAdapter.resolve(Astro.url.pathname);
+const props = await ExperiencesPageAdapter.resolve(Astro.url.pathname);
 ---
 
-<ExperiencesView vm={vm} />
+<ExperiencesView {...props} />

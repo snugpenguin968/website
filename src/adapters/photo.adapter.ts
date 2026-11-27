@@ -1,10 +1,10 @@
 import { PhotoRepository } from '@models/repositories';
 import { formatFullDate } from './format.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type { PhotoItemViewModel, PhotosPageViewModel } from './view-models';
+import type { PhotoItem, Props as PhotosViewProps } from '@views/PhotosView.astro';
 
 export class PhotosPageAdapter {
-  static async resolve(currentPath: string = '/photos'): Promise<PhotosPageViewModel> {
+  static async resolve(currentPath: string = '/photos'): Promise<PhotosViewProps> {
     const [entities, shell] = await Promise.all([
       PhotoRepository.findAll(),
       ShellAdapter.resolve({
@@ -14,7 +14,7 @@ export class PhotosPageAdapter {
       }),
     ]);
 
-    const photos: readonly PhotoItemViewModel[] = entities.map((photo) => ({
+    const photos: readonly PhotoItem[] = entities.map((photo) => ({
       id: photo.id,
       title: photo.title,
       src: photo.src,

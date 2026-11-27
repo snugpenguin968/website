@@ -1,25 +1,36 @@
 ---
-import type { BlogIndexViewModel } from '@adapters/view-models';
 import PostListItem from '@components/PostListItem.astro';
+import type { BlogListItem } from '@components/PostListItem.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: BlogIndexViewModel;
+export interface BlogYearGroup {
+  readonly year: number;
+  readonly posts: readonly BlogListItem[];
 }
 
-const { vm } = Astro.props;
+export interface Props {
+  readonly shell: ShellData;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly totalCount: number;
+  readonly allTags: readonly string[];
+  readonly yearGroups: readonly BlogYearGroup[];
+}
+
+const { shell, heading, subtitle, totalCount, allTags, yearGroups } = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-ink">
-        {vm.heading}
+        {heading}
       </h1>
-      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{subtitle}</p>
 
       {
-        vm.allTags.length > 0 && (
+        allTags.length > 0 && (
           <div class="mt-5 flex flex-wrap gap-2" data-tag-filters>
             <button
               type="button"
@@ -27,9 +38,9 @@ const { vm } = Astro.props;
               data-active="true"
               class="rounded border border-base px-2.5 py-1 font-mono text-xs transition-colors bg-[#888888]/15 text-base-ink"
             >
-              all ({vm.totalCount})
+              all ({totalCount})
             </button>
-            {vm.allTags.map((tag) => (
+            {allTags.map((tag) => (
               <button
                 type="button"
                 data-tag-btn={tag}
@@ -45,11 +56,11 @@ const { vm } = Astro.props;
     </header>
 
     {
-      vm.yearGroups.length === 0 ? (
+      yearGroups.length === 0 ? (
         <p class="text-sm text-muted">No posts published yet.</p>
       ) : (
         <div class="space-y-12">
-          {vm.yearGroups.map((group) => (
+          {yearGroups.map((group) => (
             <div data-year-group class="relative pt-8 sm:pt-10">
               <div
                 aria-hidden="true"

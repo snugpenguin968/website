@@ -1,30 +1,39 @@
 ---
-import type { ExperiencesPageViewModel } from '@adapters/view-models';
 import ExperienceCard from '@components/ExperienceCard.astro';
+import type { ExperienceCardItem } from '@components/ExperienceCard.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: ExperiencesPageViewModel;
+export interface ExperienceGroup {
+  readonly category: string;
+  readonly experiences: readonly ExperienceCardItem[];
 }
 
-const { vm } = Astro.props;
+export interface Props {
+  readonly shell: ShellData;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly groups: readonly ExperienceGroup[];
+}
+
+const { shell, heading, subtitle, groups } = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10 sm:mb-12">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-ink">
-        {vm.heading}
+        {heading}
       </h1>
-      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{subtitle}</p>
     </header>
 
     {
-      vm.groups.length === 0 ? (
+      groups.length === 0 ? (
         <p class="text-sm text-muted">Nothing listed yet.</p>
       ) : (
         <div class="space-y-12">
-          {vm.groups.map((group) => (
+          {groups.map((group) => (
             <section>
               <div class="mb-4">
                 <h2 class="inline-block font-mono text-xs uppercase tracking-[0.18em] text-[var(--c-accent)] border-b border-[var(--c-accent)]/40 pb-1.5">

@@ -1,37 +1,64 @@
 ---
-import type { HomePageViewModel } from '@adapters/view-models';
 import DitherPortrait from '@components/DitherPortrait.astro';
+import type { DitherPortraitData } from '@components/DitherPortrait.astro';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: HomePageViewModel;
+export interface HomePostPreview {
+  readonly slug: string;
+  readonly href: string;
+  readonly title: string;
+  readonly dateLabel: string;
+  readonly isoDate: string;
+  readonly readingTimeLabel: string;
 }
 
-const { vm } = Astro.props;
+export interface HomeExperiencePreview {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly role: string | undefined;
+  readonly period: string | undefined;
+  readonly link: string | undefined;
+  readonly icon: string;
+}
+
+export interface Props {
+  readonly shell: ShellData;
+  readonly authorName: string;
+  readonly tagline: string;
+  readonly bioParagraphs: readonly string[];
+  readonly portrait: DitherPortraitData;
+  readonly recentPosts: readonly HomePostPreview[];
+  readonly featuredExperiences: readonly HomeExperiencePreview[];
+}
+
+const { shell, authorName, tagline, bioParagraphs, portrait, recentPosts, featuredExperiences } =
+  Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <article class="mx-auto max-w-[65ch] slide-enter-content">
     <section class="flex flex-col-reverse gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
       <div class="min-w-0 flex-1">
         <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-base-ink">
-          {vm.authorName}
+          {authorName}
         </h1>
         <p class="mt-2 flex items-center gap-2 font-mono text-xs sm:text-sm text-subtle">
           <span
             aria-hidden="true"
             class="inline-block h-2 w-2 rounded-[2px] bg-[var(--c-accent)] shrink-0"
           />
-          <span>{vm.tagline}</span>
+          <span>{tagline}</span>
         </p>
 
         <div class="antfu-prose mt-5 sm:mt-6">
-          {vm.bioParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          {bioParagraphs.map((paragraph) => <p>{paragraph}</p>)}
         </div>
       </div>
 
       <div class="w-44 sm:w-48 md:w-52 shrink-0 self-start">
-        <DitherPortrait portrait={vm.portrait} />
+        <DitherPortrait portrait={portrait} />
       </div>
     </section>
 
@@ -41,7 +68,7 @@ const { vm } = Astro.props;
       <p class="font-mono text-xs uppercase tracking-wider text-[var(--c-accent)]">Find me on</p>
       <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2.5 text-sm">
         {
-          vm.shell.socials.map((social) => (
+          shell.socials.map((social) => (
             <a
               href={social.href}
               target={social.external ? '_blank' : undefined}
@@ -57,7 +84,7 @@ const { vm } = Astro.props;
     </section>
 
     {
-      vm.recentPosts.length > 0 && (
+      recentPosts.length > 0 && (
         <section class="mt-14">
           <div class="flex items-baseline justify-between">
             <h2 class="text-sm font-mono uppercase tracking-wider text-subtle">
@@ -69,7 +96,7 @@ const { vm } = Astro.props;
           </div>
 
           <ul class="mt-4 space-y-2">
-            {vm.recentPosts.map((post) => (
+            {recentPosts.map((post) => (
               <li class="list-none">
                 <a
                   href={post.href}
@@ -90,7 +117,7 @@ const { vm } = Astro.props;
     }
 
     {
-      vm.featuredExperiences.length > 0 && (
+      featuredExperiences.length > 0 && (
         <section class="mt-14">
           <div class="flex items-baseline justify-between">
             <h2 class="text-sm font-mono uppercase tracking-wider text-subtle">
@@ -105,7 +132,7 @@ const { vm } = Astro.props;
           </div>
 
           <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {vm.featuredExperiences.map((item) =>
+            {featuredExperiences.map((item) =>
               item.link ? (
                 <a
                   href={item.link}

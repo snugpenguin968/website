@@ -3,7 +3,7 @@ import lightLogoImage from '@assets/images/logo.png';
 import { SITE_CONFIG } from '@models/site.model';
 import type { NavRouteId, SiteConfigEntity } from '@models/entities';
 import { formatCopyrightRange, normalizePathname } from './format.adapter';
-import type { NavItemViewModel, ShellViewModel } from './view-models';
+import type { NavItem, ShellData } from '@layouts/BaseLayout.astro';
 
 export interface ResolveShellInput {
   readonly currentPath: string;
@@ -25,7 +25,7 @@ export function isNavRouteActive(currentPath: string, navPath: string): boolean 
 }
 
 export class NavigationAdapter {
-  static buildShell(input: ResolveShellInput): ShellViewModel {
+  static buildShell(input: ResolveShellInput): ShellData {
     const config = input.config ?? SITE_CONFIG;
     const normalizedPath = normalizePathname(input.currentPath);
     const fullTitle =
@@ -38,7 +38,7 @@ export class NavigationAdapter {
     const year = input.currentYear ?? new Date().getUTCFullYear();
     const populated = input.populatedRouteIds ?? new Set<NavRouteId>();
 
-    const navItems: readonly NavItemViewModel[] = config.navigation
+    const navItems: readonly NavItem[] = config.navigation
       .filter((route) => route.alwaysVisible || populated.has(route.id))
       .map((route) => ({
         id: route.id,

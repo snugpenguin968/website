@@ -2,7 +2,7 @@
 import { PhotosPageAdapter } from '@adapters/photo.adapter';
 import PhotosView from '@views/PhotosView.astro';
 
-const vm = await PhotosPageAdapter.resolve(Astro.url.pathname);
+const props = await PhotosPageAdapter.resolve(Astro.url.pathname);
 ---
 
-<PhotosView vm={vm} />
+<PhotosView {...props} />

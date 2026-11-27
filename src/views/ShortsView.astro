@@ -1,29 +1,42 @@
 ---
-import type { ShortsPageViewModel } from '@adapters/view-models';
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import BaseLayout from '@layouts/BaseLayout.astro';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 
-interface Props {
-  vm: ShortsPageViewModel;
+export interface RenderedShort {
+  readonly slug: string;
+  readonly title: string | undefined;
+  readonly dateLabel: string;
+  readonly isoDate: string;
+  readonly tags: readonly string[];
+  readonly Content: AstroComponentFactory;
 }
 
-const { vm } = Astro.props;
+export interface Props {
+  readonly shell: ShellData;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly shorts: readonly RenderedShort[];
+}
+
+const { shell, heading, subtitle, shorts } = Astro.props;
 ---
 
-<BaseLayout shell={vm.shell}>
+<BaseLayout shell={shell}>
   <section class="mx-auto max-w-[65ch] slide-enter-content">
     <header class="mb-10 sm:mb-12">
       <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-base-ink">
-        {vm.heading}
+        {heading}
       </h1>
-      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{subtitle}</p>
     </header>
 
     {
-      vm.shorts.length === 0 ? (
+      shorts.length === 0 ? (
         <p class="text-sm text-muted">No shorts yet.</p>
       ) : (
         <div class="space-y-8">
-          {vm.shorts.map((item) => {
+          {shorts.map((item) => {
             const Content = item.Content;
             return (
               <article class="border-b border-base pb-7 last:border-b-0">

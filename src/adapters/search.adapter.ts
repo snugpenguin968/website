@@ -7,10 +7,19 @@ import {
   ShortRepository,
 } from '@models/repositories';
 import { formatFullDate } from './format.adapter';
-import type { SearchIndexItemViewModel } from './view-models';
+
+export interface SearchIndexItem {
+  readonly id: string;
+  readonly type: 'Page' | 'Blog' | 'Experience' | 'Highlight' | 'Note' | 'Short' | 'Photo';
+  readonly title: string;
+  readonly description: string;
+  readonly href: string;
+  readonly tags: readonly string[];
+  readonly external: boolean;
+}
 
 export class SearchAdapter {
-  static async resolveIndex(): Promise<readonly SearchIndexItemViewModel[]> {
+  static async resolveIndex(): Promise<readonly SearchIndexItem[]> {
     const [posts, experiences, highlights, notes, shorts, photos] = await Promise.all([
       BlogRepository.findAll(),
       ExperienceRepository.findAll(),
@@ -20,7 +29,7 @@ export class SearchAdapter {
       PhotoRepository.findAll(),
     ]);
 
-    const items: SearchIndexItemViewModel[] = [
+    const items: SearchIndexItem[] = [
       {
         id: 'page:home',
         type: 'Page',

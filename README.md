@@ -1,6 +1,6 @@
 # Personal Website
 
-Personal website built with Astro, UnoCSS, and strict TypeScript, inspired by [Astro AntfuStyle Theme](https://github.com/lin-stephanie/astro-antfustyle-theme).
+Personal website built with Astro, UnoCSS, and TypeScript, inspired by [Astro AntfuStyle Theme](https://github.com/lin-stephanie/astro-antfustyle-theme).
 
 ## Development
 
@@ -14,7 +14,7 @@ npm run dev
 - `npm run dev` — Start local development server
 - `npm run build` — Build static output to `dist/`
 - `npm run preview` — Preview production build locally
-- `npm run check` — Run `astro check` and strict `tsc --noEmit`
+- `npm run check` — Run `astro check` (TypeScript + Astro diagnostics)
 - `npm run check:arch` — Verify layer import boundaries
 - `npm test` — Run Vitest unit tests
 
@@ -29,7 +29,7 @@ Edit `src/models/site.model.ts`:
 
 ### Dithering Any Arbitrary Image
 
-Call `ditherImageFile` from `@adapters/dither-image.adapter` on the server and pass the returned view model into `<DitherPortrait />`:
+Call `ditherImageFile` from `@adapters/dither-image.adapter` on the server and pass the returned portrait data into `<DitherPortrait />`:
 
 ```astro
 ---

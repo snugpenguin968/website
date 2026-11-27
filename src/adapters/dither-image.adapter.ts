@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 import { ditherGrayscaleBitmap, renderMaskToRgba } from '@models/dither.model';
 import { SITE_CONFIG } from '@models/site.model';
 import type { PortraitDitherConfig } from '@models/entities';
-import type { DitherPortraitViewModel } from './view-models';
+import type { DitherPortraitData } from '@components/DitherPortrait.astro';
 
 export interface DitherImageInput {
   readonly filePath: string;
@@ -14,7 +14,7 @@ export interface DitherImageInput {
   readonly config?: Partial<PortraitDitherConfig>;
 }
 
-const cache = new Map<string, DitherPortraitViewModel>();
+const cache = new Map<string, DitherPortraitData>();
 
 function resolveFilePath(filePath: string): string {
   if (isAbsolute(filePath) && existsSync(filePath)) {
@@ -44,7 +44,7 @@ async function encodeRgbaToPngDataUri(
 }
 
 export class DitherImageAdapter {
-  static async ditherFile(input: DitherImageInput): Promise<DitherPortraitViewModel> {
+  static async ditherFile(input: DitherImageInput): Promise<DitherPortraitData> {
     const resolvedPath = resolveFilePath(input.filePath);
     const config: PortraitDitherConfig = {
       ...SITE_CONFIG.portraitDither,
@@ -95,7 +95,7 @@ export class DitherImageAdapter {
       encodeRgbaToPngDataUri(darkRgba, mask.width, mask.height),
     ]);
 
-    const viewModel: DitherPortraitViewModel = {
+    const portrait: DitherPortraitData = {
       lightBgDataUri,
       darkBgDataUri,
       originalImage: config.revealOnHover ? input.originalImage : undefined,
@@ -107,8 +107,8 @@ export class DitherImageAdapter {
       revealOnHover: config.revealOnHover,
     };
 
-    cache.set(key, viewModel);
-    return viewModel;
+    cache.set(key, portrait);
+    return portrait;
   }
 
   static clearCache(): void {
@@ -116,6 +116,6 @@ export class DitherImageAdapter {
   }
 }
 
-export function ditherImageFile(input: DitherImageInput): Promise<DitherPortraitViewModel> {
+export function ditherImageFile(input: DitherImageInput): Promise<DitherPortraitData> {
   return DitherImageAdapter.ditherFile(input);
 }

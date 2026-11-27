@@ -3,16 +3,14 @@ import { BlogRepository } from '@models/repositories';
 import { extractUniqueTags, groupBlogPostsByYear, toBlogListItem } from './blog.presenter';
 import { formatFullDate, formatReadingTime } from './format.adapter';
 import { ShellAdapter } from './shell.adapter';
-import type {
-  BlogDetailViewModel,
-  BlogIndexViewModel,
-  TocItemViewModel,
-} from './view-models';
+import type { TocItem } from '@components/TocSidebar.astro';
+import type { Props as BlogDetailProps } from '@views/BlogDetailView.astro';
+import type { Props as BlogIndexProps } from '@views/BlogIndexView.astro';
 
 export { extractUniqueTags, groupBlogPostsByYear, toBlogListItem };
 
 export class BlogPageAdapter {
-  static async resolveIndex(currentPath: string = '/blog'): Promise<BlogIndexViewModel> {
+  static async resolveIndex(currentPath: string = '/blog'): Promise<BlogIndexProps> {
     const [posts, shell] = await Promise.all([
       BlogRepository.findAll(),
       ShellAdapter.resolve({
@@ -42,7 +40,7 @@ export class BlogPageAdapter {
   static async resolveDetail(
     slug: string,
     currentPath: string,
-  ): Promise<BlogDetailViewModel | undefined> {
+  ): Promise<BlogDetailProps | undefined> {
     const posts = await BlogRepository.findAll();
     const index = posts.findIndex((p) => p.slug === slug);
     const post = index >= 0 ? posts[index] : undefined;
@@ -60,7 +58,7 @@ export class BlogPageAdapter {
       }),
     ]);
 
-    const tocHeadings: readonly TocItemViewModel[] = headings
+    const tocHeadings: readonly TocItem[] = headings
       .filter((h) => h.depth >= 2 && h.depth <= 3)
       .map((h) => ({
         depth: h.depth,

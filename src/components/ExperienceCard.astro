@@ -1,8 +1,19 @@
 ---
-import type { ExperienceCardViewModel } from '@adapters/view-models';
+export interface ExperienceCardItem {
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly role: string | undefined;
+  readonly period: string | undefined;
+  readonly location: string | undefined;
+  readonly link: string | undefined;
+  readonly repo: string | undefined;
+  readonly icon: string;
+  readonly hostLabel: string | undefined;
+}
 
-interface Props {
-  experience: ExperienceCardViewModel;
+export interface Props {
+  experience: ExperienceCardItem;
 }
 
 const { experience } = Astro.props;

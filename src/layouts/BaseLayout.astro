@@ -8,15 +8,59 @@ import '@fontsource/roboto-condensed/700.css';
 import '@styles/main.css';
 import '@styles/prose.css';
 
-import type { ShellViewModel } from '@adapters/view-models';
 import BackToTop from '@components/BackToTop.astro';
 import BackgroundCanvas from '@components/BackgroundCanvas.astro';
+import type { BackgroundStyle } from '@components/BackgroundCanvas.astro';
 import Footer from '@components/Footer.astro';
 import NavHeader from '@components/NavHeader.astro';
 import SurfaceTexture from '@components/SurfaceTexture.astro';
+import type { ThemeLogoData } from '@components/ThemeLogo.astro';
 
-interface Props {
-  shell: ShellViewModel;
+export type { BackgroundStyle, ThemeLogoData };
+
+export type AccentStyle = 'vermilion' | 'moss' | 'sumi';
+
+export type SurfaceTextureStyle = 'mist' | 'seigaiha' | 'linen' | 'shoji' | 'none';
+
+export interface NavItem {
+  readonly id: string;
+  readonly label: string;
+  readonly href: string;
+  readonly active: boolean;
+}
+
+export interface SocialLink {
+  readonly id: string;
+  readonly label: string;
+  readonly href: string;
+  readonly icon: string;
+  readonly external: boolean;
+}
+
+export interface HeadMeta {
+  readonly pageTitle: string;
+  readonly siteTitle: string;
+  readonly description: string;
+  readonly canonicalUrl: string;
+  readonly ogImageUrl: string;
+  readonly lang: string;
+}
+
+export interface ShellData {
+  readonly head: HeadMeta;
+  readonly logo: ThemeLogoData;
+  readonly navItems: readonly NavItem[];
+  readonly socials: readonly SocialLink[];
+  readonly rssHref: string | undefined;
+  readonly background: BackgroundStyle;
+  readonly accent: AccentStyle;
+  readonly texture: SurfaceTextureStyle;
+  readonly copyrightText: string;
+  readonly authorName: string;
+}
+
+export interface Props {
+  shell: ShellData;
 }
 
 const { shell } = Astro.props;

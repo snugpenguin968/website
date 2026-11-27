@@ -1,4 +1,3 @@
-export * from './view-models';
 export {
   extractHostLabel,
   formatCopyrightRange,

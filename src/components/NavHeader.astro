@@ -1,12 +1,12 @@
 ---
-import type { ShellViewModel } from '@adapters/view-models';
+import type { ShellData } from '@layouts/BaseLayout.astro';
 import AppearanceToggle from './AppearanceToggle.astro';
 import SearchButton from './SearchButton.astro';
 import ThemeLogo from './ThemeLogo.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
-interface Props {
-  shell: ShellViewModel;
+export interface Props {
+  shell: ShellData;
 }
 
 const { shell } = Astro.props;

@@ -2,7 +2,7 @@
 import { BlogPageAdapter } from '@adapters/blog.adapter';
 import BlogIndexView from '@views/BlogIndexView.astro';
 
-const vm = await BlogPageAdapter.resolveIndex(Astro.url.pathname);
+const props = await BlogPageAdapter.resolveIndex(Astro.url.pathname);
 ---
 
-<BlogIndexView vm={vm} />
+<BlogIndexView {...props} />
