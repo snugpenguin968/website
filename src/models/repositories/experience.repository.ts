@@ -19,6 +19,7 @@ function toExperienceEntity(entry: CollectionEntry<'experiences'>): ExperienceEn
     icon: entry.data.icon,
     order: entry.data.order,
     featured: entry.data.featured,
+    draft: entry.data.draft,
   };
 }
 
@@ -45,15 +46,19 @@ export function groupExperiencesByCategory(
 }
 
 export class ExperienceRepository {
-  static async findAll(): Promise<readonly ExperienceEntity[]> {
-    const entries = await getCollection('experiences');
+  static async findAll(includeDrafts: boolean = false): Promise<readonly ExperienceEntity[]> {
+    const entries = await getCollection('experiences', (entry) =>
+      includeDrafts ? true : !entry.data.draft,
+    );
     return entries
       .map(toExperienceEntity)
       .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
   }
 
-  static async findGroupedByCategory(): Promise<readonly ExperienceCategoryGroupEntity[]> {
-    const all = await ExperienceRepository.findAll();
+  static async findGroupedByCategory(
+    includeDrafts: boolean = false,
+  ): Promise<readonly ExperienceCategoryGroupEntity[]> {
+    const all = await ExperienceRepository.findAll(includeDrafts);
     return groupExperiencesByCategory(all);
   }
 }

@@ -5,6 +5,9 @@ export { applyToneCurve, ditherGrayscaleBitmap, renderMaskToRgba } from './dithe
 export {
   BlogRepository,
   ExperienceRepository,
+  HighlightRepository,
   NoteRepository,
+  PhotoRepository,
+  ShortRepository,
   groupExperiencesByCategory,
 } from './repositories';

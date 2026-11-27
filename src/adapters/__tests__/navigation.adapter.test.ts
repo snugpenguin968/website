@@ -11,7 +11,7 @@ describe('NavigationAdapter', () => {
     expect(isNavRouteActive('/blogger', '/blog')).toBe(false);
   });
 
-  it('builds shell view model with active nav state, canonical URL, and logo polarity', () => {
+  it('only shows experiences and blog in nav when optional sections are empty', () => {
     const shell = NavigationAdapter.buildShell({
       currentPath: '/blog/type-systems',
       pageTitle: 'Type Systems',
@@ -21,6 +21,7 @@ describe('NavigationAdapter', () => {
     expect(shell.head.pageTitle).toBe('Type Systems — John Tian');
     expect(shell.head.canonicalUrl).toBe('https://snugpenguin.dev/blog/type-systems');
     expect(shell.copyrightText).toBe('2026 © John Tian');
+    expect(shell.navItems.map((n) => n.id)).toEqual(['experiences', 'blog']);
 
     const blogNav = shell.navItems.find((n) => n.id === 'blog');
     const expNav = shell.navItems.find((n) => n.id === 'experiences');
@@ -29,5 +30,22 @@ describe('NavigationAdapter', () => {
 
     expect(String(shell.logo.lightModeSrc)).toContain('darklogo');
     expect(String(shell.logo.darkModeSrc)).toContain('logo');
+  });
+
+  it('reveals optional nav items once they have published content', () => {
+    const shell = NavigationAdapter.buildShell({
+      currentPath: '/photos',
+      populatedRouteIds: new Set(['highlights', 'photos', 'shorts', 'notes']),
+    });
+
+    expect(shell.navItems.map((n) => n.id)).toEqual([
+      'experiences',
+      'blog',
+      'highlights',
+      'photos',
+      'shorts',
+      'notes',
+    ]);
+    expect(shell.navItems.find((n) => n.id === 'photos')?.active).toBe(true);
   });
 });

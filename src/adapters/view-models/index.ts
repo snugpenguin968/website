@@ -25,4 +25,7 @@ export type {
   ExperienceGroupViewModel,
   ExperiencesPageViewModel,
 } from './experience.vm';
+export type { HighlightItemViewModel, HighlightsPageViewModel } from './highlight.vm';
+export type { PhotoItemViewModel, PhotosPageViewModel } from './photo.vm';
+export type { RenderedShortViewModel, ShortsPageViewModel } from './short.vm';
 export type { NotesPageViewModel, RenderedNoteViewModel } from './note.vm';

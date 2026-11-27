@@ -2,7 +2,7 @@ import { render } from 'astro:content';
 import { BlogRepository } from '@models/repositories';
 import { extractUniqueTags, groupBlogPostsByYear, toBlogListItem } from './blog.presenter';
 import { formatFullDate, formatReadingTime } from './format.adapter';
-import { NavigationAdapter } from './navigation.adapter';
+import { ShellAdapter } from './shell.adapter';
 import type {
   BlogDetailViewModel,
   BlogIndexViewModel,
@@ -13,12 +13,14 @@ export { extractUniqueTags, groupBlogPostsByYear, toBlogListItem };
 
 export class BlogPageAdapter {
   static async resolveIndex(currentPath: string = '/blog'): Promise<BlogIndexViewModel> {
-    const posts = await BlogRepository.findAll();
-    const shell = NavigationAdapter.buildShell({
-      currentPath,
-      pageTitle: 'Blog',
-      description: 'Essays, engineering notes, and thoughts on software design.',
-    });
+    const [posts, shell] = await Promise.all([
+      BlogRepository.findAll(),
+      ShellAdapter.resolve({
+        currentPath,
+        pageTitle: 'Blog',
+        description: 'Essays, engineering notes, and thoughts on software design.',
+      }),
+    ]);
 
     return {
       shell,
@@ -49,7 +51,15 @@ export class BlogPageAdapter {
       return undefined;
     }
 
-    const { Content, headings } = await render(post.entry);
+    const [{ Content, headings }, shell] = await Promise.all([
+      render(post.entry),
+      ShellAdapter.resolve({
+        currentPath,
+        pageTitle: post.title,
+        description: post.description,
+      }),
+    ]);
+
     const tocHeadings: readonly TocItemViewModel[] = headings
       .filter((h) => h.depth >= 2 && h.depth <= 3)
       .map((h) => ({
@@ -60,12 +70,6 @@ export class BlogPageAdapter {
 
     const newerPost = index > 0 ? posts[index - 1] : undefined;
     const olderPost = index + 1 < posts.length ? posts[index + 1] : undefined;
-
-    const shell = NavigationAdapter.buildShell({
-      currentPath,
-      pageTitle: post.title,
-      description: post.description,
-    });
 
     return {
       shell,

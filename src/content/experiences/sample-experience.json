@@ -1,0 +1,13 @@
+{
+  "name": "Sample Company",
+  "role": "Software Engineer",
+  "period": "2025 – Present",
+  "location": "San Francisco, CA",
+  "description": "An example work experience entry. Change category to 'Projects' or any other subsection name.",
+  "category": "Work Experience",
+  "icon": "i-ri-building-2-line",
+  "link": "https://example.com",
+  "order": 1,
+  "featured": true,
+  "draft": true
+}

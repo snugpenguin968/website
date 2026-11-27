@@ -1,0 +1,10 @@
+{
+  "title": "Sample Photo",
+  "src": "/favicon.png",
+  "alt": "Sample photo description",
+  "caption": "An example photo entry. Place images in public/images/ and reference them like /images/photo.jpg.",
+  "takenAt": "2026-11-27",
+  "location": "San Francisco, CA",
+  "order": 1,
+  "draft": true
+}

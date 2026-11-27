@@ -1,0 +1,57 @@
+---
+import type { ShortsPageViewModel } from '@adapters/view-models';
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+interface Props {
+  vm: ShortsPageViewModel;
+}
+
+const { vm } = Astro.props;
+---
+
+<BaseLayout shell={vm.shell}>
+  <section class="mx-auto max-w-[65ch] slide-enter-content">
+    <header class="mb-10 sm:mb-12">
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        {vm.heading}
+      </h1>
+      <p class="mt-2 text-sm sm:text-base text-muted italic">{vm.subtitle}</p>
+    </header>
+
+    {
+      vm.shorts.length === 0 ? (
+        <p class="text-sm text-muted">No shorts yet.</p>
+      ) : (
+        <div class="space-y-8">
+          {vm.shorts.map((item) => {
+            const Content = item.Content;
+            return (
+              <article class="border-b border-base pb-7 last:border-b-0">
+                <header class="flex flex-wrap items-baseline justify-between gap-2">
+                  {item.title && (
+                    <h2 class="text-base font-medium text-base-ink">{item.title}</h2>
+                  )}
+                  <time datetime={item.isoDate} class="font-mono text-xs text-subtle">
+                    {item.dateLabel}
+                  </time>
+                </header>
+
+                <div class="antfu-prose mt-2 text-sm">
+                  <Content />
+                </div>
+
+                {item.tags.length > 0 && (
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {item.tags.map((tag) => (
+                      <span class="font-mono text-[11px] text-subtle">#{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </article>
+            );
+          })}
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
