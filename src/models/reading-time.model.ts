@@ -2,10 +2,6 @@ import type { ReadingTimeEntity } from './entities/blog.entity';
 
 const DEFAULT_WORDS_PER_MINUTE = 220;
 
-/**
- * Strips frontmatter, fenced code blocks, inline code, HTML/MDX tags,
- * and markdown punctuation to estimate natural reading time.
- */
 export function estimateReadingTime(
   rawBody: string,
   wordsPerMinute: number = DEFAULT_WORDS_PER_MINUTE,

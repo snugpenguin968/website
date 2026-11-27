@@ -8,28 +8,41 @@ interface Props {
 const { shell } = Astro.props;
 ---
 
-<footer class="mt-auto w-full px-6 pt-16 pb-10 sm:px-8">
+<footer class="mt-auto w-full px-5 pt-14 pb-10 sm:px-8 sm:pt-16">
   <div
-    class="mx-auto flex max-w-[65ch] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-sm text-subtle"
+    class="mx-auto flex max-w-[65ch] flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-xs text-subtle"
   >
-    <span class="font-mono text-xs">{shell.copyrightText}</span>
+    <div class="flex items-center justify-between gap-4 sm:justify-start">
+      <span class="font-mono">{shell.copyrightText}</span>
 
-    <div class="flex items-center gap-4">
-      {
-        shell.socials.map((social) => (
-          <a
-            href={social.href}
-            aria-label={social.label}
-            title={social.label}
-            target={social.external ? '_blank' : undefined}
-            rel={social.external ? 'noopener noreferrer' : undefined}
-            class="icon-btn text-base sm:hidden"
-          >
-            <span class={social.icon} aria-hidden="true" />
-          </a>
-        ))
-      }
-      <span class="font-mono text-xs opacity-75">Built with Astro · MVA</span>
+      <div class="flex items-center gap-3.5 sm:hidden">
+        {
+          shell.socials.map((social) => (
+            <a
+              href={social.href}
+              aria-label={social.label}
+              title={social.label}
+              target={social.external ? '_blank' : undefined}
+              rel={social.external ? 'noopener noreferrer' : undefined}
+              class="icon-btn text-base p-1"
+            >
+              <span class={social.icon} aria-hidden="true" />
+            </a>
+          ))
+        }
+      </div>
     </div>
+
+    <span class="font-mono opacity-80">
+      Powered by{' '}
+      <a
+        href="https://github.com/lin-stephanie/astro-antfustyle-theme"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="prose-link text-base-ink"
+      >
+        Astro AntfuStyle Theme
+      </a>
+    </span>
   </div>
 </footer>

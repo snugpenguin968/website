@@ -10,11 +10,13 @@ export interface HomePostPreviewViewModel {
   readonly readingTimeLabel: string;
 }
 
-export interface HomeProjectPreviewViewModel {
+export interface HomeExperiencePreviewViewModel {
   readonly id: string;
   readonly name: string;
   readonly description: string;
-  readonly link: string;
+  readonly role: string | undefined;
+  readonly period: string | undefined;
+  readonly link: string | undefined;
   readonly icon: string;
 }
 
@@ -25,5 +27,5 @@ export interface HomePageViewModel {
   readonly bioParagraphs: readonly string[];
   readonly portrait: DitherPortraitViewModel;
   readonly recentPosts: readonly HomePostPreviewViewModel[];
-  readonly featuredProjects: readonly HomeProjectPreviewViewModel[];
+  readonly featuredExperiences: readonly HomeExperiencePreviewViewModel[];
 }

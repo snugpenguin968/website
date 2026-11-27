@@ -4,9 +4,7 @@ import type { BackgroundStyle } from '@models/entities';
 export type { BackgroundStyle };
 
 export interface ThemeLogoViewModel {
-  /** Dark-ink penguin mark rendered on light mode backgrounds (`darklogo.png`). */
   readonly lightModeSrc: ImageMetadata;
-  /** Light-ink penguin mark rendered on dark mode backgrounds (`logo.png`). */
   readonly darkModeSrc: ImageMetadata;
   readonly alt: string;
 }

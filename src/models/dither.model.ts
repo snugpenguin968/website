@@ -18,10 +18,6 @@ function clampByte(value: number): number {
   return value;
 }
 
-/**
- * Applies brightness, contrast, and gamma adjustment to an 8-bit grayscale bitmap,
- * returning a working Float32Array in [0, 255].
- */
 export function applyToneCurve(
   bitmap: GrayscaleBitmap,
   options: Pick<DitherOptions, 'brightness' | 'contrast' | 'gamma'>,
@@ -84,8 +80,6 @@ function runAtkinson(
       const newVal = isBright ? 255 : 0;
       brightMask[idx] = isBright ? 1 : 0;
 
-      // Atkinson distributes 6/8 of quantization error (1/8 to each of 6 neighbors),
-      // preserving crisp highlights and deep shadows.
       const err = (oldVal - newVal) / 8;
       diffuseError(buffer, width, height, x + 1, y, err);
       diffuseError(buffer, width, height, x + 2, y, err);
@@ -141,7 +135,6 @@ function runBayer4x4(
       const idx = y * width + x;
       const val = buffer[idx] ?? 0;
       const cell = matrixRow?.[x & 3] ?? 0;
-      // Scale Bayer value [0..15] into (0..255) centered at 128
       const cellThreshold = ((cell + 0.5) / 16) * 255 + thresholdBias;
       brightMask[idx] = val >= cellThreshold ? 1 : 0;
     }
@@ -150,11 +143,6 @@ function runBayer4x4(
   return brightMask;
 }
 
-/**
- * Pure domain dithering engine.
- * Converts an 8-bit grayscale bitmap into a 1-bit binary luminance mask
- * (`1` = bright highlight, `0` = dark shadow) using the configured algorithm.
- */
 export function ditherGrayscaleBitmap(
   bitmap: GrayscaleBitmap,
   options: DitherOptions,
@@ -190,12 +178,6 @@ export function ditherGrayscaleBitmap(
   };
 }
 
-/**
- * Renders a 1-bit luminance mask into an RGBA byte buffer with true-positive
- * luminance polarity for either a light background or dark background:
- * - `light-bg`: dark ink dots mark shadow pixels (`brightMask === 0`); highlights are transparent.
- * - `dark-bg`: light ink dots mark highlight pixels (`brightMask === 1`); shadows are transparent.
- */
 export function renderMaskToRgba(
   mask: DitheredLuminanceMask,
   options: RgbaRasterOptions,

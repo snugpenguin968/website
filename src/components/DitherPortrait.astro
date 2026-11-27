@@ -14,7 +14,6 @@ const { portrait } = Astro.props;
     class="relative overflow-hidden rounded-sm border border-base bg-base p-1.5 transition-colors duration-300"
     style={`aspect-ratio: ${portrait.aspectRatio};`}
   >
-    {/* Light-mode dithered portrait (dark ink dots on transparent) */}
     <img
       src={portrait.lightBgDataUri}
       alt={portrait.alt}
@@ -28,7 +27,6 @@ const { portrait } = Astro.props;
       ]}
     />
 
-    {/* Dark-mode dithered portrait (light ink dots on transparent, true-positive luminance) */}
     <img
       src={portrait.darkBgDataUri}
       alt={portrait.alt}
@@ -42,22 +40,16 @@ const { portrait } = Astro.props;
       ]}
     />
 
-    {/* Optional hover reveal of original photograph */}
     {
       portrait.revealOnHover && portrait.originalImage && (
         <Image
           src={portrait.originalImage}
           alt={portrait.alt}
-          width={560}
+          width={640}
           loading="lazy"
           class="pointer-events-none absolute inset-1.5 h-[calc(100%-0.75rem)] w-[calc(100%-0.75rem)] rounded-[2px] object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
       )
     }
   </div>
-
-  <figcaption class="mt-2 flex items-center justify-between font-mono text-[11px] text-subtle">
-    <span>{portrait.algorithm} · 1-bit</span>
-    {portrait.revealOnHover && <span class="opacity-65">hover to reveal</span>}
-  </figcaption>
 </figure>

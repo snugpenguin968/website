@@ -51,9 +51,6 @@ export class NavigationAdapter {
         lang: config.lang,
       },
       logo: {
-        // Verified pixel polarity:
-        // darklogo.png = black penguin ink on transparent -> light mode backgrounds
-        // logo.png     = white penguin ink on transparent -> dark mode backgrounds
         lightModeSrc: darkLogoImage,
         darkModeSrc: lightLogoImage,
         alt: `${config.author.name} logo`,

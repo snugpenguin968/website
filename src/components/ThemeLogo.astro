@@ -12,22 +12,26 @@ const { logo } = Astro.props;
 <a
   href="/"
   aria-label={logo.alt}
-  class="inline-flex items-center select-none opacity-85 hover:opacity-100 transition-opacity duration-200 focus:outline-none"
+  class="inline-flex shrink-0 items-center select-none opacity-85 hover:opacity-100 transition-opacity duration-200 focus:outline-none"
 >
   <Image
     src={logo.lightModeSrc}
     alt={logo.alt}
-    height={28}
+    height={56}
+    densities={[1, 2]}
+    format="png"
     loading="eager"
     decoding="sync"
-    class="block dark:hidden h-7 w-auto"
+    class="block dark:hidden h-6 sm:h-7 w-auto"
   />
   <Image
     src={logo.darkModeSrc}
     alt={logo.alt}
-    height={28}
+    height={56}
+    densities={[1, 2]}
+    format="png"
     loading="eager"
     decoding="sync"
-    class="hidden dark:block h-7 w-auto"
+    class="hidden dark:block h-6 sm:h-7 w-auto"
   />
 </a>

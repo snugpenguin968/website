@@ -59,7 +59,6 @@ describe('dither.model', () => {
       width: 2,
       height: 1,
       algorithm: 'atkinson' as const,
-      // pixel 0 = shadow (0), pixel 1 = highlight (1)
       brightMask: new Uint8Array([0, 1]),
     };
 
@@ -67,7 +66,6 @@ describe('dither.model', () => {
       ink: { r: 20, g: 20, b: 20 },
       mode: 'light-bg',
     });
-    // Light background: shadow pixel gets dark ink (alpha 255), highlight stays transparent (alpha 0)
     expect(Array.from(lightBg.slice(0, 4))).toEqual([20, 20, 20, 255]);
     expect(Array.from(lightBg.slice(4, 8))).toEqual([0, 0, 0, 0]);
 
@@ -75,7 +73,6 @@ describe('dither.model', () => {
       ink: { r: 235, g: 235, b: 235 },
       mode: 'dark-bg',
     });
-    // Dark background: shadow pixel stays transparent (alpha 0), highlight gets light ink (alpha 255)
     expect(Array.from(darkBg.slice(0, 4))).toEqual([0, 0, 0, 0]);
     expect(Array.from(darkBg.slice(4, 8))).toEqual([235, 235, 235, 255]);
   });

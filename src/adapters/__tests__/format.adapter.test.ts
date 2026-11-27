@@ -22,7 +22,7 @@ describe('format.adapter', () => {
   it('normalizes trailing slashes and leading slashes', () => {
     expect(normalizePathname('/')).toBe('/');
     expect(normalizePathname('/blog/')).toBe('/blog');
-    expect(normalizePathname('projects/')).toBe('/projects');
+    expect(normalizePathname('experiences/')).toBe('/experiences');
   });
 
   it('extracts clean host labels without www prefix', () => {

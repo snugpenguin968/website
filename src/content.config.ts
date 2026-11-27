@@ -15,15 +15,18 @@ const blog = defineCollection({
   }),
 });
 
-const projects = defineCollection({
-  loader: glob({ pattern: '**/*.json', base: './src/content/projects' }),
+const experiences = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/experiences' }),
   schema: z.object({
     name: z.string().min(1),
     description: z.string().min(1),
-    link: z.string().url(),
-    repo: z.string().url().optional(),
-    icon: z.string().min(1),
     category: z.string().min(1),
+    role: z.string().min(1).optional(),
+    period: z.string().min(1).optional(),
+    location: z.string().min(1).optional(),
+    link: z.string().url().optional(),
+    repo: z.string().url().optional(),
+    icon: z.string().min(1).default('i-ri-sparkling-line'),
     order: z.number().int().default(0),
     featured: z.boolean().default(false),
   }),
@@ -41,6 +44,6 @@ const notes = defineCollection({
 
 export const collections = {
   blog,
-  projects,
+  experiences,
   notes,
 };

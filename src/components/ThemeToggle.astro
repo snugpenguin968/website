@@ -6,7 +6,7 @@
   data-theme-toggle
   aria-label="Toggle color scheme"
   title="Toggle color scheme"
-  class="icon-btn p-1 text-lg"
+  class="icon-btn p-2 -mr-2 sm:p-1 sm:mr-0 text-lg"
 >
   <span class="i-ri-sun-line dark:hidden" aria-hidden="true"></span>
   <span class="i-ri-moon-line hidden dark:inline-block" aria-hidden="true"></span>
@@ -18,7 +18,7 @@
     try {
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     } catch {
-      // Ignore storage access errors in restricted browsing contexts.
+      return;
     }
   }
 

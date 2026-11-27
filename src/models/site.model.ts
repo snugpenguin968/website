@@ -1,10 +1,5 @@
 import type { SiteConfigEntity } from './entities/site.entity';
 
-/**
- * Central domain configuration for the personal website.
- * Adjust `portraitDither.algorithm` ('atkinson' | 'floyd-steinberg' | 'bayer4x4')
- * or `portraitDither.revealOnHover` to customize the dithered portrait rendering.
- */
 export const SITE_CONFIG: SiteConfigEntity = {
   title: 'John Tian',
   description:
@@ -23,7 +18,7 @@ export const SITE_CONFIG: SiteConfigEntity = {
   },
   navigation: [
     { id: 'blog', label: 'Blog', path: '/blog' },
-    { id: 'projects', label: 'Projects', path: '/projects' },
+    { id: 'experiences', label: 'Experiences', path: '/experiences' },
     { id: 'notes', label: 'Notes', path: '/notes' },
   ],
   socials: [
@@ -59,14 +54,14 @@ export const SITE_CONFIG: SiteConfigEntity = {
   background: 'plum',
   portraitDither: {
     algorithm: 'atkinson',
-    targetWidth: 280,
-    contrast: 1.16,
+    targetWidth: 420,
+    contrast: 1.06,
     gamma: 1.0,
-    brightness: 4,
+    brightness: 2,
     threshold: 128,
     revealOnHover: true,
-    lightInk: { r: 24, g: 24, b: 27 },
-    darkInk: { r: 232, g: 232, b: 232 },
+    lightInk: { r: 28, g: 28, b: 30 },
+    darkInk: { r: 228, g: 228, b: 230 },
   },
   copyrightStartYear: 2026,
 } as const;

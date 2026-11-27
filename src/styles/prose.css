@@ -1,9 +1,9 @@
-/* AntfuStyle typographic prose refinements */
 .antfu-prose {
   max-width: 65ch;
   color: var(--c-fg);
   font-size: 1rem;
   line-height: 1.75;
+  overflow-wrap: break-word;
 }
 
 .antfu-prose h1,
@@ -17,22 +17,28 @@
 }
 
 .antfu-prose h1 {
-  font-size: 2rem;
+  font-size: 1.85rem;
   line-height: 1.25;
   margin-bottom: 1rem;
 }
 
+@media (min-width: 640px) {
+  .antfu-prose h1 {
+    font-size: 2rem;
+  }
+}
+
 .antfu-prose h2 {
-  font-size: 1.4rem;
+  font-size: 1.35rem;
   line-height: 1.35;
-  margin-top: 2.5rem;
+  margin-top: 2.25rem;
   margin-bottom: 0.9rem;
 }
 
 .antfu-prose h3 {
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   line-height: 1.4;
-  margin-top: 2rem;
+  margin-top: 1.85rem;
   margin-bottom: 0.65rem;
 }
 
@@ -100,15 +106,15 @@
   color: var(--c-fg-deep);
 }
 
-/* Shiki dual-theme code blocks */
 .antfu-prose pre.astro-code {
   margin: 1.5em 0;
-  padding: 1rem 1.2rem;
+  padding: 0.9rem 1rem;
   border-radius: 0.5rem;
   border: 1px solid var(--c-border);
   overflow-x: auto;
+  max-width: 100%;
   font-family: var(--font-mono);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   line-height: 1.65;
   background-color: #fafafa !important;
 }

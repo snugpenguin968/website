@@ -30,29 +30,29 @@ html {
   font-family: var(--font-sans);
   scroll-behavior: smooth;
   overflow-y: scroll;
+  overflow-x: clip;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background-color: var(--c-bg);
+  background-color: transparent;
   color: var(--c-fg);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  overflow-x: clip;
 }
 
 ::selection {
   background: rgba(136, 136, 136, 0.28);
 }
 
-/* Crisp pixel-art scaling for 1-bit dithered portrait */
 .dither-pixelated {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
   image-rendering: pixelated;
 }
 
-/* Circular theme view transition (antfu.me signature) */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -75,7 +75,6 @@ html.dark::view-transition-new(root) {
   z-index: 1;
 }
 
-/* Staggered slide-enter animation matching astro-antfustyle-theme */
 @keyframes slide-enter {
   0% {
     transform: translateY(10px);
@@ -108,7 +107,6 @@ html.dark::view-transition-new(root) {
   .slide-enter-content > *:nth-child(10) { --stagger: 10; }
 }
 
-/* Subtle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

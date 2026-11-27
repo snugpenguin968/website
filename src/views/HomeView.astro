@@ -12,29 +12,27 @@ const { vm } = Astro.props;
 
 <BaseLayout shell={vm.shell}>
   <article class="mx-auto max-w-[65ch] slide-enter-content">
-    {/* Hero header + dithered portrait */}
-    <section class="flex flex-col-reverse gap-8 sm:flex-row sm:items-start sm:justify-between">
+    <section class="flex flex-col-reverse gap-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
       <div class="min-w-0 flex-1">
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
+        <h1 class="text-2xl sm:text-4xl font-bold tracking-tight text-[#000000] dark:text-[#ffffff]">
           {vm.authorName}
         </h1>
         <p class="mt-2 font-mono text-xs sm:text-sm text-subtle">
           {vm.tagline}
         </p>
 
-        <div class="antfu-prose mt-6">
+        <div class="antfu-prose mt-5 sm:mt-6">
           {vm.bioParagraphs.map((paragraph) => <p>{paragraph}</p>)}
         </div>
       </div>
 
-      <div class="w-44 sm:w-48 md:w-52 shrink-0">
+      <div class="w-44 sm:w-48 md:w-52 shrink-0 self-start">
         <DitherPortrait portrait={vm.portrait} />
       </div>
     </section>
 
-    <hr class="w-12 mx-auto my-10 border-t border-base" />
+    <hr class="w-12 mx-auto my-9 sm:my-10 border-t border-base" />
 
-    {/* Find me on */}
     <section>
       <p class="text-sm text-muted">Find me on</p>
       <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2.5 text-sm">
@@ -44,7 +42,7 @@ const { vm } = Astro.props;
               href={social.href}
               target={social.external ? '_blank' : undefined}
               rel={social.external ? 'noopener noreferrer' : undefined}
-              class="inline-flex items-center gap-1.5 prose-link text-base-ink opacity-80 hover:opacity-100"
+              class="inline-flex items-center gap-1.5 prose-link text-base-ink opacity-80 hover:opacity-100 py-0.5"
             >
               <span class={`${social.icon} text-base`} aria-hidden="true" />
               <span>{social.label}</span>
@@ -54,7 +52,6 @@ const { vm } = Astro.props;
       </div>
     </section>
 
-    {/* Recent Writing */}
     {
       vm.recentPosts.length > 0 && (
         <section class="mt-14">
@@ -88,39 +85,58 @@ const { vm } = Astro.props;
       )
     }
 
-    {/* Selected Projects */}
     {
-      vm.featuredProjects.length > 0 && (
+      vm.featuredExperiences.length > 0 && (
         <section class="mt-14">
           <div class="flex items-baseline justify-between">
             <h2 class="text-sm font-mono uppercase tracking-wider text-subtle">
-              Selected Projects
+              Selected Experiences
             </h2>
-            <a href="/projects" class="text-xs font-mono prose-link text-subtle hover:text-base-ink">
-              all projects →
+            <a
+              href="/experiences"
+              class="text-xs font-mono prose-link text-subtle hover:text-base-ink"
+            >
+              all experiences →
             </a>
           </div>
 
           <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {vm.featuredProjects.map((project) => (
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="card-minimal group flex items-start gap-3 no-underline"
-              >
-                <span
-                  class={`${project.icon} mt-0.5 text-xl opacity-55 group-hover:opacity-100 transition-opacity shrink-0`}
-                  aria-hidden="true"
-                />
-                <div class="min-w-0">
-                  <div class="text-sm font-medium text-base-ink">{project.name}</div>
-                  <p class="mt-0.5 text-xs text-muted leading-relaxed opacity-80">
-                    {project.description}
-                  </p>
+            {vm.featuredExperiences.map((item) =>
+              item.link ? (
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="card-minimal group flex items-start gap-3 no-underline"
+                >
+                  <span
+                    class={`${item.icon} mt-0.5 text-xl opacity-55 group-hover:opacity-100 transition-opacity shrink-0`}
+                    aria-hidden="true"
+                  />
+                  <div class="min-w-0">
+                    <div class="text-sm font-medium text-base-ink">{item.name}</div>
+                    {item.role && <div class="font-mono text-[11px] text-subtle">{item.role}</div>}
+                    <p class="mt-0.5 text-xs text-muted leading-relaxed opacity-80">
+                      {item.description}
+                    </p>
+                  </div>
+                </a>
+              ) : (
+                <div class="card-minimal group flex items-start gap-3">
+                  <span
+                    class={`${item.icon} mt-0.5 text-xl opacity-55 group-hover:opacity-100 transition-opacity shrink-0`}
+                    aria-hidden="true"
+                  />
+                  <div class="min-w-0">
+                    <div class="text-sm font-medium text-base-ink">{item.name}</div>
+                    {item.role && <div class="font-mono text-[11px] text-subtle">{item.role}</div>}
+                    <p class="mt-0.5 text-xs text-muted leading-relaxed opacity-80">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
-              </a>
-            ))}
+              ),
+            )}
           </div>
         </section>
       )

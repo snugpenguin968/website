@@ -1,8 +1,0 @@
----
-import { ProjectsPageAdapter } from '@adapters/project.adapter';
-import ProjectsView from '@views/ProjectsView.astro';
-
-const vm = await ProjectsPageAdapter.resolve(Astro.url.pathname);
----
-
-<ProjectsView vm={vm} />
